@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GpxViewer2.Model;
 using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Services.GpxFileStore;
@@ -11,6 +12,18 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
     public IReadOnlyList<GpxFileRepositoryNode> GetAllLoadedNodes()
     {
         return _loadedNodes;
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<LoadedGpxFile> QueryAllLoadedFiles()
+    {
+        foreach (var actLoadedNode in _loadedNodes)
+        {
+            foreach (var actLoadedFile in actLoadedNode.GetAssociatedGpxFilesDeep())
+            {
+                yield return actLoadedFile;
+            }
+        }
     }
 
     /// <inheritdoc />

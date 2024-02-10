@@ -9,5 +9,8 @@
              x:Class="GpxViewer2.Views.MapView"
              d:DataContext="{x:Static local:MapViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:MapViewModel}">
-    <mapsui:MapControl x:Name="MapControl" />
+    <mapsui:MapControl x:Name="MapControl"
+                       PointerPressed="OnMapControl_PointerPressed"
+                       PointerReleased="OnMapControl_PointerReleased"
+                       PointerMoved="OnMapControl_PointerMoved"/>
 </ext:MvvmUserControl>

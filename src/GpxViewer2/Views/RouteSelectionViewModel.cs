@@ -60,7 +60,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         }
     }
 
-    private void OnMessageReceived(GpxToursSelectedMessage message)
+    private void OnMessageReceived(GpxFilesSelectedMessage message)
     {
         
     }
