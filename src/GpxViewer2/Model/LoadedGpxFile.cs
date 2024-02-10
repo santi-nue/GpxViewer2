@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using RolandK.Formats.Gpx;
 
-namespace GpxViewer2.Data;
+namespace GpxViewer2.Model;
 
-internal class LoadedGpxFile
+public class LoadedGpxFile
 {
     public GpxFile RawGpxFile { get; }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GpxViewer2.Data.GpxXmlExtensions;
+namespace GpxViewer2.Model.GpxXmlExtensions;
 
 public abstract class TourExtension
 {

@@ -22,9 +22,4 @@
         <PackageReference Include="RolandK.Formats.Gpx" Version="1.0.1" />
         <PackageReference Include="RolandK.InProcessMessaging" Version="1.0.2" />
     </ItemGroup>
-
-
-    <ItemGroup>
-      <Folder Include="Messages\" />
-    </ItemGroup>
 </Project>

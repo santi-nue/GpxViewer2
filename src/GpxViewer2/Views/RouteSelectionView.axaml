@@ -4,9 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ext="https://github.com/RolandK.AvaloniaExtensions"
              xmlns:local="clr-namespace:GpxViewer2.Views"
+             xmlns:localUtil="clr-namespace:GpxViewer2.Views.RouteSelection"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GpxViewer2.Views.RouteSelectionView"
+             x:DataType="local:RouteSelectionViewModel"
              d:DataContext="{x:Static local:RouteSelectionViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:RouteSelectionViewModel}">
-    
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Load File"
+                      Command="{Binding Path=LoadGpxFileCommand}" />
+            <MenuItem Header="Load Directory"
+                      Command="{Binding Path=LoadGpxDirectoryCommand}" />
+        </Menu>
+        
+        <TreeView ItemsSource="{Binding Path=Nodes}">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="{x:Type localUtil:RouteSelectionNode}"
+                                  ItemsSource="{Binding Path=ChildNodes}">
+                    <TextBlock Text="{Binding Path=Node.NodeText}" />
+                </TreeDataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+    </DockPanel>
 </ext:MvvmUserControl>

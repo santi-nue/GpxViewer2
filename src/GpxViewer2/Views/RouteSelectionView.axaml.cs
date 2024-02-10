@@ -6,6 +6,6 @@ public partial class RouteSelectionView : MvvmUserControl
 {
     public RouteSelectionView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

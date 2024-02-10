@@ -1,5 +1,5 @@
 ﻿
-namespace GpxViewer2.Data.GpxXmlExtensions;
+namespace GpxViewer2.Model.GpxXmlExtensions;
 
 public enum GpxTrackState
 {
