@@ -45,6 +45,6 @@ class Program
                 // UseCases
                 services.AddScoped<LoadGpxFileUseCase>();
                 services.AddScoped<LoadGpxDirectoryUseCase>();
-                services.AddScoped<SelectGpxFilesUseCase>();
+                services.AddScoped<SelectGpxToursUseCase>();
             });
 }

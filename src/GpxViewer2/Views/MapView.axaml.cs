@@ -45,17 +45,18 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     }
 
     /// <inheritdoc />
-    public void AddAvailableGpxFiles(IEnumerable<LoadedGpxFile> newGpxFiles)
+    public void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours)
     {
         _lineStringLayerForAll.Features = _lineStringLayerForAll.Features.Concat(
-            newGpxFiles
-                .Select(actFile =>
+            newGpxTours
+                .SelectMany(x => x.Segments)
+                .Select(actSegment =>
                 {
                     return new GeometryFeatureWithMetadata()
                     {
-                        Geometry = actFile.RawGpxFile.Tracks[0].Segments[0].Points.GpxWaypointsToMapsuiGeometry(),
+                        Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
                         Styles = new[] { GpxRenderingHelper.CreateLineStringStyle_Default() },
-                        Route = actFile
+                        Tour = actSegment.Tour
                     };
                 }))
             .ToArray();
@@ -64,7 +65,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     }
 
     /// <inheritdoc />
-    public void SetSelectedGpxFile(IReadOnlyList<LoadedGpxFile> selection)
+    public void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection)
     {
         if (selection.Count == 0)
         {
@@ -73,13 +74,14 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         else
         {
             _lineStringLayerForSelection.Features = selection
-                .Select(actFile =>
+                .SelectMany(x => x.Segments)
+                .Select(actSegment =>
                 {
                     return new GeometryFeatureWithMetadata()
                     {
-                        Geometry = actFile.RawGpxFile.Tracks[0].Segments[0].Points.GpxWaypointsToMapsuiGeometry(),
+                        Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
                         Styles = new[] { GpxRenderingHelper.CreateLineStringStyle_Selected() },
-                        Route = actFile
+                        Tour = actSegment.Tour
                     };
                 })
                 .ToArray();
@@ -112,7 +114,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 3);
             if (clickInfo.Feature is GeometryFeatureWithMetadata featureWithMetadata)
             {
-                this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(featureWithMetadata.Route));
+                this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(featureWithMetadata.Tour));
             }
             else
             {

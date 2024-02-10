@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
@@ -25,6 +26,14 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     public Control CreateViewInstance()
     {
         return new RouteSelectionView();
+    }
+
+    public void NotifyDoubleTabbed(RouteSelectionNode node)
+    {
+        using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
+        useCase.SelectGpxTours(node.Node
+            .GetAssociatedToursDeep()
+            .ToArray());
     }
     
     [RelayCommand]

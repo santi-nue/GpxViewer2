@@ -9,15 +9,23 @@ namespace GpxViewer2.Model;
 
 public class LoadedGpxFileTourSegmentInfo
 {
+    public LoadedGpxFileTourInfo Tour { get; }
+    
     public List<GpxWaypoint> Points { get; }
         
-    public LoadedGpxFileTourSegmentInfo(GpxRoute route)
+    public LoadedGpxFileTourSegmentInfo(
+        LoadedGpxFileTourInfo tour,
+        GpxRoute route)
     {
+        this.Tour = tour;
         this.Points = route.RoutePoints;
     }
 
-    public LoadedGpxFileTourSegmentInfo(GpxTrackSegment trackSegment)
+    public LoadedGpxFileTourSegmentInfo(
+        LoadedGpxFileTourInfo tour,
+        GpxTrackSegment trackSegment)
     {
+        this.Tour = tour;
         this.Points = trackSegment.Points;
     }
 }

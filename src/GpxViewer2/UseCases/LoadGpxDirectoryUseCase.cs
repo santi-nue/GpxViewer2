@@ -12,11 +12,11 @@ public class LoadGpxDirectoryUseCase(
     public void LoadGpxDirectory(string directoryPath)
     {
         var loadedNode = srvGpxFileRepository.LoadGpxFilesFromDirectory(directoryPath);
-        var loadedGpxFiles = loadedNode
-            .GetAssociatedGpxFilesDeep()
+        var loadedGpxTours = loadedNode
+            .GetAssociatedToursDeep()
             .ToArray();
         
         srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([loadedNode]));
-        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(loadedGpxFiles));
+        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(loadedGpxTours));
     }
 }

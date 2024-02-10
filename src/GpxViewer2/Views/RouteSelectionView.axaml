@@ -18,7 +18,8 @@
                       Command="{Binding Path=LoadGpxDirectoryCommand}" />
         </Menu>
         
-        <TreeView ItemsSource="{Binding Path=Nodes}">
+        <TreeView ItemsSource="{Binding Path=Nodes}"
+                  DoubleTapped="OnTreeView_DoubleTabbed">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type localUtil:RouteSelectionNode}"
                                   ItemsSource="{Binding Path=ChildNodes}">

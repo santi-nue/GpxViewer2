@@ -34,28 +34,31 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     
     private void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
     {
-        using var scope = this.GetScopedService(out SelectGpxFilesUseCase useCase);
+        using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
 
-        if (e.ClickedGpxFile == null)
+        if (e.ClickedGpxTour == null)
         {
-            useCase.SelectGpxFiles([]);
+            useCase.SelectGpxTours([]);
             return;
         }
         
-        useCase.SelectGpxFiles([e.ClickedGpxFile]);
+        useCase.SelectGpxTours([e.ClickedGpxTour]);
     }
     
     public void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
-        srvMaps.AddAvailableGpxFiles(
-            _srvGpxFileRepository.QueryAllLoadedFiles());
+
+        foreach (var actNode in message.Nodes)
+        {
+            srvMaps.AddAvailableGpxTours(actNode.GetAssociatedToursDeep());
+        }
     }
     
     public void OnMessageReceived(GpxFilesSelectedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
-        srvMaps.SetSelectedGpxFile(message.GpxFiles);
+        srvMaps.SetSelectedGpxTours(message.GpxTours);
     }
 
     /// <inheritdoc />

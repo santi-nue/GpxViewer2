@@ -6,4 +6,4 @@ namespace GpxViewer2.Messages;
 
 [InProcessMessage]
 public record GpxFilesSelectedMessage(
-    IReadOnlyList<LoadedGpxFile> GpxFiles);
+    IReadOnlyList<LoadedGpxFileTourInfo> GpxTours);

@@ -5,5 +5,5 @@ namespace GpxViewer2.Views.Maps;
 
 public class GeometryFeatureWithMetadata : GeometryFeature
 {
-    public LoadedGpxFile? Route { get; set; }
+    public LoadedGpxFileTourInfo? Tour { get; set; }
 }

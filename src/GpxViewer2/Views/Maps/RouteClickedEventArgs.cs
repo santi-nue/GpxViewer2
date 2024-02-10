@@ -3,7 +3,7 @@ using GpxViewer2.Model;
 
 namespace GpxViewer2.Views.Maps;
 
-public class RouteClickedEventArgs(LoadedGpxFile? clickedGpxFile) : EventArgs
+public class RouteClickedEventArgs(LoadedGpxFileTourInfo? clickedGpxTour) : EventArgs
 {
-    public LoadedGpxFile? ClickedGpxFile { get; } = clickedGpxFile;
+    public LoadedGpxFileTourInfo? ClickedGpxTour { get; } = clickedGpxTour;
 }

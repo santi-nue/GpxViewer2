@@ -9,7 +9,7 @@ public interface IMapsViewService : IViewService
 {
     event EventHandler<RouteClickedEventArgs> RouteClicked; 
 
-    void AddAvailableGpxFiles(IEnumerable<LoadedGpxFile> newGpxFiles);
+    void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours);
     
-    void SetSelectedGpxFile(IReadOnlyList<LoadedGpxFile> selection);
+    void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection);
 }

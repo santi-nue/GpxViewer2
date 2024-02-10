@@ -43,7 +43,9 @@ public class LoadedGpxFileTourInfo
         this.RawTourExtensionData = rawRouteData.Extensions.GetOrCreateExtension<RouteExtension>();
 
         this.Segments = new List<LoadedGpxFileTourSegmentInfo>(1);
-        this.Segments.Add(new LoadedGpxFileTourSegmentInfo(rawRouteData));
+        this.Segments.Add(new LoadedGpxFileTourSegmentInfo(
+            this,
+            rawRouteData));
 
         this.Waypoints = file.Waypoints;
 
@@ -62,7 +64,9 @@ public class LoadedGpxFileTourInfo
         this.Segments = new List<LoadedGpxFileTourSegmentInfo>(rawTrackData.Segments.Count);
         foreach(var actSegment in rawTrackData.Segments)
         {
-            this.Segments.Add(new LoadedGpxFileTourSegmentInfo(actSegment));
+            this.Segments.Add(new LoadedGpxFileTourSegmentInfo(
+                this,
+                actSegment));
         }
 
         this.Waypoints = file.Waypoints;

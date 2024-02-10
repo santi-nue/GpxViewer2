@@ -5,11 +5,11 @@ using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;
 
-public class SelectGpxFilesUseCase(
+public class SelectGpxToursUseCase(
     IInProcessMessagePublisher srvMessagePublisher)
 {
-    public void SelectGpxFiles(IReadOnlyList<LoadedGpxFile> gpxFiles)
+    public void SelectGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> gpxTours)
     {
-        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(gpxFiles));
+        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(gpxTours));
     }
 }
