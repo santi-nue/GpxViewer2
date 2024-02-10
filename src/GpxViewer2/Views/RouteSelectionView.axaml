@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ext="https://github.com/RolandK.AvaloniaExtensions"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:local="clr-namespace:GpxViewer2.Views"
              xmlns:localUtil="clr-namespace:GpxViewer2.Views.RouteSelection"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -12,18 +13,75 @@
              ViewFor="{x:Type local:RouteSelectionViewModel}">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Load File"
-                      Command="{Binding Path=LoadGpxFileCommand}" />
-            <MenuItem Header="Load Directory"
-                      Command="{Binding Path=LoadGpxDirectoryCommand}" />
+            <MenuItem Command="{Binding Path=LoadGpxFileCommand}"
+                      ToolTip.Tip="Load GPX-File">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-file-import"/>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding Path=LoadGpxDirectoryCommand}"
+                      ToolTip.Tip="Load Directory">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-folder-open"/>
+                </MenuItem.Header>
+            </MenuItem>
         </Menu>
         
         <TreeView ItemsSource="{Binding Path=Nodes}"
-                  DoubleTapped="OnTreeView_DoubleTabbed">
+                  DoubleTapped="OnTreeView_DoubleTabbed"
+                  Grid.IsSharedSizeScope="True">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type localUtil:RouteSelectionNode}"
                                   ItemsSource="{Binding Path=ChildNodes}">
-                    <TextBlock Text="{Binding Path=Node.NodeText}" />
+                    <Grid ToolTip.Tip="{Binding Path=TooltipText}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C1" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C2" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C3" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C4" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="C5" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <i:Icon Grid.Column="0"
+                                Value="fa-check"
+                                IsVisible="{Binding Path=IsTourFinishedVisible}"/>
+                        
+                        <TextBlock Grid.Column="2" 
+                                   Text="{Binding Path=Node.NodeText}" />
+                        
+                        <StackPanel Grid.Column="4"
+                                    Orientation="Horizontal"
+                                    IsVisible="{Binding Path=HasAssociatedTour}">
+                            <i:Icon Value="fa-route"
+                                    Margin="0,0,2,0"/>
+                            <TextBlock Text="{Binding Path=DistanceKm, StringFormat=N1}" />
+                            <TextBlock Text="km" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="6"
+                                    Orientation="Horizontal"
+                                    IsVisible="{Binding Path=HasAssociatedTour}">
+                            <i:Icon Value="fa-arrow-up"
+                                    Margin="0,0,2,0"/>
+                            <TextBlock Text="{Binding Path=ElevationUpMeters, StringFormat=N0}" />
+                            <TextBlock Text="m" />
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="8"
+                                    Orientation="Horizontal"
+                                    IsVisible="{Binding Path=HasAssociatedTour}">
+                            <i:Icon Value="fa-arrow-down"
+                                    Margin="0,0,2,0"/>
+                            <TextBlock Text="{Binding Path=ElevationDownMeters, StringFormat=N0}" />
+                            <TextBlock Text="m" />
+                        </StackPanel>
+                    </Grid>
+                    
+                    
                 </TreeDataTemplate>
             </TreeView.DataTemplates>
         </TreeView>
