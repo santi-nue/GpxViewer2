@@ -26,6 +26,5 @@
 
     <ItemGroup>
       <Folder Include="Messages\" />
-      <Folder Include="Services\GpxFileStore\" />
     </ItemGroup>
 </Project>
