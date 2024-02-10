@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ext="https://github.com/RolandK.AvaloniaExtensions"
         xmlns:local="clr-namespace:GpxViewer2"
+        xmlns:controls="clr-namespace:GpxViewer2.Controls"
         xmlns:views="clr-namespace:GpxViewer2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GpxViewer2.MainWindow"
@@ -11,5 +12,28 @@
         Title="RK GPXviewer 2"
         ViewFor="{x:Type local:MainWindowViewModel}"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
-    <views:MapView />
+    <Grid RowDefinitions="*,3,200">
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="200,3,*">
+        
+            <controls:RegionControl Grid.Column="0"
+                                    ViewModelType="{x:Type views:RouteSelectionViewModel}" />
+            
+            <GridSplitter Grid.Column="1"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch" />
+            
+            <controls:RegionControl Grid.Column="2"
+                                    ViewModelType="{x:Type views:MapViewModel}" />
+            
+        </Grid>
+        
+        <GridSplitter Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" />
+        
+        <controls:RegionControl Grid.Row="2" 
+                                ViewModelType="{x:Type views:RouteDetailViewModel}" />
+    </Grid>
+
 </ext:MvvmWindow>

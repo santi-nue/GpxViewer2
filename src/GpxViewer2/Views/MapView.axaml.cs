@@ -1,10 +1,10 @@
-using Avalonia.Controls;
 using Mapsui.Layers;
 using Mapsui.Tiling;
+using RolandK.AvaloniaExtensions.Mvvm.Controls;
 
 namespace GpxViewer2.Views;
 
-public partial class MapView : UserControl
+public partial class MapView : MvvmUserControl
 {
     private MemoryLayer _lineStringLayerForAll;
     private MemoryLayer _lineStringLayerForSelection;

@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GpxViewer2.Controls.RegionControl">
+    <UserControl.Styles>
+        <Style Selector="HeaderedContentControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True" Margin="3">
+                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}" BorderThickness="0"
+                                        Margin="5,0,0,0">
+                                    <ContentPresenter Margin="2"
+                                                      Content="{TemplateBinding Header}" />
+                                </Border>
+                            </StackPanel>
+
+                            <Border
+                                BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                BorderThickness="1">
+                                <ContentPresenter Content="{TemplateBinding Content}" />
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    
+    <HeaderedContentControl x:Name="CtrlContentControl">
+        <HeaderedContentControl.Header>
+            <TextBlock x:Name="CtrlTitle" />
+        </HeaderedContentControl.Header>
+    </HeaderedContentControl>
+    
+</UserControl>

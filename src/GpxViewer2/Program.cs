@@ -2,6 +2,7 @@
 using System;
 using GpxViewer2.Services;
 using GpxViewer2.Services.RecentlyOpened;
+using GpxViewer2.Views;
 using Microsoft.Extensions.DependencyInjection;
 using RolandK.AvaloniaExtensions.DependencyInjection;
 using RolandK.InProcessMessaging;
@@ -33,5 +34,8 @@ class Program
                     _ => new RecentlyOpenedFilesService(".RKMediaGallery", 5));
                 
                 services.AddTransient<MainWindowViewModel>();
+                services.AddTransient<MapViewModel>();
+                services.AddTransient<RouteDetailViewModel>();
+                services.AddTransient<RouteSelectionViewModel>();
             });
 }
