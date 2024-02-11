@@ -33,7 +33,8 @@
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type localUtil:RouteSelectionNode}"
                                   ItemsSource="{Binding Path=ChildNodes}">
-                    <Grid ToolTip.Tip="{Binding Path=TooltipText}">
+                    <Grid ToolTip.Tip="{Binding Path=TooltipText}"
+                          Background="#01000000">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="C1" />
                             <ColumnDefinition Width="10" />

@@ -15,7 +15,7 @@ namespace GpxViewer2.Views;
 
 public partial class MapView : MvvmUserControl, IMapsViewService
 {
-    private MemoryLayer _lineStringLayerForAll;
+    private MemoryLayer _lineStringLayerForDefault;
     private MemoryLayer _lineStringLayerForSelection;
     
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
@@ -30,13 +30,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     {
         this.InitializeComponent();
         
-        _lineStringLayerForAll = new MemoryLayer();
-        _lineStringLayerForAll.IsMapInfoLayer = true;
+        _lineStringLayerForDefault = new MemoryLayer();
+        _lineStringLayerForDefault.IsMapInfoLayer = true;
         _lineStringLayerForSelection = new MemoryLayer();
         
         this.MapControl.Map!.Layers.Add(OpenStreetMap.CreateTileLayer());
-        this.MapControl.Map.Layers.Add(_lineStringLayerForAll);
         this.MapControl.Map.Layers.Add(_lineStringLayerForSelection);
+        this.MapControl.Map.Layers.Add(_lineStringLayerForDefault);
         // this.MapControl.Map.RotationLock = false;   ????
         this.MapControl.UnSnapRotationDegrees = 30;
         this.MapControl.ReSnapRotationDegrees = 5;
@@ -47,7 +47,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     /// <inheritdoc />
     public void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours)
     {
-        _lineStringLayerForAll.Features = _lineStringLayerForAll.Features.Concat(
+        _lineStringLayerForDefault.Features = _lineStringLayerForDefault.Features.Concat(
             newGpxTours
                 .SelectMany(x => x.Segments)
                 .Select(actSegment =>
@@ -55,7 +55,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                     return new GeometryFeatureWithMetadata()
                     {
                         Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
-                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyle_Default() },
+                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Default) },
                         Tour = actSegment.Tour
                     };
                 }))
@@ -80,7 +80,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                     return new GeometryFeatureWithMetadata()
                     {
                         Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
-                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyle_Selected() },
+                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Selected) },
                         Tour = actSegment.Tour
                     };
                 })
