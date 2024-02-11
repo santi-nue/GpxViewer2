@@ -10,6 +10,8 @@ public interface IMapsViewService : IViewService
     event EventHandler<RouteClickedEventArgs> RouteClicked; 
 
     void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours);
+
+    void UpdateGpxTourStyles();
     
     void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection);
 }

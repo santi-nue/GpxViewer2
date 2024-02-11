@@ -15,7 +15,7 @@ namespace GpxViewer2.Views;
 
 public partial class MapView : MvvmUserControl, IMapsViewService
 {
-    private MemoryLayer _lineStringLayerForDefault;
+    private MemoryLayer _lineStringLayerForAll;
     private MemoryLayer _lineStringLayerForSelection;
     
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
@@ -30,14 +30,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     {
         this.InitializeComponent();
         
-        _lineStringLayerForDefault = new MemoryLayer();
-        _lineStringLayerForDefault.IsMapInfoLayer = true;
+        _lineStringLayerForAll = new MemoryLayer();
+        _lineStringLayerForAll.IsMapInfoLayer = true;
         _lineStringLayerForSelection = new MemoryLayer();
         
-        this.MapControl.Map!.Layers.Add(OpenStreetMap.CreateTileLayer());
+        this.MapControl.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
         this.MapControl.Map.Layers.Add(_lineStringLayerForSelection);
-        this.MapControl.Map.Layers.Add(_lineStringLayerForDefault);
-        // this.MapControl.Map.RotationLock = false;   ????
+        this.MapControl.Map.Layers.Add(_lineStringLayerForAll);
         this.MapControl.UnSnapRotationDegrees = 30;
         this.MapControl.ReSnapRotationDegrees = 5;
 
@@ -47,7 +46,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     /// <inheritdoc />
     public void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours)
     {
-        _lineStringLayerForDefault.Features = _lineStringLayerForDefault.Features.Concat(
+        _lineStringLayerForAll.Features = _lineStringLayerForAll.Features.Concat(
             newGpxTours
                 .SelectMany(x => x.Segments)
                 .Select(actSegment =>
@@ -55,13 +54,31 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                     return new GeometryFeatureWithMetadata()
                     {
                         Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
-                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Default) },
+                        Styles = new[] { GpxRenderingHelper.CreateLineStringStyleForTour(actSegment.Tour) },
                         Tour = actSegment.Tour
                     };
                 }))
             .ToArray();
         
         this.MapControl.RefreshGraphics();
+    }
+
+    /// <inheritdoc />
+    public void UpdateGpxTourStyles()
+    {
+        foreach (var actFeature in _lineStringLayerForAll.Features)
+        {
+            if ((actFeature is not GeometryFeatureWithMetadata featureWithMetadata) ||
+                (featureWithMetadata.Tour == null))
+            {
+                continue;
+            }
+
+            featureWithMetadata.Styles = new[]
+            {
+                GpxRenderingHelper.CreateLineStringStyleForTour(featureWithMetadata.Tour)
+            };
+        }
     }
 
     /// <inheritdoc />
@@ -112,7 +129,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             var clickInfo = this.MapControl.GetMapInfo(
                 new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
                 3);
-            if (clickInfo.Feature is GeometryFeatureWithMetadata featureWithMetadata)
+            if (clickInfo?.Feature is GeometryFeatureWithMetadata featureWithMetadata)
             {
                 this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(featureWithMetadata.Tour));
             }
@@ -131,7 +148,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
             3);
 
-        this.MapControl.Cursor = mouseLocationInfo.Feature != null
+        this.MapControl.Cursor = mouseLocationInfo?.Feature != null
             ? new Cursor(StandardCursorType.Hand)
             : Cursor.Default;
     }

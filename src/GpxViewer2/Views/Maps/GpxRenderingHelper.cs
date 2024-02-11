@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Reactive.Joins;
+using GpxViewer2.Model;
+using GpxViewer2.Model.GpxXmlExtensions;
 using Mapsui.Projections;
 using Mapsui.Styles;
 using NetTopologySuite.Geometries;
@@ -78,6 +81,18 @@ public static class GpxRenderingHelper
     
     public static IStyle CreateLineStringStyle(GpxTourLineStringType lineStringType)
     {
+        return _lineStringStyles[lineStringType];
+    }
+    
+    public static IStyle CreateLineStringStyleForTour(LoadedGpxFileTourInfo tour)
+    {
+        var lineStringType = tour.RawTourExtensionData.State switch
+        {
+            GpxTrackState.Planned => GpxTourLineStringType.Planned,
+            GpxTrackState.Succeeded => GpxTourLineStringType.Succeeded,
+            _ => GpxTourLineStringType.Default
+        };
+        
         return _lineStringStyles[lineStringType];
     }
 }

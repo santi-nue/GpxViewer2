@@ -1,21 +1,16 @@
 using Avalonia.Controls;
 using GpxViewer2.Messages;
-using GpxViewer2.Services;
 using GpxViewer2.UseCases;
 using GpxViewer2.Util;
 using GpxViewer2.Views.Maps;
-using NSubstitute;
 using RKMediaGallery.Controls;
 
 namespace GpxViewer2.Views;
 
 public partial class MapViewModel : OwnViewModelBase, INavigationTarget
 {
-    public static readonly MapViewModel EmptyViewModel = new(
-        Substitute.For<IGpxFileRepositoryService>());
-
-    private readonly IGpxFileRepositoryService _srvGpxFileRepository;
-
+    public static readonly MapViewModel EmptyViewModel = new();
+    
     private IMapsViewService? _attachedMapsViewService;
     
     /// <inheritdoc />
@@ -25,11 +20,6 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     public Control CreateViewInstance()
     {
         return new MapView();
-    }
-
-    public MapViewModel(IGpxFileRepositoryService srvGpxFileRepository)
-    {
-        _srvGpxFileRepository = srvGpxFileRepository;
     }
     
     private void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
@@ -59,6 +49,12 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
         srvMaps.SetSelectedGpxTours(message.GpxTours);
+    }
+
+    public void OnMessageReceived(TourMetadataChangedMessage message)
+    {
+        var srvMaps = this.GetViewService<IMapsViewService>();
+        srvMaps.UpdateGpxTourStyles();
     }
 
     /// <inheritdoc />
