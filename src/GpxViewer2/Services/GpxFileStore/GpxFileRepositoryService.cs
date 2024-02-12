@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using GpxViewer2.Model;
 using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Services.GpxFileStore;
@@ -14,33 +14,61 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
         return _loadedNodes;
     }
 
-    /// <inheritdoc />
-    public IEnumerable<LoadedGpxFile> QueryAllLoadedFiles()
+    /// <summary>
+    /// Gets the existing node based on the given <see cref="FileOrDirectoryPath"/>.
+    /// Null is returned, if not loaded before.
+    /// </summary>
+    private static GpxFileRepositoryNode? TryGetExistingNode(FileOrDirectoryPath pathToSearch, IEnumerable<GpxFileRepositoryNode> nodes)
     {
-        foreach (var actLoadedNode in _loadedNodes)
+        foreach (var actNode in nodes)
         {
-            foreach (var actLoadedFile in actLoadedNode.GetAssociatedGpxFilesDeep())
-            {
-                yield return actLoadedFile;
-            }
+            if (actNode.Source.Equals(pathToSearch)) { return actNode; }
+
+            var childNodeResult = TryGetExistingNode(pathToSearch, actNode.ChildNodes);
+            if (childNodeResult != null) { return childNodeResult; }
         }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Checks whether there is an existing node loaded from given <see cref="FileOrDirectoryPath"/>
+    /// </summary>
+    private static bool ContainsExistingNode(FileOrDirectoryPath pathToSearch, IEnumerable<GpxFileRepositoryNode> nodes)
+    {
+        var existingNode = TryGetExistingNode(pathToSearch, nodes);
+        return existingNode != null;
     }
 
     /// <inheritdoc />
-    public GpxFileRepositoryNode LoadGpxFile(string filePath)
+    public GpxFileRepositoryNode? TryGetExistingNode(FileOrDirectoryPath fileOrDirectoryPath)
     {
-        var fileOrDirectoryPath = new FileOrDirectoryPath(filePath);
-        var gpxFileNode = new GpxFileRepositoryNodeFile(fileOrDirectoryPath);
+        return TryGetExistingNode(fileOrDirectoryPath, _loadedNodes);
+    }
+    
+    /// <inheritdoc />
+    public GpxFileRepositoryNode LoadFileNode(FileOrDirectoryPath filePath)
+    {
+        if (ContainsExistingNode(filePath, _loadedNodes))
+        {
+            throw new InvalidOperationException($"File {filePath} already loaded!");
+        }
+        
+        var gpxFileNode = new GpxFileRepositoryNodeFile(filePath);
         _loadedNodes.Add(gpxFileNode);
         return gpxFileNode;
     }
-
+    
     /// <inheritdoc />
-    public GpxFileRepositoryNode LoadGpxFilesFromDirectory(string directoryPath)
+    public GpxFileRepositoryNode LoadDirectoryNode(FileOrDirectoryPath directoryPath)
     {
-        var fileOrDirectoryPath = new FileOrDirectoryPath(directoryPath);
-        var gpxDirectoryNode = new GpxFileRepositoryNodeDirectory(fileOrDirectoryPath);
-        _loadedNodes.Add(gpxDirectoryNode);
-        return gpxDirectoryNode;
+        if (ContainsExistingNode(directoryPath, _loadedNodes))
+        {
+            throw new InvalidOperationException($"Directory {directoryPath} already loaded!");
+        }
+        
+        var gpxFileNode = new GpxFileRepositoryNodeDirectory(directoryPath);
+        _loadedNodes.Add(gpxFileNode);
+        return gpxFileNode;
     }
 }

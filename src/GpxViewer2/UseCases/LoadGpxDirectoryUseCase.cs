@@ -1,6 +1,7 @@
 using System.Linq;
 using GpxViewer2.Messages;
 using GpxViewer2.Services;
+using GpxViewer2.ValueObjects;
 using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;
@@ -11,12 +12,19 @@ public class LoadGpxDirectoryUseCase(
 {
     public void LoadGpxDirectory(string directoryPath)
     {
-        var loadedNode = srvGpxFileRepository.LoadGpxFilesFromDirectory(directoryPath);
-        var loadedGpxTours = loadedNode
+        var source = new FileOrDirectoryPath(directoryPath);
+        
+        var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
+        if (repositoryNode == null)
+        {
+            repositoryNode = srvGpxFileRepository.LoadDirectoryNode(source);
+            srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([repositoryNode]));
+        }
+        
+        var loadedGpxTours = repositoryNode
             .GetAssociatedToursDeep()
             .ToArray();
-        
-        srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([loadedNode]));
+
         srvMessagePublisher.Publish(new GpxFilesSelectedMessage(loadedGpxTours));
     }
 }

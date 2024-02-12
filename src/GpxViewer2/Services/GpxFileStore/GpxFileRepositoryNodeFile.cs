@@ -17,6 +17,9 @@ namespace GpxViewer2.Services.GpxFileStore
         private Exception? _fileLoadError;
 
         public FileOrDirectoryPath FilePath { get; }
+        
+        /// <inheritdoc />
+        public override FileOrDirectoryPath Source => this.FilePath;
 
         /// <inheritdoc />
         public override bool CanSave => true;

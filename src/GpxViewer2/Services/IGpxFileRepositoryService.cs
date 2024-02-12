@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using GpxViewer2.Model;
 using GpxViewer2.Services.GpxFileStore;
+using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Services;
 
@@ -8,9 +8,9 @@ public interface IGpxFileRepositoryService
 {
     IReadOnlyList<GpxFileRepositoryNode> GetAllLoadedNodes();
 
-    IEnumerable<LoadedGpxFile> QueryAllLoadedFiles();
+    GpxFileRepositoryNode? TryGetExistingNode(FileOrDirectoryPath fileOrDirectoryPath);
+    
+    GpxFileRepositoryNode LoadFileNode(FileOrDirectoryPath filePath);
 
-    GpxFileRepositoryNode LoadGpxFile(string filePath);
-
-    GpxFileRepositoryNode LoadGpxFilesFromDirectory(string directoryPath);
+    GpxFileRepositoryNode LoadDirectoryNode(FileOrDirectoryPath directoryPath);
 }

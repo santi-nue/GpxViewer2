@@ -13,13 +13,28 @@ public readonly struct FileOrDirectoryPath(string path)
 {
     public static readonly FileOrDirectoryPath Empty = new();
     
-    private readonly string? _path = System.IO.Path.GetFullPath(path);
+    private readonly string? _path = ConvertForOsCasingBehavior(System.IO.Path.GetFullPath(path));
 
     public string Path => _path ?? string.Empty;
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return _path ?? nameof(FileOrDirectoryPath);
+    }
+    
     public bool Equals(FileOrDirectoryPath other)
     {
         return this.Path == other.Path;
+    }
+    
+    private static string ConvertForOsCasingBehavior(string path)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return path.ToLower();
+        }
+        return path;
     }
 
     /// <inheritdoc />
