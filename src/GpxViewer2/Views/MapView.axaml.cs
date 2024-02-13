@@ -64,6 +64,29 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     }
 
     /// <inheritdoc />
+    public void RemoveAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> existingGpxTours)
+    {
+        _lineStringLayerForAll.Features = _lineStringLayerForAll.Features
+            .Where(x =>
+            {
+                if (x is not GeometryFeatureWithMetadata feature) { return true; }
+
+                return !existingGpxTours.Contains(feature.Tour);
+            })
+            .ToArray();
+        _lineStringLayerForSelection.Features = _lineStringLayerForAll.Features
+            .Where(x =>
+            {
+                if (x is not GeometryFeatureWithMetadata feature) { return true; }
+
+                return !existingGpxTours.Contains(feature.Tour);
+            })
+            .ToArray();
+        
+        this.MapControl.RefreshGraphics();
+    }
+
+    /// <inheritdoc />
     public void UpdateGpxTourStyles()
     {
         foreach (var actFeature in _lineStringLayerForAll.Features)

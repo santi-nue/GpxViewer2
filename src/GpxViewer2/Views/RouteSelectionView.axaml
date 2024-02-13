@@ -25,9 +25,22 @@
                     <i:Icon Value="fa-folder-open"/>
                 </MenuItem.Header>
             </MenuItem>
+            
+            <MenuItem Header="|"
+                      IsHitTestVisible="False" />
+            
+            <MenuItem Command="{Binding Path=CloseNodesCommand}"
+                      ToolTip.Tip="Close">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-circle-xmark"/>
+                </MenuItem.Header>
+            </MenuItem>
         </Menu>
         
-        <TreeView ItemsSource="{Binding Path=Nodes}"
+        <TreeView x:Name="CtrlNodeTree"
+                  SelectionMode="Multiple"
+                  SelectionChanged="OnCtrlNodeTree_SelectionChanged"
+                  ItemsSource="{Binding Path=Nodes}"
                   DoubleTapped="OnTreeView_DoubleTabbed"
                   Grid.IsSharedSizeScope="True">
             <TreeView.DataTemplates>

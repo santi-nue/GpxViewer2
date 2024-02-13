@@ -56,6 +56,7 @@ class Program
                 services.AddTransient<RouteSelectionViewModel>();
 
                 // UseCases
+                services.AddScoped<CloseFileOrDirectoryUseCase>();
                 services.AddScoped<LoadGpxFileUseCase>();
                 services.AddScoped<LoadGpxDirectoryUseCase>();
                 services.AddScoped<SelectGpxToursUseCase>();

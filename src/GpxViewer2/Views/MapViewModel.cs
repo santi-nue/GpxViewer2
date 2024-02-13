@@ -57,6 +57,16 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         srvMaps.UpdateGpxTourStyles();
     }
 
+    public void OnMessageReceived(GpxFileRepositoryNodesRemovedMessage message)
+    {
+        var srvMaps = this.GetViewService<IMapsViewService>();
+
+        foreach (var actNode in message.Nodes)
+        {
+            srvMaps.RemoveAvailableGpxTours(actNode.GetAssociatedToursDeep());
+        }
+    }
+
     /// <inheritdoc />
     protected override void OnAssociatedViewChanged(object? associatedView)
     {

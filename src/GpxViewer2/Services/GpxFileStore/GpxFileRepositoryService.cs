@@ -30,6 +30,29 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
 
         return null;
     }
+
+    /// <summary>
+    /// Removes the given node. True is returned, when node was found and removed.
+    /// </summary>
+    private static bool RemoveNodeIfFound(GpxFileRepositoryNode node, IList<GpxFileRepositoryNode> nodeCollection)
+    {
+        for (var loop = 0; loop < nodeCollection.Count; loop++)
+        {
+            if (nodeCollection[loop] == node)
+            {
+                nodeCollection.RemoveAt(loop);
+                return true;
+            }
+
+            var removedOnChildCollection = RemoveNodeIfFound(node, nodeCollection[loop].ChildNodes);
+            if (removedOnChildCollection)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     /// <summary>
     /// Checks whether there is an existing node loaded from given <see cref="FileOrDirectoryPath"/>
@@ -70,5 +93,11 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
         var gpxFileNode = new GpxFileRepositoryNodeDirectory(directoryPath);
         _loadedNodes.Add(gpxFileNode);
         return gpxFileNode;
+    }
+
+    /// <inheritdoc />
+    public void RemoveNode(GpxFileRepositoryNode node)
+    {
+        RemoveNodeIfFound(node, _loadedNodes);
     }
 }

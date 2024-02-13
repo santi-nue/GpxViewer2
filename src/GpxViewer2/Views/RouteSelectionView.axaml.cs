@@ -1,12 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using GpxViewer2.Views.RouteSelection;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 
 namespace GpxViewer2.Views;
 
-public partial class RouteSelectionView : MvvmUserControl
+public partial class RouteSelectionView : MvvmUserControl, IRouteSelectionViewService
 {
+    /// <inheritdoc />
+    public event EventHandler? NodeSelectionChanged;
+    
     public RouteSelectionView()
     {
         this.InitializeComponent();
@@ -22,5 +29,18 @@ public partial class RouteSelectionView : MvvmUserControl
         }
 
         viewModel.NotifyDoubleTabbed(node);
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<RouteSelectionNode> GetSelectedNodes()
+    {
+        return this.CtrlNodeTree.SelectedItems
+            .Cast<RouteSelectionNode>()
+            .ToArray();
+    }
+
+    private void OnCtrlNodeTree_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        this.NodeSelectionChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -13,4 +13,6 @@ public interface IGpxFileRepositoryService
     GpxFileRepositoryNode LoadFileNode(FileOrDirectoryPath filePath);
 
     GpxFileRepositoryNode LoadDirectoryNode(FileOrDirectoryPath directoryPath);
+
+    void RemoveNode(GpxFileRepositoryNode node);
 }

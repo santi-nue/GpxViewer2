@@ -11,6 +11,8 @@ public interface IMapsViewService : IViewService
 
     void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours);
 
+    void RemoveAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> existingGpxTours);
+
     void UpdateGpxTourStyles();
     
     void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection);
