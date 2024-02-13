@@ -45,6 +45,8 @@ namespace GpxViewer2.Services.GpxFileStore
                 childFile.Parent = this;
                 this.ChildNodes.Add(childFile);
             }
+            
+            this.ChildNodes.Sort((x, y) => x.NodeText.CompareTo(y.NodeText));
         }
 
         /// <inheritdoc />

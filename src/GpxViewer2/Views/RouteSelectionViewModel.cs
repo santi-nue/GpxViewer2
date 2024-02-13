@@ -70,7 +70,6 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     private void CloseNodes()
     {
         if (_routeSelectionViewService == null) { return; }
-        
         var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
         if (selectedNodes.Count == 0) { return; }
 
@@ -84,7 +83,17 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
 
     private void OnRouteSelectionViewService_NodeSelectionChanged(object? sender, EventArgs e)
     {
+        if (_routeSelectionViewService == null) { return; }
+        var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
+        if (selectedNodes.Count == 0) { return; }
         
+        var toursToSelect = selectedNodes
+            .SelectMany(x => x.Node.GetAssociatedToursDeep())
+            .Distinct()
+            .ToArray();
+
+        using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
+        useCase.SelectGpxTours(toursToSelect);
     }
     
     private void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)

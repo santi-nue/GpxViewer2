@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GpxViewer2.Model;
 using GpxViewer2.Util;
@@ -10,7 +9,7 @@ namespace GpxViewer2.Services.GpxFileStore;
 
 public abstract class GpxFileRepositoryNode 
 {
-    public ObservableCollection<GpxFileRepositoryNode> ChildNodes { get; } = new();
+    public List<GpxFileRepositoryNode> ChildNodes { get; } = new();
 
     public GpxFileRepositoryNode? Parent { get; set; }
     
