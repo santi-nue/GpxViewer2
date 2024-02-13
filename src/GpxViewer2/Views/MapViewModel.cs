@@ -45,7 +45,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         }
     }
     
-    public void OnMessageReceived(GpxFilesSelectedMessage message)
+    public void OnMessageReceived(GpxToursSelectedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
         srvMaps.SetSelectedGpxTours(message.GpxTours);

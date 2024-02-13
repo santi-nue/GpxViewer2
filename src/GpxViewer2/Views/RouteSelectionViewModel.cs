@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using GpxViewer2.Messages;
+using GpxViewer2.Model;
 using GpxViewer2.Services.GpxFileStore;
 using GpxViewer2.UseCases;
 using GpxViewer2.Util;
@@ -21,6 +22,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     public static readonly RouteSelectionViewModel EmptyViewModel = new();
 
     private IRouteSelectionViewService? _routeSelectionViewService;
+    private bool _isInSelectionProcessing;
 
     /// <inheritdoc />
     public string Title { get; } = "Routes";
@@ -39,6 +41,44 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         useCase.SelectGpxTours(node.Node
             .GetAssociatedToursDeep()
             .ToArray());
+    }
+    
+    private static void RemoveNodesDeep(
+        IReadOnlyList<GpxFileRepositoryNode> removedRepoNodes,
+        ObservableCollection<RouteSelectionNode> treeNodes)
+    {
+        var removedNodes = treeNodes
+            .Where(x => removedRepoNodes.Contains(x.Node))
+            .ToArray();
+        foreach (var actRemovedNode in removedNodes)
+        {
+            treeNodes.Remove(actRemovedNode);
+        }
+
+        foreach (var actRemainingTreeNode in treeNodes)
+        {
+            if(actRemainingTreeNode.ChildNodes.Count == 0){ continue; }
+            RemoveNodesDeep(removedRepoNodes, actRemainingTreeNode.ChildNodes);
+        }
+    }
+
+    private static IEnumerable<RouteSelectionNode> GetCorrespondingNodes(
+        IReadOnlyList<LoadedGpxFileTourInfo> tours,
+        ObservableCollection<RouteSelectionNode> treeNodes)
+    {
+        foreach (var actTreeNode in treeNodes)
+        {
+            if (tours.Any(x => x.File == actTreeNode.Node.GetAssociatedGpxFile()))
+            {
+                yield return actTreeNode;
+            }
+            
+            if(actTreeNode.ChildNodes.Count == 0){ continue; }
+            foreach (var actFoundNode in GetCorrespondingNodes(tours, actTreeNode.ChildNodes))
+            {
+                yield return actFoundNode;
+            }
+        }
     }
     
     [RelayCommand]
@@ -84,16 +124,25 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     private void OnRouteSelectionViewService_NodeSelectionChanged(object? sender, EventArgs e)
     {
         if (_routeSelectionViewService == null) { return; }
-        var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
-        if (selectedNodes.Count == 0) { return; }
         
-        var toursToSelect = selectedNodes
-            .SelectMany(x => x.Node.GetAssociatedToursDeep())
-            .Distinct()
-            .ToArray();
+        if (_isInSelectionProcessing) { return; }
+        _isInSelectionProcessing = true;
+        try
+        {
+            var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
 
-        using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
-        useCase.SelectGpxTours(toursToSelect);
+            var toursToSelect = selectedNodes
+                .SelectMany(x => x.Node.GetAssociatedToursDeep())
+                .Distinct()
+                .ToArray();
+
+            using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
+            useCase.SelectGpxTours(toursToSelect);
+        }
+        finally
+        {
+            _isInSelectionProcessing = false;
+        }
     }
     
     private void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)
@@ -109,22 +158,22 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         RemoveNodesDeep(message.Nodes, this.Nodes);
     }
 
-    private static void RemoveNodesDeep(
-        IReadOnlyList<GpxFileRepositoryNode> removedRepoNodes,
-        ObservableCollection<RouteSelectionNode> treeNodes)
+    private void OnMessageReceived(GpxToursSelectedMessage message)
     {
-        var removedNodes = treeNodes
-            .Where(x => removedRepoNodes.Contains(x.Node))
-            .ToArray();
-        foreach (var actRemovedNode in removedNodes)
+        if (_routeSelectionViewService == null) { return; }
+        
+        if (_isInSelectionProcessing) { return; }
+        _isInSelectionProcessing = true;
+        try
         {
-            treeNodes.Remove(actRemovedNode);
+            var correspondingNodes = 
+                GetCorrespondingNodes(message.GpxTours, this.Nodes)
+                .ToArray();
+            _routeSelectionViewService.SetSelectedNodes(correspondingNodes);
         }
-
-        foreach (var actRemainingTreeNode in treeNodes)
+        finally
         {
-            if(actRemainingTreeNode.ChildNodes.Count == 0){ continue; }
-            RemoveNodesDeep(removedRepoNodes, actRemainingTreeNode.ChildNodes);
+            _isInSelectionProcessing = false;
         }
     }
 

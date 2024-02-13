@@ -10,6 +10,6 @@ public class SelectGpxToursUseCase(
 {
     public void SelectGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> gpxTours)
     {
-        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(gpxTours));
+        srvMessagePublisher.Publish(new GpxToursSelectedMessage(gpxTours));
     }
 }

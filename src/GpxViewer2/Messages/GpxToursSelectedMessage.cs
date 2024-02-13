@@ -5,5 +5,5 @@ using RolandK.InProcessMessaging;
 namespace GpxViewer2.Messages;
 
 [InProcessMessage]
-public record GpxFilesSelectedMessage(
+public record GpxToursSelectedMessage(
     IReadOnlyList<LoadedGpxFileTourInfo> GpxTours);

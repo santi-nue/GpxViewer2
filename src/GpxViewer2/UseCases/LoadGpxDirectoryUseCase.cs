@@ -25,6 +25,6 @@ public class LoadGpxDirectoryUseCase(
             .GetAssociatedToursDeep()
             .ToArray();
 
-        srvMessagePublisher.Publish(new GpxFilesSelectedMessage(loadedGpxTours));
+        srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
     }
 }

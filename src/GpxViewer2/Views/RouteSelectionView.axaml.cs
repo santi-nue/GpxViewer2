@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using GpxViewer2.Views.RouteSelection;
@@ -37,6 +38,13 @@ public partial class RouteSelectionView : MvvmUserControl, IRouteSelectionViewSe
         return this.CtrlNodeTree.SelectedItems
             .Cast<RouteSelectionNode>()
             .ToArray();
+    }
+
+    /// <inheritdoc />
+    public void SetSelectedNodes(IReadOnlyList<RouteSelectionNode> nodes)
+    {
+        var newList = new AvaloniaList<RouteSelectionNode>(nodes);
+        this.CtrlNodeTree.SelectedItems = newList;
     }
 
     private void OnCtrlNodeTree_SelectionChanged(object? sender, SelectionChangedEventArgs e)
