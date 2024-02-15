@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using GpxViewer2.Messages;
 using GpxViewer2.UseCases;
@@ -15,6 +16,8 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     
     /// <inheritdoc />
     public string Title { get; } = "Map";
+
+    public event EventHandler<ZoomToGpxToursRequestEventArgs>? ZoomToGpxToursRequest; 
 
     /// <inheritdoc />
     public Control CreateViewInstance()
@@ -65,6 +68,13 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         {
             srvMaps.RemoveAvailableGpxTours(actNode.GetAssociatedToursDeep());
         }
+    }
+
+    public void OnMessageReceived(ZoomToGpxToursRequestMessage message)
+    {
+        this.ZoomToGpxToursRequest?.Invoke(
+            this, 
+            new ZoomToGpxToursRequestEventArgs(message.Tours));
     }
 
     /// <inheritdoc />

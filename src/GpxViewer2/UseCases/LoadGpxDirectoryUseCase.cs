@@ -26,5 +26,6 @@ public class LoadGpxDirectoryUseCase(
             .ToArray();
 
         srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
+        srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
     }
 }

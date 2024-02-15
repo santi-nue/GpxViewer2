@@ -5,9 +5,11 @@ using Avalonia.Input;
 using GpxViewer2.Model;
 using GpxViewer2.Views.Maps;
 using Mapsui;
+using Mapsui.Animations;
 using Mapsui.Layers;
 using Mapsui.Nts;
 using Mapsui.Tiling;
+using RolandK.AvaloniaExtensions.Mvvm;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 using RolandK.AvaloniaExtensions.ViewServices.Base;
 
@@ -19,6 +21,8 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     private MemoryLayer _lineStringLayerForSelection;
     
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
+
+    private MapViewModel? _attachedViewModel;
     
     /// <inheritdoc />
     public event EventHandler<RouteClickedEventArgs>? RouteClicked;
@@ -51,12 +55,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 .SelectMany(x => x.Segments)
                 .Select(actSegment =>
                 {
-                    return new GeometryFeatureWithMetadata()
+                    var result = new GeometryFeatureWithMetadata()
                     {
                         Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
                         Styles = new[] { GpxRenderingHelper.CreateLineStringStyleForTour(actSegment.Tour) },
                         Tour = actSegment.Tour
                     };
+                    return result;
                 }))
             .ToArray();
         
@@ -174,5 +179,63 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         this.MapControl.Cursor = mouseLocationInfo?.Feature != null
             ? new Cursor(StandardCursorType.Hand)
             : Cursor.Default;
+    }
+    
+    private void OnAttachedViewModel_ZoomToGpxToursRequest(object? sender, ZoomToGpxToursRequestEventArgs e)
+    {
+        var rectBuilder = new NavigationMRectBuilder();
+        foreach (var actTour in e.Tours)
+        {
+            foreach (var actSegment in actTour.Segments)
+            {
+                var actFeature = new GeometryFeatureWithMetadata()
+                {
+                    Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(),
+                    Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Selected) },
+                    Tour = actSegment.Tour
+                };
+                rectBuilder.TryAddFeature(actFeature);
+            }
+        }
+
+        if (rectBuilder.CanBuildBoundingBox)
+        {
+            this.MapControl.Map.Navigator.ZoomToBox(
+                rectBuilder.TryBuild(),
+                MBoxFit.Fit,
+                500L,
+                Easing.Linear);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnViewModelAttached(ViewModelAttachedEventArgs args)
+    {
+        base.OnViewModelAttached(args);
+
+        if (_attachedViewModel != null)
+        {
+            _attachedViewModel.ZoomToGpxToursRequest -= this.OnAttachedViewModel_ZoomToGpxToursRequest;
+            _attachedViewModel = null;
+        }
+        
+        _attachedViewModel = args.ViewModel as MapViewModel;
+
+        if (_attachedViewModel != null)
+        {
+            _attachedViewModel.ZoomToGpxToursRequest += this.OnAttachedViewModel_ZoomToGpxToursRequest;
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnViewModelDetached(ViewModelDetachedEventArgs args)
+    {
+        base.OnViewModelDetached(args);
+        
+        if (_attachedViewModel != null)
+        {
+            _attachedViewModel.ZoomToGpxToursRequest -= this.OnAttachedViewModel_ZoomToGpxToursRequest;
+            _attachedViewModel = null;
+        }
     }
 }
