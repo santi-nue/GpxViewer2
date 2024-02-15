@@ -31,11 +31,11 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
 
         if (e.ClickedGpxTour == null)
         {
-            useCase.SelectGpxTours([]);
+            useCase.SelectGpxTours([], false);
             return;
         }
         
-        useCase.SelectGpxTours([e.ClickedGpxTour]);
+        useCase.SelectGpxTours([e.ClickedGpxTour], false);
     }
     
     public void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)

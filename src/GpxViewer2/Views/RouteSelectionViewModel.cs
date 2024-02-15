@@ -37,10 +37,19 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
 
     public void NotifyDoubleTabbed(RouteSelectionNode node)
     {
-        using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
-        useCase.SelectGpxTours(node.Node
-            .GetAssociatedToursDeep()
-            .ToArray());
+        if (_isInSelectionProcessing) { return; }
+        _isInSelectionProcessing = true;
+        try
+        {
+            using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
+            useCase.SelectGpxTours(
+                node.Node.GetAssociatedToursDeep().ToArray(), 
+                true);
+        }
+        finally
+        {
+            _isInSelectionProcessing = false;
+        }
     }
     
     private static void RemoveNodesDeep(
@@ -121,6 +130,29 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         useCase.CloseFileOrDirectories(nodesToRemove);
     }
 
+    [RelayCommand]
+    private void ZoomToSelectedNodes()
+    {
+        if (_routeSelectionViewService == null) { return; }
+        
+        if (_isInSelectionProcessing) { return; }
+        _isInSelectionProcessing = true;
+        try
+        {
+            var selectedTours = _routeSelectionViewService.GetSelectedNodes()
+                .SelectMany(x => x.Node.GetAssociatedToursDeep())
+                .Distinct()
+                .ToArray();
+
+            using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
+            useCase.SelectGpxTours(selectedTours, true);
+        }
+        finally
+        {
+            _isInSelectionProcessing = false;
+        }
+    }
+
     private void OnRouteSelectionViewService_NodeSelectionChanged(object? sender, EventArgs e)
     {
         if (_routeSelectionViewService == null) { return; }
@@ -137,7 +169,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .ToArray();
 
             using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
-            useCase.SelectGpxTours(toursToSelect);
+            useCase.SelectGpxTours(toursToSelect, false);
         }
         finally
         {

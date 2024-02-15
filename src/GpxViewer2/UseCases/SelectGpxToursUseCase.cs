@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GpxViewer2.Messages;
 using GpxViewer2.Model;
+using GpxViewer2.Views.Maps;
 using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;
@@ -8,8 +9,15 @@ namespace GpxViewer2.UseCases;
 public class SelectGpxToursUseCase(
     IInProcessMessagePublisher srvMessagePublisher)
 {
-    public void SelectGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> gpxTours)
+    public void SelectGpxTours(
+        IReadOnlyList<LoadedGpxFileTourInfo> gpxTours,
+        bool zoomToTours)
     {
         srvMessagePublisher.Publish(new GpxToursSelectedMessage(gpxTours));
+
+        if (zoomToTours)
+        {
+            srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(gpxTours));
+        }
     }
 }

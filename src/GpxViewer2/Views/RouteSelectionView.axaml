@@ -29,6 +29,16 @@
             <MenuItem Header="|"
                       IsHitTestVisible="False" />
             
+            <MenuItem Command="{Binding Path=ZoomToSelectedNodesCommand}"
+                      ToolTip.Tip="Zoom to nodes">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-magnifying-glass-location"/>
+                </MenuItem.Header>
+            </MenuItem>
+            
+            <MenuItem Header="|"
+                      IsHitTestVisible="False" />
+            
             <MenuItem Command="{Binding Path=CloseNodesCommand}"
                       ToolTip.Tip="Close">
                 <MenuItem.Header>
