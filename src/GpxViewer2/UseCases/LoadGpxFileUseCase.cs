@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GpxViewer2.Messages;
 using GpxViewer2.Services;
+using GpxViewer2.Services.RecentlyOpened;
 using GpxViewer2.ValueObjects;
 using RolandK.InProcessMessaging;
 
@@ -9,9 +10,10 @@ namespace GpxViewer2.UseCases;
 
 public class LoadGpxFileUseCase(
     IGpxFileRepositoryService srvGpxFileRepository,
-    IInProcessMessagePublisher srvMessagePublisher)
+    IInProcessMessagePublisher srvMessagePublisher,
+    IRecentlyOpenedService srvRecentlyOpened)
 {
-    public void LoadGpxFile(string filePath)
+    public async Task LoadGpxFileAsync(string filePath)
     {
         var source = new FileOrDirectoryPath(filePath);
 
@@ -28,5 +30,8 @@ public class LoadGpxFileUseCase(
         
         srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
         srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
+
+        await srvRecentlyOpened.AddOpenedAsync(
+            filePath, RecentlyOpenedType.File);
     }
 }

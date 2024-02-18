@@ -100,7 +100,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         if (string.IsNullOrEmpty(fileToOpen)) { return; }
 
         using var scope = this.GetScopedService(out LoadGpxFileUseCase useCase);
-        useCase.LoadGpxFile(fileToOpen);
+        await useCase.LoadGpxFileAsync(fileToOpen);
     }
 
     [RelayCommand]
@@ -112,7 +112,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         if (string.IsNullOrEmpty(directoryToOpen)) { return; }
 
         using var scope = this.GetScopedService(out LoadGpxDirectoryUseCase useCase);
-        useCase.LoadGpxDirectory(directoryToOpen);
+        await useCase.LoadGpxDirectoryAsync(directoryToOpen);
     }
 
     [RelayCommand]

@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace GpxViewer2.Services.RecentlyOpened;
 
-internal class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
+public class RecentlyOpenedService : IRecentlyOpenedService
 {
     private const string FILE_NAME = "recentlyOpened.json";
 
     private readonly string _applicationDirectoryName;
-    private readonly int _maxFileCount;
+    private readonly int _maxEntryCount;
 
-    public RecentlyOpenedFilesService(string applicationDirectoryName, int maxFileCount)
+    public RecentlyOpenedService(string applicationDirectoryName, int maxEntryCount)
     {
-        if (maxFileCount <= 0)
+        if (maxEntryCount <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(maxFileCount));
+            throw new ArgumentOutOfRangeException(nameof(maxEntryCount));
         }
         if (string.IsNullOrEmpty(applicationDirectoryName))
         {
@@ -26,50 +26,53 @@ internal class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
         }
 
         _applicationDirectoryName = applicationDirectoryName;
-        _maxFileCount = maxFileCount;
+        _maxEntryCount = maxEntryCount;
     }
 
-    public async Task AddOpenedFileAsync(string filePath)
+    public async Task AddOpenedAsync(string path, RecentlyOpenedType type)
     {
-        if (string.IsNullOrEmpty(filePath))
+        if (string.IsNullOrEmpty(path))
         {
-            throw new ArgumentException(nameof(filePath));
+            throw new ArgumentException(nameof(path));
         }
 
-        var model = await ReadRecentlyOpenedFilesAsync();
-        model.Files.RemoveAll(
-            x => x.FullFilePath.Equals(filePath, StringComparison.InvariantCultureIgnoreCase));
-        model.Files.Insert(0, new RecentlyOpenedFileModel(){ FullFilePath = filePath });
-
-        while (model.Files.Count > _maxFileCount)
+        var model = await this.ReadRecentlyOpenedAsync();
+        model.Entries.RemoveAll(
+            x => x.FullPath.Equals(path, StringComparison.InvariantCultureIgnoreCase));
+        model.Entries.Insert(0, new RecentlyOpenedFileOrDirectoryModel()
         {
-            model.Files.RemoveAt(model.Files.Count - 1);
+            FullPath = path,
+            Type = type
+        });
+
+        while (model.Entries.Count > _maxEntryCount)
+        {
+            model.Entries.RemoveAt(model.Entries.Count - 1);
         }
 
-        await WriteRecentlyOpenedFilesAsync(model);
+        await this.WriteRecentlyOpenedAsync(model);
     }
 
-    public async Task<string> TryGetLastOpenedFileAsync()
+    public async Task<RecentlyOpenedFileOrDirectoryModel?> TryGetLastOpenedAsync()
     {
-        var model = await ReadRecentlyOpenedFilesAsync();
+        var model = await this.ReadRecentlyOpenedAsync();
 
-        if (model.Files.Count > 0)
+        if (model.Entries.Count > 0)
         {
-            return model.Files[0].FullFilePath;
+            return model.Entries[0];
         }
 
-        return string.Empty;
+        return null;
     }
 
-    public async Task<IReadOnlyList<string>> GetAllRecentlyOpenedFilesAsync()
+    public async Task<IReadOnlyList<RecentlyOpenedFileOrDirectoryModel>> GetAllRecentlyOpenedAsync()
     {
-        var model = await ReadRecentlyOpenedFilesAsync();
-        return model.Files
-            .Select(x => x.FullFilePath)
+        var model = await this.ReadRecentlyOpenedAsync();
+        return model.Entries
             .ToArray();
     }
 
-    private async Task WriteRecentlyOpenedFilesAsync(RecentlyOpenedModel model)
+    private async Task WriteRecentlyOpenedAsync(RecentlyOpenedModel model)
     {
         var directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         var appPath = Path.Combine(directory, _applicationDirectoryName);
@@ -86,11 +89,11 @@ internal class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
             fileStream, model,
             new JsonSerializerOptions(JsonSerializerDefaults.General)
             {
-                WriteIndented = true
+                WriteIndented = true,
             });
     }
 
-    private async Task<RecentlyOpenedModel> ReadRecentlyOpenedFilesAsync()
+    private async Task<RecentlyOpenedModel> ReadRecentlyOpenedAsync()
     {
         var directory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         var appPath = Path.Combine(directory, _applicationDirectoryName);

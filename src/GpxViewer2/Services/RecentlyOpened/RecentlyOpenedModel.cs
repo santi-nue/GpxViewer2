@@ -2,7 +2,7 @@
 
 namespace GpxViewer2.Services.RecentlyOpened;
 
-internal class RecentlyOpenedModel
+public class RecentlyOpenedModel
 {
-    public List<RecentlyOpenedFileModel> Files { get; set; } = new();
+    public List<RecentlyOpenedFileOrDirectoryModel> Entries { get; set; } = new();
 }

@@ -45,8 +45,8 @@ class Program
                 var inProcessMessenger = new InProcessMessenger();
                 services.AddSingleton<IInProcessMessageSubscriber>(_ => inProcessMessenger);
                 services.AddSingleton<IInProcessMessagePublisher>(_ => inProcessMessenger);
-                services.AddSingleton<IRecentlyOpenedFilesService>(
-                    _ => new RecentlyOpenedFilesService(".RKMediaGallery", 5));
+                services.AddSingleton<IRecentlyOpenedService>(
+                    _ => new RecentlyOpenedService(".RKGpxViewer2", 15));
                 services.AddSingleton<IGpxFileRepositoryService, GpxFileRepositoryService>();
 
                 // ViewModels

@@ -1,0 +1,14 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using GpxViewer2.Services.RecentlyOpened;
+
+namespace GpxViewer2.Services;
+
+public interface IRecentlyOpenedService
+{
+    Task AddOpenedAsync(string path, RecentlyOpenedType type);
+
+    Task<RecentlyOpenedFileOrDirectoryModel?> TryGetLastOpenedAsync();
+
+    Task<IReadOnlyList<RecentlyOpenedFileOrDirectoryModel>> GetAllRecentlyOpenedAsync();
+}
