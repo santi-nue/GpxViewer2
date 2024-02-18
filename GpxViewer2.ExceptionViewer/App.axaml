@@ -1,0 +1,9 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GpxViewer2.ExceptionViewer.App"
+             RequestedThemeVariant="Default"
+             Name="RK GPXviewer 2">
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</Application>

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GpxViewer2.Messages;
@@ -34,5 +35,7 @@ public class LoadGpxDirectoryUseCase(
         await srvRecentlyOpened.AddOpenedAsync(
             directoryPath,
             RecentlyOpenedType.Directory);
+
+        throw new ArgumentException("DummyArgument");
     }
 }
