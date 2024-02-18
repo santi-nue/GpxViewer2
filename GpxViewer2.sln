@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2", "src\GpxViewer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.ExceptionViewer", "GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj", "{88010340-5094-4FFD-9CE6-6D234D203994}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.Tests", "GpxViewer2.Tests\GpxViewer2.Tests.csproj", "{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{88010340-5094-4FFD-9CE6-6D234D203994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88010340-5094-4FFD-9CE6-6D234D203994}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88010340-5094-4FFD-9CE6-6D234D203994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
