@@ -35,7 +35,5 @@ public class LoadGpxDirectoryUseCase(
         await srvRecentlyOpened.AddOpenedAsync(
             directoryPath,
             RecentlyOpenedType.Directory);
-
-        throw new ArgumentException("DummyArgument");
     }
 }

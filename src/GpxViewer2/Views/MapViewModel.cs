@@ -4,6 +4,7 @@ using GpxViewer2.Messages;
 using GpxViewer2.UseCases;
 using GpxViewer2.Util;
 using GpxViewer2.Views.Maps;
+using GpxViewer2.ViewServices;
 using RKMediaGallery.Controls;
 
 namespace GpxViewer2.Views;
@@ -25,17 +26,25 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         return new MapView();
     }
     
-    private void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
+    private async void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
     {
-        using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
-
-        if (e.ClickedGpxTour == null)
+        try
         {
-            useCase.SelectGpxTours([], false);
-            return;
+            using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
+
+            if (e.ClickedGpxTour == null)
+            {
+                useCase.SelectGpxTours([], false);
+                return;
+            }
+
+            useCase.SelectGpxTours([e.ClickedGpxTour], false);
         }
-        
-        useCase.SelectGpxTours([e.ClickedGpxTour], false);
+        catch (Exception ex)
+        {
+            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
+            await srvErrorReporting.ShowErrorDialogAsync(ex);
+        }
     }
     
     public void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)

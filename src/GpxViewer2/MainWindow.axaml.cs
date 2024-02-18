@@ -10,5 +10,6 @@ public partial class MainWindow : MvvmWindow
         this.InitializeComponent();
         
         this.ViewServices.Add(new ServiceProviderViewService(this));
+        this.ViewServices.Add(new ErrorReportingViewService(this));
     }
 }

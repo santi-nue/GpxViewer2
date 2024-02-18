@@ -1,8 +1,9 @@
 ﻿using System;
+using RolandK.AvaloniaExtensions.ViewServices.Base;
 
 namespace GpxViewer2.ViewServices;
 
-public interface IServiceProviderViewService
+public interface IServiceProviderViewService : IViewService
 {
     void GetService<TService>(out TService service)
         where TService : notnull;
