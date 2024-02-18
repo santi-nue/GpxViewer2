@@ -97,7 +97,7 @@ public class LoadedGpxFileTourInfo
                 {
                     var elevationLast = (double)lastPoint.Elevation!;
                     var elevationAct = (double)actPoint.Elevation!;
-                    if (elevationLast.Equals3DigitPrecision(elevationAct)){ }
+                    if (elevationLast.EqualsWithTolerance(elevationAct)){ }
                     if (elevationAct > elevationLast) { elevationUpMeters += (elevationAct - elevationLast); }
                     else { elevationDownMeters += (elevationLast - elevationAct); }
                 }
