@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2", "src\GpxViewer2\GpxViewer2.csproj", "{5A5908C7-89C6-4EF9-B762-7DC48C6F4EFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.ExceptionViewer", "GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj", "{88010340-5094-4FFD-9CE6-6D234D203994}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.ExceptionViewer", "src\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj", "{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.Tests", "GpxViewer2.Tests\GpxViewer2.Tests.csproj", "{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpxViewer2.Tests", "src\GpxViewer2.Tests\GpxViewer2.Tests.csproj", "{3FCCE84F-31A5-46F8-8422-2DF05D100F93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,13 +16,13 @@ Global
 		{5A5908C7-89C6-4EF9-B762-7DC48C6F4EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A5908C7-89C6-4EF9-B762-7DC48C6F4EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A5908C7-89C6-4EF9-B762-7DC48C6F4EFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88010340-5094-4FFD-9CE6-6D234D203994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88010340-5094-4FFD-9CE6-6D234D203994}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88010340-5094-4FFD-9CE6-6D234D203994}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88010340-5094-4FFD-9CE6-6D234D203994}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB3DB2A1-9E8D-491E-A16C-252DBE8613D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FCCE84F-31A5-46F8-8422-2DF05D100F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCCE84F-31A5-46F8-8422-2DF05D100F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCCE84F-31A5-46F8-8422-2DF05D100F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCCE84F-31A5-46F8-8422-2DF05D100F93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
