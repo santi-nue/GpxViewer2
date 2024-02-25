@@ -23,7 +23,10 @@
                     <NativeMenuItem Header="Load Directory"
                                     Command="{Binding Path=LoadDirectoryCommand}" />
                     <NativeMenuItemSeparator />
-                    <NativeMenuItem Header="Recently Opened" />
+                    <controls:NativeMenuTaggedItem Tag="RecentlyOpened" 
+                                                   Header="Recently Opened">
+                        <NativeMenu />
+                    </controls:NativeMenuTaggedItem>
                 </NativeMenu>
             </NativeMenuItem>
         </NativeMenu>

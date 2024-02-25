@@ -21,7 +21,13 @@ public class LoadGpxDirectoryUseCase(
         var directoryToOpen = await srvOpenDirectoryDialog.ShowOpenDirectoryDialogAsync(
             "Load Directory");
         if (string.IsNullOrEmpty(directoryToOpen)) { return; }
-        
+
+        await this.LoadGpxDirectoryAsync(directoryToOpen);
+    }
+
+    public async Task LoadGpxDirectoryAsync(
+        string directoryToOpen)
+    {
         var source = new FileOrDirectoryPath(directoryToOpen);
         
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);

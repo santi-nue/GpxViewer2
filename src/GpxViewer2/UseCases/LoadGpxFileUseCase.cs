@@ -21,7 +21,13 @@ public class LoadGpxFileUseCase(
             [new FileDialogFilter("GPX-Files (*.gpx)", ["*.gpx"])],
             "Load GPX-File");
         if (string.IsNullOrEmpty(fileToOpen)) { return; }
-        
+
+        await this.LoadGpxFileAsync(fileToOpen);
+    }
+
+    public async Task LoadGpxFileAsync(
+        string fileToOpen)
+    {
         var source = new FileOrDirectoryPath(fileToOpen);
 
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
