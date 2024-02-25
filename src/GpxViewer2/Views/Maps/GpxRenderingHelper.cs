@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reactive.Joins;
 using GpxViewer2.Model;
 using GpxViewer2.Model.GpxXmlExtensions;
 using Mapsui.Projections;
@@ -21,7 +20,6 @@ public static class GpxRenderingHelper
                 Fill = null,
                 Outline = null,
                 Line =
-
                 {
                     Color = Color.Gray,
                     Width = 4
@@ -66,11 +64,23 @@ public static class GpxRenderingHelper
         }
     };
     
-    public static LineString? GpxWaypointsToMapsuiGeometry(this IEnumerable<GpxWaypoint> waypoints)
+    public static LineString? GpxWaypointsToMapsuiGeometry(
+        this IReadOnlyList<GpxWaypoint> waypoints,
+        int skipPointsCount)
     {
         var linePoints = new List<Coordinate>();
-        foreach (var actPoint in waypoints)
+        // var pointCount = 0;
+        for(var loop=0; loop<waypoints.Count; loop++)
         {
+            if ((loop < waypoints.Count - 1) &&
+                (skipPointsCount != 0) &&
+                (loop % skipPointsCount > 0))
+            {
+                continue;
+            }
+
+            var actPoint = waypoints[loop];
+            
             var point = SphericalMercator.FromLonLat(actPoint.Longitude, actPoint.Latitude);
             linePoints.Add(new Coordinate(point.x, point.y));
         }

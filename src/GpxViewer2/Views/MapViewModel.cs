@@ -66,7 +66,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     public void OnMessageReceived(TourConfigurationChangedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
-        srvMaps.UpdateGpxTourStyles();
+        srvMaps.UpdateGpxTourVisualization();
     }
 
     public void OnMessageReceived(GpxFileRepositoryNodesRemovedMessage message)

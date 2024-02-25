@@ -12,7 +12,7 @@
     <mapsui:MapControl x:Name="CtrlMap"
                        UseContinuousMouseWheelZoom="True"
                        ContinuousMouseWheelZoomStepSize="0.2"
-                       PointerPressed="OnMapControl_PointerPressed"
-                       PointerReleased="OnMapControl_PointerReleased"
-                       PointerMoved="OnMapControl_PointerMoved"/>
+                       PointerPressed="OnCtrlMap_PointerPressed"
+                       PointerReleased="OnCtrlMap_PointerReleased"
+                       PointerMoved="OnCtrlMap_PointerMoved"/>
 </ext:MvvmUserControl>

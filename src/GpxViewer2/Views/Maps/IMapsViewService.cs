@@ -13,7 +13,7 @@ public interface IMapsViewService : IViewService
 
     void RemoveAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> existingGpxTours);
 
-    void UpdateGpxTourStyles();
+    void UpdateGpxTourVisualization();
     
     void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection);
 }
