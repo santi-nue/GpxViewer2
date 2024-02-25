@@ -19,18 +19,24 @@
         <PackageReference Include="bodong.PropertyModels" Version="11.0.6.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
-        <PackageReference Include="Mapsui.Avalonia" Version="4.1.3" />
+        <PackageReference Include="Mapsui.Avalonia" Version="4.1.4" />
         <PackageReference Include="NSubstitute" Version="5.1.0" />
-        <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.0.1" />
-        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.0.1" />
+        <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.1.1" />
+        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.1.1" />
         <PackageReference Include="RolandK.AvaloniaExtensions" Version="2.0.4" />
         <PackageReference Include="RolandK.AvaloniaExtensions.DependencyInjection" Version="2.0.4" />
         <PackageReference Include="RolandK.Formats.Gpx" Version="1.0.1" />
         <PackageReference Include="RolandK.InProcessMessaging" Version="1.0.2" />
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.13" />
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj" />
       <ProjectReference Include="..\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <AvaloniaResource Include="..\..\assets\GPXviewer.svg">
+        <Link>Assets/GPXviewer.svg</Link>
+      </AvaloniaResource>
     </ItemGroup>
 </Project>

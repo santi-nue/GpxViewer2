@@ -9,37 +9,54 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GpxViewer2.MainWindow"
         d:DataContext="{x:Static local:MainWindowViewModel.EmptyViewModel}"
+        ExtendClientAreaToDecorationsHint="True"
         Title="RK GPXviewer 2"
         ViewFor="{x:Type local:MainWindowViewModel}"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
-    <Grid ColumnDefinitions="200,3,*">
+    <ext:MainWindowFrame>
+        <ext:MainWindowFrame.CustomTitleArea>
+            <Image Margin="0,6,6,6"
+                   VerticalAlignment="Center">
+                <Image.Source>
+                    <SvgImage Source="Assets/GPXviewer.svg" /> 
+                </Image.Source>
+            </Image>
+            <TextBlock Text="RK GPXviewer 2"
+                       VerticalAlignment="Center"/>
+        </ext:MainWindowFrame.CustomTitleArea>
         
-        <!-- Left side ('Route selection' and 'Route detail') -->
-        <Grid Grid.Column="0" 
-              RowDefinitions="*,3,300">
-            <controls:RegionControl Grid.Row="0"
-                                    ViewModelType="{x:Type views:RouteSelectionViewModel}" />
-            <GridSplitter Grid.Row="1"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch" />
-            <controls:RegionControl Grid.Row="2" 
-                                    ViewModelType="{x:Type views:RouteDetailViewModel}" />
-        </Grid>
+        <ext:MainWindowFrame.MainContentArea>
+            <Grid ColumnDefinitions="200,3,*">
         
-        <GridSplitter Grid.Column="1"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch" />
+                <!-- Left side ('Route selection' and 'Route detail') -->
+                <Grid Grid.Column="0" 
+                      RowDefinitions="*,3,300">
+                    <controls:RegionControl Grid.Row="0"
+                                            ViewModelType="{x:Type views:RouteSelectionViewModel}" />
+                    <GridSplitter Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch" />
+                    <controls:RegionControl Grid.Row="2" 
+                                            ViewModelType="{x:Type views:RouteDetailViewModel}" />
+                </Grid>
         
-        <!-- Right side ('Map' and 'Elevation profile') -->
-        <Grid Grid.Column="2" 
-              RowDefinitions="*,3,200">
-            <controls:RegionControl Grid.Row="0"
-                                    ViewModelType="{x:Type views:MapViewModel}" />
-            <GridSplitter Grid.Row="1"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch" />
-            <controls:RegionControl Grid.Row="2"
-                                    ViewModelType="{x:Type views:ElevationProfileViewModel}" />
-        </Grid>
-    </Grid>
+                <GridSplitter Grid.Column="1"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch" />
+        
+                <!-- Right side ('Map' and 'Elevation profile') -->
+                <Grid Grid.Column="2" 
+                      RowDefinitions="*,3,200">
+                    <controls:RegionControl Grid.Row="0"
+                                            ViewModelType="{x:Type views:MapViewModel}" />
+                    <GridSplitter Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch" />
+                    <controls:RegionControl Grid.Row="2"
+                                            ViewModelType="{x:Type views:ElevationProfileViewModel}" />
+                </Grid>
+            </Grid> 
+        </ext:MainWindowFrame.MainContentArea>
+        
+    </ext:MainWindowFrame>
 </ext:MvvmWindow>

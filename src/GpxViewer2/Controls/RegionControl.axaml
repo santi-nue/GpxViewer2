@@ -10,17 +10,15 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <DockPanel LastChildFill="True" Margin="3">
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}" BorderThickness="0"
-                                        Margin="5,0,0,0">
-                                    <ContentPresenter Margin="2"
-                                                      Content="{TemplateBinding Header}" />
-                                </Border>
-                            </StackPanel>
+                            <Border DockPanel.Dock="Top" 
+                                    Background="{DynamicResource ComboBoxDropDownBackground}"
+                                    BorderThickness="0">
+                                <ContentPresenter Margin="4"
+                                                  Content="{TemplateBinding Header}" />
+                            </Border>
 
-                            <Border
-                                BorderBrush="{DynamicResource ThemeBorderMidBrush}"
-                                BorderThickness="1">
+                            <Border BorderBrush="{DynamicResource ComboBoxDropDownBackground}"
+                                    BorderThickness="2,0,2,2">
                                 <ContentPresenter Content="{TemplateBinding Content}" />
                             </Border>
                         </DockPanel>
