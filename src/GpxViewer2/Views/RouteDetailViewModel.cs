@@ -1,11 +1,10 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GpxViewer2.Messages;
-using GpxViewer2.Model;
+using GpxViewer2.UseCases;
 using GpxViewer2.Util;
 using GpxViewer2.Views.RouteDetail;
 using RKMediaGallery.Controls;
-using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.Views;
 
@@ -35,10 +34,10 @@ public partial class RouteDetailViewModel : OwnViewModelBase, INavigationTarget
     {
         if (message.GpxTours.Count == 1)
         {
-            base.GetService(out IInProcessMessagePublisher messagePublisher);
+            base.GetService(out UpdateTourPropertyUseCase updateTourPropertyUseCase);
             this.SelectedTour = new SelectedTourPropertiesViewModel(
                 message.GpxTours[0],
-                messagePublisher);
+                updateTourPropertyUseCase);
         }
         else
         {

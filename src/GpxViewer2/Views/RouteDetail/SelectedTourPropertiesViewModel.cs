@@ -1,64 +1,33 @@
 using System.ComponentModel;
-using GpxViewer2.Messages;
 using GpxViewer2.Model;
 using GpxViewer2.Model.GpxXmlExtensions;
-using RolandK.InProcessMessaging;
+using GpxViewer2.UseCases;
 
 namespace GpxViewer2.Views.RouteDetail;
 
 public class SelectedTourPropertiesViewModel(
     LoadedGpxFileTourInfo tour,
-    IInProcessMessagePublisher messagePublisher)
+    UpdateTourPropertyUseCase useCase)
 {
     [Category("Metadata")]
     public string Name
     {
         get => tour.RawTrackOrRoute.Name ?? string.Empty;
-        set
-        {
-            if (tour.RawTrackOrRoute.Name != value)
-            {
-                tour.RawTrackOrRoute.Name = value;
-                tour.File.ContentsChanged = true;
-
-                messagePublisher.BeginPublish(
-                    new TourConfigurationChangedMessage(tour));
-            }
-        }
+        set => useCase.SetTourName(tour, value);
     }
     
     [Category("Metadata")]
     public string Description
     {
         get => tour.RawTrackOrRoute.Description ?? string.Empty;
-        set
-        {
-            if (tour.RawTrackOrRoute.Description != value)
-            {
-                tour.RawTrackOrRoute.Description = value;
-                tour.File.ContentsChanged = true;
-
-                messagePublisher.BeginPublish(
-                    new TourConfigurationChangedMessage(tour));
-            }
-        }
+        set => useCase.SetTourDescription(tour, value);
     }
     
     [Category("Metadata")]
     public GpxTrackState State
     {
         get => tour.RawTourExtensionData.State;
-        set
-        {
-            if (tour.RawTourExtensionData.State != value)
-            {
-                tour.RawTourExtensionData.State = value;
-                tour.File.ContentsChanged = true;
-
-                messagePublisher.BeginPublish(
-                    new TourConfigurationChangedMessage(tour));
-            }
-        }
+        set => useCase.SetTourState(tour, value);
     }
     
     [Category("Metrics")]
