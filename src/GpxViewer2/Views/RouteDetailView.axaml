@@ -2,11 +2,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pgc="clr-namespace:Avalonia.PropertyGrid.Controls;assembly=Avalonia.PropertyGrid"
              xmlns:ext="https://github.com/RolandK.AvaloniaExtensions"
              xmlns:local="clr-namespace:GpxViewer2.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GpxViewer2.Views.RouteDetailView"
              d:DataContext="{x:Static local:RouteDetailViewModel.EmptyViewModel}"
+             x:DataType="local:RouteDetailViewModel"
              ViewFor="{x:Type local:RouteDetailViewModel}">
-    Welcome to Avalonia!
+    <Panel IsVisible="{Binding Path=ShowRouteDetail}">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+            <pgc:PropertyGrid DataContext="{Binding Path=SelectedTour}" 
+                              AllowFilter="False"
+                              AllowToggleView="False"
+                              AllowQuickFilter="False"
+                              ShowTitle="False"
+                              ShowStyle="Category" />
+        </ScrollViewer>
+    </Panel>
 </ext:MvvmUserControl>

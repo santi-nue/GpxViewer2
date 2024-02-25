@@ -63,7 +63,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         srvMaps.SetSelectedGpxTours(message.GpxTours);
     }
 
-    public void OnMessageReceived(TourMetadataChangedMessage message)
+    public void OnMessageReceived(TourConfigurationChangedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
         srvMaps.UpdateGpxTourStyles();

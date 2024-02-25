@@ -67,6 +67,7 @@ class Program
                 services.AddTransient<MapViewModel>();
                 services.AddTransient<RouteDetailViewModel>();
                 services.AddTransient<RouteSelectionViewModel>();
+                services.AddTransient<ElevationProfileViewModel>();
 
                 // UseCases
                 services.AddScoped<CloseFileOrDirectoryUseCase>();

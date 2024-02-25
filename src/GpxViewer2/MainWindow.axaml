@@ -12,28 +12,34 @@
         Title="RK GPXviewer 2"
         ViewFor="{x:Type local:MainWindowViewModel}"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
-    <Grid RowDefinitions="*,3,200">
-        <Grid Grid.Row="0" 
-              ColumnDefinitions="200,3,*">
+    <Grid ColumnDefinitions="200,3,*">
         
-            <controls:RegionControl Grid.Column="0"
+        <!-- Left side ('Route selection' and 'Route detail') -->
+        <Grid Grid.Column="0" 
+              RowDefinitions="*,3,300">
+            <controls:RegionControl Grid.Row="0"
                                     ViewModelType="{x:Type views:RouteSelectionViewModel}" />
-            
-            <GridSplitter Grid.Column="1"
+            <GridSplitter Grid.Row="1"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" />
-            
-            <controls:RegionControl Grid.Column="2"
-                                    ViewModelType="{x:Type views:MapViewModel}" />
-            
+            <controls:RegionControl Grid.Row="2" 
+                                    ViewModelType="{x:Type views:RouteDetailViewModel}" />
         </Grid>
         
-        <GridSplitter Grid.Row="1"
+        <GridSplitter Grid.Column="1"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch" />
         
-        <controls:RegionControl Grid.Row="2" 
-                                ViewModelType="{x:Type views:RouteDetailViewModel}" />
+        <!-- Right side ('Map' and 'Elevation profile') -->
+        <Grid Grid.Column="2" 
+              RowDefinitions="*,3,200">
+            <controls:RegionControl Grid.Row="0"
+                                    ViewModelType="{x:Type views:MapViewModel}" />
+            <GridSplitter Grid.Row="1"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch" />
+            <controls:RegionControl Grid.Row="2"
+                                    ViewModelType="{x:Type views:ElevationProfileViewModel}" />
+        </Grid>
     </Grid>
-
 </ext:MvvmWindow>
