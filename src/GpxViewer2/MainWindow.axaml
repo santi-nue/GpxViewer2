@@ -8,11 +8,27 @@
         xmlns:views="clr-namespace:GpxViewer2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GpxViewer2.MainWindow"
+        x:DataType="local:MainWindowViewModel"
         d:DataContext="{x:Static local:MainWindowViewModel.EmptyViewModel}"
         ExtendClientAreaToDecorationsHint="True"
         Title="RK GPXviewer 2"
         ViewFor="{x:Type local:MainWindowViewModel}"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="File">
+                <NativeMenu>
+                    <NativeMenuItem Header="Load File"
+                                    Command="{Binding Path=LoadFileCommand}" />
+                    <NativeMenuItem Header="Load Directory"
+                                    Command="{Binding Path=LoadDirectoryCommand}" />
+                    <NativeMenuItemSeparator />
+                    <NativeMenuItem Header="Recently Opened" />
+                </NativeMenu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
+    
     <ext:MainWindowFrame>
         <ext:MainWindowFrame.CustomTitleArea>
             <Image Margin="0,6,6,6"

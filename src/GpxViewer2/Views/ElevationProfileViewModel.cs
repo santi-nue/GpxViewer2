@@ -46,7 +46,7 @@ public partial class ElevationProfileViewModel : OwnViewModelBase, INavigationTa
             return;
         }
         _selectedTour = message.GpxTours[0];
-        
+
         GpxWaypoint? lastPoint = null;
         var actDistanceM = 0.0;
         this.Series = message.GpxTours[0].Segments

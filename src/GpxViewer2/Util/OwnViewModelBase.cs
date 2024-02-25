@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GpxViewer2.ViewServices;
 using RolandK.AvaloniaExtensions.Mvvm;
@@ -60,6 +61,32 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
         this.CloseWindowRequest.Invoke(
             this, 
             new CloseWindowRequestEventArgs(dialogResult));
+    }
+
+    protected async void WrapWithErrorHandling(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
+            await srvErrorReporting.ShowErrorDialogAsync(ex);
+        }
+    }
+    
+    protected async Task WrapWithErrorHandlingAsync(Func<Task> asyncFunc)
+    {
+        try
+        {
+            await asyncFunc();
+        }
+        catch (Exception ex)
+        {
+            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
+            await srvErrorReporting.ShowErrorDialogAsync(ex);
+        }
     }
 
     protected void GetService<TService>(out TService service)

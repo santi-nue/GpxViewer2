@@ -14,7 +14,6 @@ using GpxViewer2.Views.RouteSelection;
 using GpxViewer2.ViewServices;
 using RKMediaGallery.Controls;
 using RolandK.AvaloniaExtensions.ViewServices;
-using FileDialogFilter = RolandK.AvaloniaExtensions.ViewServices.FileDialogFilter;
 
 namespace GpxViewer2.Views;
 
@@ -94,48 +93,29 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     [RelayCommand]
     private async Task LoadGpxFileAsync()
     {
-        try
+        await this.WrapWithErrorHandlingAsync(async () =>
         {
-            var srvOpenFileDialog = this.GetViewService<IOpenFileViewService>();
-            var fileToOpen = await srvOpenFileDialog.ShowOpenFileDialogAsync(
-                [new FileDialogFilter("GPX-Files (*.gpx)", ["*.gpx"])],
-                "Load GPX-File");
-            if (string.IsNullOrEmpty(fileToOpen)) { return; }
-
             using var scope = this.GetScopedService(out LoadGpxFileUseCase useCase);
-            await useCase.LoadGpxFileAsync(fileToOpen);
-        }
-        catch (Exception ex)
-        {
-            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
-            await srvErrorReporting.ShowErrorDialogAsync(ex);
-        }
+            await useCase.LoadGpxFileAsync(
+                this.GetViewService<IOpenFileViewService>());
+        });
     }
 
     [RelayCommand]
     private async Task LoadGpxDirectoryAsync()
     {
-        try
+        await this.WrapWithErrorHandlingAsync(async () =>
         {
-            var srvOpenDirectoryDialog = this.GetViewService<IOpenDirectoryViewService>();
-            var directoryToOpen = await srvOpenDirectoryDialog.ShowOpenDirectoryDialogAsync(
-                "Load Directory");
-            if (string.IsNullOrEmpty(directoryToOpen)) { return; }
-
             using var scope = this.GetScopedService(out LoadGpxDirectoryUseCase useCase);
-            await useCase.LoadGpxDirectoryAsync(directoryToOpen);
-        }
-        catch (Exception ex)
-        {
-            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
-            await srvErrorReporting.ShowErrorDialogAsync(ex);
-        }
+            await useCase.LoadGpxDirectoryAsync(
+                this.GetViewService<IOpenDirectoryViewService>());
+        });
     }
 
     [RelayCommand]
-    private async Task CloseNodesAsync()
+    private void CloseNodes()
     {
-        try
+        this.WrapWithErrorHandling(() =>
         {
             if (_routeSelectionViewService == null) { return; }
             var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
@@ -145,14 +125,9 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .Select(x => x.Node)
                 .ToArray();
 
-            using var scope = base.GetScopedService(out CloseFileOrDirectoryUseCase useCase);
+            using var scope = this.GetScopedService(out CloseFileOrDirectoryUseCase useCase);
             useCase.CloseFileOrDirectories(nodesToRemove);
-        }
-        catch (Exception ex)
-        {
-            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
-            await srvErrorReporting.ShowErrorDialogAsync(ex);
-        }
+        });
     }
 
     [RelayCommand]
@@ -169,7 +144,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .Distinct()
                 .ToArray();
 
-            using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
+            using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
             useCase.SelectGpxTours(selectedTours, true);
         }
         catch (Exception ex)
@@ -198,7 +173,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .Distinct()
                 .ToArray();
 
-            using var scope = base.GetScopedService(out SelectGpxToursUseCase useCase);
+            using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
             useCase.SelectGpxTours(toursToSelect, false);
         }
         catch (Exception ex)

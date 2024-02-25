@@ -5,6 +5,7 @@ using GpxViewer2.Messages;
 using GpxViewer2.Services;
 using GpxViewer2.Services.RecentlyOpened;
 using GpxViewer2.ValueObjects;
+using RolandK.AvaloniaExtensions.ViewServices;
 using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;
@@ -14,9 +15,14 @@ public class LoadGpxDirectoryUseCase(
     IInProcessMessagePublisher srvMessagePublisher,
     IRecentlyOpenedService srvRecentlyOpened)
 {
-    public async Task LoadGpxDirectoryAsync(string directoryPath)
+    public async Task LoadGpxDirectoryAsync(
+        IOpenDirectoryViewService srvOpenDirectoryDialog)
     {
-        var source = new FileOrDirectoryPath(directoryPath);
+        var directoryToOpen = await srvOpenDirectoryDialog.ShowOpenDirectoryDialogAsync(
+            "Load Directory");
+        if (string.IsNullOrEmpty(directoryToOpen)) { return; }
+        
+        var source = new FileOrDirectoryPath(directoryToOpen);
         
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
         if (repositoryNode == null)
@@ -33,7 +39,7 @@ public class LoadGpxDirectoryUseCase(
         srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
 
         await srvRecentlyOpened.AddOpenedAsync(
-            directoryPath,
+            directoryToOpen,
             RecentlyOpenedType.Directory);
     }
 }

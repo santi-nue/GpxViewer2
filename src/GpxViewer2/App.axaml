@@ -3,6 +3,9 @@
              x:Class="GpxViewer2.App"
              RequestedThemeVariant="Default"
              Name="RK GPXviewer 2">
+    <NativeMenu.Menu>
+        <NativeMenu />
+    </NativeMenu.Menu>
     
     <Application.Styles>
         <FluentTheme />

@@ -4,6 +4,7 @@ using GpxViewer2.Messages;
 using GpxViewer2.Services;
 using GpxViewer2.Services.RecentlyOpened;
 using GpxViewer2.ValueObjects;
+using RolandK.AvaloniaExtensions.ViewServices;
 using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;
@@ -13,9 +14,15 @@ public class LoadGpxFileUseCase(
     IInProcessMessagePublisher srvMessagePublisher,
     IRecentlyOpenedService srvRecentlyOpened)
 {
-    public async Task LoadGpxFileAsync(string filePath)
+    public async Task LoadGpxFileAsync(
+        IOpenFileViewService srvOpenFileDialog)
     {
-        var source = new FileOrDirectoryPath(filePath);
+        var fileToOpen = await srvOpenFileDialog.ShowOpenFileDialogAsync(
+            [new FileDialogFilter("GPX-Files (*.gpx)", ["*.gpx"])],
+            "Load GPX-File");
+        if (string.IsNullOrEmpty(fileToOpen)) { return; }
+        
+        var source = new FileOrDirectoryPath(fileToOpen);
 
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
         if (repositoryNode == null)
@@ -32,6 +39,6 @@ public class LoadGpxFileUseCase(
         srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
 
         await srvRecentlyOpened.AddOpenedAsync(
-            filePath, RecentlyOpenedType.File);
+            fileToOpen, RecentlyOpenedType.File);
     }
 }
