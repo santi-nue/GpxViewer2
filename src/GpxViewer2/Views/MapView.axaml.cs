@@ -21,9 +21,9 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     private static readonly TourVisualizationDetailLevel[] DETAIL_LEVELS = new[]
     {
         new TourVisualizationDetailLevel(10, 0),
-        new TourVisualizationDetailLevel(50, 5),
-        new TourVisualizationDetailLevel(100, 10),
-        new TourVisualizationDetailLevel(200, 20),
+        new TourVisualizationDetailLevel(100, 5),
+        new TourVisualizationDetailLevel(200, 10),
+        new TourVisualizationDetailLevel(500, 20),
         new TourVisualizationDetailLevel(double.MaxValue, 30)
     };
 
