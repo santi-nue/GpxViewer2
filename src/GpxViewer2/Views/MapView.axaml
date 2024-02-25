@@ -9,7 +9,9 @@
              x:Class="GpxViewer2.Views.MapView"
              d:DataContext="{x:Static local:MapViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:MapViewModel}">
-    <mapsui:MapControl x:Name="MapControl"
+    <mapsui:MapControl x:Name="CtrlMap"
+                       UseContinuousMouseWheelZoom="True"
+                       ContinuousMouseWheelZoomStepSize="0.2"
                        PointerPressed="OnMapControl_PointerPressed"
                        PointerReleased="OnMapControl_PointerReleased"
                        PointerMoved="OnMapControl_PointerMoved"/>

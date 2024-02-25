@@ -38,11 +38,11 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         _lineStringLayerForAll.IsMapInfoLayer = true;
         _lineStringLayerForSelection = new MemoryLayer();
         
-        this.MapControl.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
-        this.MapControl.Map.Layers.Add(_lineStringLayerForSelection);
-        this.MapControl.Map.Layers.Add(_lineStringLayerForAll);
-        this.MapControl.UnSnapRotationDegrees = 30;
-        this.MapControl.ReSnapRotationDegrees = 5;
+        this.CtrlMap.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
+        this.CtrlMap.Map.Layers.Add(_lineStringLayerForSelection);
+        this.CtrlMap.Map.Layers.Add(_lineStringLayerForAll);
+        this.CtrlMap.UnSnapRotationDegrees = 30;
+        this.CtrlMap.ReSnapRotationDegrees = 5;
 
         this.ViewServices.Add(this);
     }
@@ -65,7 +65,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 }))
             .ToArray();
         
-        this.MapControl.RefreshGraphics();
+        this.CtrlMap.RefreshGraphics();
     }
 
     /// <inheritdoc />
@@ -88,7 +88,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             })
             .ToArray();
         
-        this.MapControl.RefreshGraphics();
+        this.CtrlMap.RefreshGraphics();
     }
 
     /// <inheritdoc />
@@ -132,7 +132,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 .ToArray();
         }
         
-        this.MapControl.RefreshGraphics();
+        this.CtrlMap.RefreshGraphics();
     }
 
     private void OnMapControl_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -152,9 +152,9 @@ public partial class MapView : MvvmUserControl, IMapsViewService
 
         if (e.InitialPressMouseButton == MouseButton.Left)
         {
-            var mousePosition = e.GetCurrentPoint(this.MapControl);
+            var mousePosition = e.GetCurrentPoint(this.CtrlMap);
         
-            var clickInfo = this.MapControl.GetMapInfo(
+            var clickInfo = this.CtrlMap.GetMapInfo(
                 new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
                 3);
             if (clickInfo?.Feature is GeometryFeatureWithMetadata featureWithMetadata)
@@ -170,13 +170,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
 
     private void OnMapControl_PointerMoved(object? sender, PointerEventArgs e)
     {
-        var mousePosition = e.GetCurrentPoint(this.MapControl);
+        var mousePosition = e.GetCurrentPoint(this.CtrlMap);
         
-        var mouseLocationInfo = this.MapControl.GetMapInfo(
+        var mouseLocationInfo = this.CtrlMap.GetMapInfo(
             new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
             3);
 
-        this.MapControl.Cursor = mouseLocationInfo?.Feature != null
+        this.CtrlMap.Cursor = mouseLocationInfo?.Feature != null
             ? new Cursor(StandardCursorType.Hand)
             : Cursor.Default;
     }
@@ -200,7 +200,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
 
         if (rectBuilder.CanBuildBoundingBox)
         {
-            this.MapControl.Map.Navigator.ZoomToBox(
+            this.CtrlMap.Map.Navigator.ZoomToBox(
                 rectBuilder.TryBuild(),
                 MBoxFit.Fit,
                 500L,
