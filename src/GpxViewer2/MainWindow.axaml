@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ext="https://github.com/RolandK.AvaloniaExtensions"
         xmlns:local="clr-namespace:GpxViewer2"
+        xmlns:localMarkup="clr-namespace:GpxViewer2.MarkupExtensions"
         xmlns:controls="clr-namespace:GpxViewer2.Controls"
         xmlns:views="clr-namespace:GpxViewer2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -45,36 +46,52 @@
         </ext:MainWindowFrame.CustomTitleArea>
         
         <ext:MainWindowFrame.MainContentArea>
-            <Grid ColumnDefinitions="200,3,*">
+            <DockPanel LastChildFill="True">
+                <Menu DockPanel.Dock="Top"
+                      IsVisible="{localMarkup:IsNonMacOs}">
+                    <MenuItem Header="File">
+                        <MenuItem Header="Load File"
+                                  Command="{Binding Path=LoadFileCommand}" />
+                        <MenuItem Header="Load Directory"
+                                  Command="{Binding Path=LoadDirectoryCommand}" />
+                        <Separator />
+                        <MenuItem x:Name="MnuRecentlyOpened" 
+                                  Header="RecentlyOpened" />
+                    </MenuItem>
+                </Menu>
+                
+                <Grid ColumnDefinitions="200,3,*">
         
-                <!-- Left side ('Route selection' and 'Route detail') -->
-                <Grid Grid.Column="0" 
-                      RowDefinitions="*,3,300">
-                    <controls:RegionControl Grid.Row="0"
-                                            ViewModelType="{x:Type views:RouteSelectionViewModel}" />
-                    <GridSplitter Grid.Row="1"
+                    <!-- Left side ('Route selection' and 'Route detail') -->
+                    <Grid Grid.Column="0" 
+                          RowDefinitions="*,3,300">
+                        <controls:RegionControl Grid.Row="0"
+                                                ViewModelType="{x:Type views:RouteSelectionViewModel}" />
+                        <GridSplitter Grid.Row="1"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch" />
+                        <controls:RegionControl Grid.Row="2" 
+                                                ViewModelType="{x:Type views:RouteDetailViewModel}" />
+                    </Grid>
+        
+                    <GridSplitter Grid.Column="1"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch" />
-                    <controls:RegionControl Grid.Row="2" 
-                                            ViewModelType="{x:Type views:RouteDetailViewModel}" />
-                </Grid>
         
-                <GridSplitter Grid.Column="1"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch" />
-        
-                <!-- Right side ('Map' and 'Elevation profile') -->
-                <Grid Grid.Column="2" 
-                      RowDefinitions="*,3,200">
-                    <controls:RegionControl Grid.Row="0"
-                                            ViewModelType="{x:Type views:MapViewModel}" />
-                    <GridSplitter Grid.Row="1"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch" />
-                    <controls:RegionControl Grid.Row="2"
-                                            ViewModelType="{x:Type views:ElevationProfileViewModel}" />
-                </Grid>
-            </Grid> 
+                    <!-- Right side ('Map' and 'Elevation profile') -->
+                    <Grid Grid.Column="2" 
+                          RowDefinitions="*,3,200">
+                        <controls:RegionControl Grid.Row="0"
+                                                ViewModelType="{x:Type views:MapViewModel}" />
+                        <GridSplitter Grid.Row="1"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch" />
+                        <controls:RegionControl Grid.Row="2"
+                                                ViewModelType="{x:Type views:ElevationProfileViewModel}" />
+                    </Grid>
+                </Grid> 
+            </DockPanel>
+            
         </ext:MainWindowFrame.MainContentArea>
         
     </ext:MainWindowFrame>

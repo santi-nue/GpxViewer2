@@ -31,21 +31,26 @@ public class LoadGpxDirectoryUseCase(
         var source = new FileOrDirectoryPath(directoryToOpen);
         
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
+        var newNodeLoaded = false;
         if (repositoryNode == null)
         {
             repositoryNode = srvGpxFileRepository.LoadDirectoryNode(source);
-            srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([repositoryNode]));
+            newNodeLoaded = true;
         }
         
         var loadedGpxTours = repositoryNode
             .GetAssociatedToursDeep()
             .ToArray();
 
-        srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
-        srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
-
         await srvRecentlyOpened.AddOpenedAsync(
             directoryToOpen,
             RecentlyOpenedType.Directory);
+
+        if (newNodeLoaded)
+        {
+            srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([repositoryNode]));
+        }
+        srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
+        srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));
     }
 }
