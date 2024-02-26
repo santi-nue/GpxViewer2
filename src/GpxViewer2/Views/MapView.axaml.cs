@@ -9,7 +9,6 @@ using Mapsui;
 using Mapsui.Animations;
 using Mapsui.Layers;
 using Mapsui.Nts;
-using Mapsui.Tiling;
 using RolandK.AvaloniaExtensions.Mvvm;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 using RolandK.AvaloniaExtensions.ViewServices.Base;
@@ -35,9 +34,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
 
     private MapViewModel? _attachedViewModel;
+    private LoadedGpxFileTourInfo? _lastPressedTour;
     
     /// <inheritdoc />
     public event EventHandler<RouteClickedEventArgs>? RouteClicked;
+    
+    /// <inheritdoc />
+    public event EventHandler<RouteClickedEventArgs>? RouteDoubleClicked;
     
     /// <inheritdoc />
     public event EventHandler<ViewServiceRequestEventArgs>? ViewServiceRequest;
@@ -210,6 +213,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
 
         if (e.InitialPressMouseButton == MouseButton.Right)
         {
+            _lastPressedTour = null;
             this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(null));
             return;
         }
@@ -223,12 +227,23 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 3);
             if (clickInfo?.Feature is GeometryFeatureWithMetadata featureWithMetadata)
             {
+                _lastPressedTour = featureWithMetadata.Tour;
                 this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(featureWithMetadata.Tour));
             }
             else
             {
+                _lastPressedTour = null;
                 this.RouteClicked?.Invoke(this, new RouteClickedEventArgs(null));
             }
+        }
+    }
+    
+    private void OnCtrlMap_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (_lastPressedTour != null)
+        {
+            this.RouteDoubleClicked?.Invoke(
+                this, new RouteClickedEventArgs(_lastPressedTour));
         }
     }
 

@@ -14,5 +14,6 @@
                        ContinuousMouseWheelZoomStepSize="0.2"
                        PointerPressed="OnCtrlMap_PointerPressed"
                        PointerReleased="OnCtrlMap_PointerReleased"
-                       PointerMoved="OnCtrlMap_PointerMoved"/>
+                       PointerMoved="OnCtrlMap_PointerMoved"
+                       DoubleTapped="OnCtrlMap_DoubleTapped"/>
 </ext:MvvmUserControl>

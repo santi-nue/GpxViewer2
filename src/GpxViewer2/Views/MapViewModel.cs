@@ -4,7 +4,6 @@ using GpxViewer2.Messages;
 using GpxViewer2.UseCases;
 using GpxViewer2.Util;
 using GpxViewer2.Views.Maps;
-using GpxViewer2.ViewServices;
 using RKMediaGallery.Controls;
 
 namespace GpxViewer2.Views;
@@ -28,7 +27,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     
     private async void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
     {
-        try
+        this.WrapWithErrorHandling(() =>
         {
             using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
 
@@ -39,12 +38,20 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
             }
 
             useCase.SelectGpxTours([e.ClickedGpxTour], false);
-        }
-        catch (Exception ex)
+        });
+    }
+    
+    private void OnAttachedMapsViewService_RouteDoubleClicked(object? sender, RouteClickedEventArgs e)
+    {
+        if (e.ClickedGpxTour == null) { return; }
+        
+        this.WrapWithErrorHandling(() =>
         {
-            var srvErrorReporting = this.GetViewService<IErrorReportingViewService>();
-            await srvErrorReporting.ShowErrorDialogAsync(ex);
-        }
+            using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
+            useCase.SelectGpxTours(
+                [e.ClickedGpxTour],
+                true);
+        });
     }
     
     public void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)
@@ -94,6 +101,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         if (_attachedMapsViewService != null)
         {
             _attachedMapsViewService.RouteClicked -= OnAttachedMapsViewService_RouteClicked;
+            _attachedMapsViewService.RouteDoubleClicked -= OnAttachedMapsViewService_RouteDoubleClicked;
             _attachedMapsViewService = null;
         }
         
@@ -101,6 +109,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         {
             _attachedMapsViewService = attachedMapsViewService;
             _attachedMapsViewService.RouteClicked += OnAttachedMapsViewService_RouteClicked;
+            _attachedMapsViewService.RouteDoubleClicked += OnAttachedMapsViewService_RouteDoubleClicked;
         }
     }
 }

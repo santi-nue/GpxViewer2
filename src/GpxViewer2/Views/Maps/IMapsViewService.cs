@@ -9,6 +9,8 @@ public interface IMapsViewService : IViewService
 {
     event EventHandler<RouteClickedEventArgs> RouteClicked; 
 
+    event EventHandler<RouteClickedEventArgs> RouteDoubleClicked; 
+    
     void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours);
 
     void RemoveAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> existingGpxTours);
