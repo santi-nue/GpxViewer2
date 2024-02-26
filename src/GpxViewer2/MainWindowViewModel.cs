@@ -17,16 +17,21 @@ namespace GpxViewer2;
 public partial class MainWindowViewModel : OwnViewModelBase
 {
     public static readonly MainWindowViewModel EmptyViewModel = new(
-        Substitute.For<IRecentlyOpenedService>());
+        Substitute.For<IRecentlyOpenedService>(),
+        Substitute.For<IGpxFileRepositoryService>());
 
     private readonly IRecentlyOpenedService _srvRecentlyOpened;
+    private readonly IGpxFileRepositoryService _srvGpxFileRepository;
 
     [ObservableProperty]
     private IReadOnlyList<RecentlyOpenedFileOrDirectoryModel> _recentlyOpenedEntries = [];
 
-    public MainWindowViewModel(IRecentlyOpenedService srvRecentlyOpened)
+    public MainWindowViewModel(
+        IRecentlyOpenedService srvRecentlyOpened,
+        IGpxFileRepositoryService srvGpxFileRepository)
     {
         _srvRecentlyOpened = srvRecentlyOpened;
+        _srvGpxFileRepository = srvGpxFileRepository;
     }
     
     [RelayCommand]
@@ -52,7 +57,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
     }
 
     [RelayCommand]
-    private async Task LoadRecentlyOpened(RecentlyOpenedFileOrDirectoryModel recentlyOpenedEntry)
+    private async Task LoadRecentlyOpenedAsync(RecentlyOpenedFileOrDirectoryModel recentlyOpenedEntry)
     {
         switch (recentlyOpenedEntry.Type)
         {
@@ -70,6 +75,18 @@ public partial class MainWindowViewModel : OwnViewModelBase
                 }
                 break;
         }
+    }
+
+    [RelayCommand]
+    private async Task SaveAllAsync()
+    {
+        await this.WrapWithErrorHandlingAsync(async () =>
+        {
+            using var scope = this.GetScopedService(out SaveNodeChangesUseCase useCase);
+
+            var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
+            await useCase.SaveChangesAsync(allNodes);
+        });
     }
 
     private async void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)

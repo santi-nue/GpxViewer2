@@ -23,11 +23,18 @@
                                     Command="{Binding Path=LoadFileCommand}" />
                     <NativeMenuItem Header="Load Directory"
                                     Command="{Binding Path=LoadDirectoryCommand}" />
+                    
                     <NativeMenuItemSeparator />
+                    
                     <controls:NativeMenuTaggedItem Tag="RecentlyOpened" 
                                                    Header="Recently Opened">
                         <NativeMenu />
                     </controls:NativeMenuTaggedItem>
+                    
+                    <NativeMenuItemSeparator />
+                    
+                    <NativeMenuItem Header="Save All"
+                                    Command="{Binding Path=SaveAllCommand}"/>
                 </NativeMenu>
             </NativeMenuItem>
         </NativeMenu>
@@ -57,6 +64,9 @@
                         <Separator />
                         <MenuItem x:Name="MnuRecentlyOpened" 
                                   Header="RecentlyOpened" />
+                        <Separator />
+                        <MenuItem Header="Save All"
+                                  Command="{Binding Path=SaveAllCommand}" />
                     </MenuItem>
                 </Menu>
                 

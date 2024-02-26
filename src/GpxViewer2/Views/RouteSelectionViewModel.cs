@@ -159,7 +159,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     }
 
     [RelayCommand]
-    private async void SaveSelectedNodes()
+    private async Task SaveSelectedNodesAsync()
     {
         if (_routeSelectionViewService == null) { return; }
         
@@ -174,12 +174,12 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .ToArray();
 
             using var scope = this.GetScopedService(out SaveNodeChangesUseCase useCase);
-            await useCase.SaveChanges(nodesToSave);
+            await useCase.SaveChangesAsync(nodesToSave);
         });
     }
     
     [RelayCommand]
-    private async void SaveAllNodes()
+    private async Task SaveAllNodesAsync()
     {
         if (_routeSelectionViewService == null) { return; }
         
@@ -192,7 +192,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
                 .ToArray();
 
             using var scope = this.GetScopedService(out SaveNodeChangesUseCase useCase);
-            await useCase.SaveChanges(nodesToSave);
+            await useCase.SaveChangesAsync(nodesToSave);
         });
     }
 

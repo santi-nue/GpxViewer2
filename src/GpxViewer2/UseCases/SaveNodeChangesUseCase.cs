@@ -10,7 +10,7 @@ namespace GpxViewer2.UseCases;
 public class SaveNodeChangesUseCase(
     IInProcessMessagePublisher srvMessagePublisher)
 {
-    public async Task SaveChanges(IReadOnlyList<GpxFileRepositoryNode> nodes)
+    public async Task SaveChangesAsync(IReadOnlyList<GpxFileRepositoryNode> nodes)
     {
         var savedNodes = new List<GpxFileRepositoryNode>(nodes.Count);
         foreach (var actNode in nodes)
