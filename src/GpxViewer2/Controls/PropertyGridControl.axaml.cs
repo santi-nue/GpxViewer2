@@ -29,7 +29,6 @@ public partial class PropertyGridControl : UserControl
             nameof(PropertyContractResolver));
 
     private PropertyGridViewModel _propertyGridVM;
-    private Grid _gridMain;
     private Control? _firstValueRowEditor;
     private object? _selectedObject;
 
@@ -66,12 +65,10 @@ public partial class PropertyGridControl : UserControl
 
     public PropertyGridControl()
     {
-        AvaloniaXamlLoader.Load(this);
-
-        _gridMain = this.FindControl<Grid>("GridMain");
+        this.InitializeComponent();
         
         _propertyGridVM = new PropertyGridViewModel();
-        _gridMain.DataContext = _propertyGridVM;
+        this.GridMain.DataContext = _propertyGridVM;
     }
 
     public void FocusFirstValueRowEditor()
@@ -88,8 +85,8 @@ public partial class PropertyGridControl : UserControl
 
     private void UpdatePropertiesView()
     {
-        _gridMain.Children.Clear();
-        _gridMain.RowDefinitions.Clear();
+        this.GridMain.Children.Clear();
+        this.GridMain.RowDefinitions.Clear();
 
         var lstProperties = new List<ConfigurablePropertyRuntime>(_propertyGridVM.PropertyMetadata);
         lstProperties.Sort((left, right) =>
@@ -107,7 +104,7 @@ public partial class PropertyGridControl : UserControl
             // Create category rows
             if (actProperty.Metadata.CategoryName != actCategory)
             {
-                _gridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(35)});
+                this.GridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(35)});
 
                 actCategory = actProperty.Metadata.CategoryName;
 
@@ -122,7 +119,7 @@ public partial class PropertyGridControl : UserControl
                 txtHeader.Margin = new Thickness(5d, 5d, 5d, 5d);
                 txtHeader.VerticalAlignment = VerticalAlignment.Bottom;
                 txtHeader.FontWeight = FontWeight.Bold;
-                _gridMain.Children.Add(txtHeader);
+                this.GridMain.Children.Add(txtHeader);
 
                 var rect = new Rectangle
                 {
@@ -135,7 +132,7 @@ public partial class PropertyGridControl : UserControl
                 rect.SetValue(Grid.RowProperty, actRowIndex);
                 rect.SetValue(Grid.ColumnSpanProperty, 3);
                 rect.SetValue(Grid.ColumnProperty, 0);
-                _gridMain.Children.Add(rect);
+                this.GridMain.Children.Add(rect);
 
                 actRowIndex++;
             }
@@ -145,46 +142,39 @@ public partial class PropertyGridControl : UserControl
             var ctrlText = new TextBlock();
             ctrlText.Text = actProperty.Metadata.PropertyDisplayName;
             ctrlText.VerticalAlignment = VerticalAlignment.Center;
+            ctrlText.Margin = new Thickness(5d, 0, 0, 0);
             SetToolTip(ctrlText, actProperty.Metadata.Description);
             ctrlTextContainer.Height = 35.0;
             ctrlTextContainer.Child = ctrlText;
             ctrlTextContainer.SetValue(Grid.RowProperty, actRowIndex);
             ctrlTextContainer.SetValue(Grid.ColumnProperty, 0);
             ctrlTextContainer.VerticalAlignment = VerticalAlignment.Top;
-            _gridMain.Children.Add(ctrlTextContainer);
-
+            this.GridMain.Children.Add(ctrlTextContainer);
+            
             // Create and configure row editor
             var ctrlValueEdit = editControlFactory.CreateControl(actProperty.Metadata, nameof(actProperty.ValueAccessor), allPropertiesMetadata);
-            if (ctrlValueEdit != null)
-            {
-                _gridMain.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-                ctrlValueEdit.Margin = new Thickness(0d, 0d, 5d, 0d);
-                ctrlValueEdit.VerticalAlignment = VerticalAlignment.Center;
-                ctrlValueEdit.SetValue(Grid.RowProperty, actRowIndex);
-                ctrlValueEdit.SetValue(Grid.ColumnProperty, 2);
-                ctrlValueEdit.DataContext = actProperty;
-                SetToolTip(ctrlValueEdit, actProperty.Metadata.Description);
-                _gridMain.Children.Add(ctrlValueEdit);
+            this.GridMain.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            ctrlValueEdit.VerticalAlignment = VerticalAlignment.Center;
+            ctrlValueEdit.SetValue(Grid.RowProperty, actRowIndex);
+            ctrlValueEdit.SetValue(Grid.ColumnProperty, 2);
+            ctrlValueEdit.DataContext = actProperty;
+            SetToolTip(ctrlValueEdit, actProperty.Metadata.Description);
+            this.GridMain.Children.Add(ctrlValueEdit);
 
-                _firstValueRowEditor ??= ctrlValueEdit;
-            }
-            else
-            {
-                _gridMain.RowDefinitions.Add(new RowDefinition(1.0, GridUnitType.Pixel));
-            }
+            _firstValueRowEditor ??= ctrlValueEdit;
 
             actRowIndex++;
         }
 
-        if (_gridMain.RowDefinitions.Count > 0)
+        if (this.GridMain.RowDefinitions.Count > 0)
         {
             var gridSplitter = new GridSplitter();
             gridSplitter.SetValue(Grid.ColumnProperty, 1);
-            gridSplitter.SetValue(Grid.RowSpanProperty, _gridMain.RowDefinitions.Count);
+            gridSplitter.SetValue(Grid.RowSpanProperty, this.GridMain.RowDefinitions.Count);
             gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
             gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
             gridSplitter.Background = Brushes.Transparent;
-            _gridMain.Children.Insert(0, gridSplitter);
+            this.GridMain.Children.Insert(0, gridSplitter);
         }
     }
 
