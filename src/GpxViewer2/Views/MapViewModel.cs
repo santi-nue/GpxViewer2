@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Input;
 using GpxViewer2.Messages;
 using GpxViewer2.UseCases;
 using GpxViewer2.Util;
@@ -17,15 +18,46 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
     /// <inheritdoc />
     public string Title { get; } = "Map";
 
-    public event EventHandler<ZoomToGpxToursRequestEventArgs>? ZoomToGpxToursRequest; 
-
     /// <inheritdoc />
     public Control CreateViewInstance()
     {
         return new MapView();
     }
+
+    [RelayCommand]
+    private void ZoomToSelection()
+    {
+        this.WrapWithErrorHandling(() =>
+        {
+            var srvMap = this.GetViewService<IMapsViewService>();
+            var selectedTours = srvMap.GetSelectedGpxTours();
+            if (selectedTours.Count == 0) { return; }
+
+            using var scope = this.GetScopedService(out ZoomToGpxToursUseCase useCase);
+            useCase.ZoomToGpxTours(selectedTours);
+        });
+    }
+
+    [RelayCommand]
+    private void ZoomOut()
+    {
+        this.WrapWithErrorHandling(() =>
+        {
+            var srvMap = this.GetViewService<IMapsViewService>();
+            
+            var allTours = srvMap.GetAvailableGpxTours();
+            if (allTours.Count > 0)
+            {
+                srvMap.ZoomToTours(allTours);
+            }
+            else
+            {
+                srvMap.ZoomToDefaultLocation();
+            }
+        });
+    }
     
-    private async void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
+    private void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
     {
         this.WrapWithErrorHandling(() =>
         {
@@ -88,9 +120,8 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
 
     public void OnMessageReceived(ZoomToGpxToursRequestMessage message)
     {
-        this.ZoomToGpxToursRequest?.Invoke(
-            this, 
-            new ZoomToGpxToursRequestEventArgs(message.Tours));
+        var srvMap = this.GetViewService<IMapsViewService>();
+        srvMap.ZoomToTours(message.Tours);
     }
 
     /// <inheritdoc />

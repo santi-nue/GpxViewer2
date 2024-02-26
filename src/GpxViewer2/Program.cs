@@ -75,6 +75,7 @@ class Program
                 services.AddScoped<LoadGpxDirectoryUseCase>();
                 services.AddScoped<SelectGpxToursUseCase>();
                 services.AddScoped<UpdateTourPropertyUseCase>();
+                services.AddScoped<ZoomToGpxToursUseCase>();
             });
     }
 }

@@ -9,7 +9,6 @@ using Mapsui;
 using Mapsui.Animations;
 using Mapsui.Layers;
 using Mapsui.Nts;
-using RolandK.AvaloniaExtensions.Mvvm;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 using RolandK.AvaloniaExtensions.ViewServices.Base;
 
@@ -25,6 +24,10 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         new TourVisualizationDetailLevel(500, 20),
         new TourVisualizationDetailLevel(double.MaxValue, 30)
     };
+    
+    private static readonly MRect DEFAULT_VIEW_BOX = new MRect(
+        -7637335.834571721, 1578946.9985836577,
+        9063849.0976259485, 10564256.424126934);
 
     private TourVisualizationDetailLevel? _lastDetailLevel;
     
@@ -33,7 +36,6 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
 
-    private MapViewModel? _attachedViewModel;
     private LoadedGpxFileTourInfo? _lastPressedTour;
     
     /// <inheritdoc />
@@ -176,6 +178,69 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     }
 
     /// <inheritdoc />
+    public void ZoomToDefaultLocation()
+    {
+        this.CtrlMap.Map.Navigator.ZoomToBox(
+            DEFAULT_VIEW_BOX,
+            MBoxFit.Fit,
+            500L,
+            Easing.Linear);
+    }
+    
+    public void ZoomToTours(IReadOnlyList<LoadedGpxFileTourInfo> tours)
+    {
+        var rectBuilder = new NavigationMRectBuilder();
+        foreach (var actTour in tours)
+        {
+            foreach (var actSegment in actTour.Segments)
+            {
+                var actFeature = new GeometryFeatureWithMetadata()
+                {
+                    Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(this.GetTourPointsToSkip()),
+                    Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Selected) },
+                    Tour = actSegment.Tour,
+                    Points = actSegment.Points
+                };
+                rectBuilder.TryAddFeature(actFeature);
+            }
+        }
+
+        if (rectBuilder.CanBuildBoundingBox)
+        {
+            this.CtrlMap.Map.Navigator.ZoomToBox(
+                rectBuilder.TryBuild(),
+                MBoxFit.Fit,
+                500L,
+                Easing.Linear);
+        }
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<LoadedGpxFileTourInfo> GetAvailableGpxTours()
+    {
+        var result = new List<LoadedGpxFileTourInfo>(_lineStringLayerForAll.Features.Count());
+        foreach (var actFeature in _lineStringLayerForAll.Features)
+        {
+            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata) { continue; }
+            if (actFeatureWithMetadata.Tour == null) {continue; }
+            result.Add(actFeatureWithMetadata.Tour);
+        }
+        return result;
+    }
+    
+    public IReadOnlyList<LoadedGpxFileTourInfo> GetSelectedGpxTours()
+    {
+        var result = new List<LoadedGpxFileTourInfo>(_lineStringLayerForSelection.Features.Count());
+        foreach (var actFeature in _lineStringLayerForSelection.Features)
+        {
+            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata) { continue; }
+            if (actFeatureWithMetadata.Tour == null) {continue; }
+            result.Add(actFeatureWithMetadata.Tour);
+        }
+        return result;
+    }
+
+    /// <inheritdoc />
     public void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection)
     {
         if (selection.Count == 0)
@@ -263,64 +328,5 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     private void OnCtrlMap_Navigator_OnViewportChanged(object? sender, PropertyChangedEventArgs e)
     {
         this.UpdateGpxTourVisualization();
-    }
-    
-    private void OnAttachedViewModel_ZoomToGpxToursRequest(object? sender, ZoomToGpxToursRequestEventArgs e)
-    {
-        var rectBuilder = new NavigationMRectBuilder();
-        foreach (var actTour in e.Tours)
-        {
-            foreach (var actSegment in actTour.Segments)
-            {
-                var actFeature = new GeometryFeatureWithMetadata()
-                {
-                    Geometry = actSegment.Points.GpxWaypointsToMapsuiGeometry(this.GetTourPointsToSkip()),
-                    Styles = new[] { GpxRenderingHelper.CreateLineStringStyle(GpxTourLineStringType.Selected) },
-                    Tour = actSegment.Tour,
-                    Points = actSegment.Points
-                };
-                rectBuilder.TryAddFeature(actFeature);
-            }
-        }
-
-        if (rectBuilder.CanBuildBoundingBox)
-        {
-            this.CtrlMap.Map.Navigator.ZoomToBox(
-                rectBuilder.TryBuild(),
-                MBoxFit.Fit,
-                500L,
-                Easing.Linear);
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void OnViewModelAttached(ViewModelAttachedEventArgs args)
-    {
-        base.OnViewModelAttached(args);
-
-        if (_attachedViewModel != null)
-        {
-            _attachedViewModel.ZoomToGpxToursRequest -= this.OnAttachedViewModel_ZoomToGpxToursRequest;
-            _attachedViewModel = null;
-        }
-        
-        _attachedViewModel = args.ViewModel as MapViewModel;
-
-        if (_attachedViewModel != null)
-        {
-            _attachedViewModel.ZoomToGpxToursRequest += this.OnAttachedViewModel_ZoomToGpxToursRequest;
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void OnViewModelDetached(ViewModelDetachedEventArgs args)
-    {
-        base.OnViewModelDetached(args);
-        
-        if (_attachedViewModel != null)
-        {
-            _attachedViewModel.ZoomToGpxToursRequest -= this.OnAttachedViewModel_ZoomToGpxToursRequest;
-            _attachedViewModel = null;
-        }
     }
 }

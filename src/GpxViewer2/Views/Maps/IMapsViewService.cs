@@ -12,10 +12,18 @@ public interface IMapsViewService : IViewService
     event EventHandler<RouteClickedEventArgs> RouteDoubleClicked; 
     
     void AddAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> newGpxTours);
+    
+    IReadOnlyList<LoadedGpxFileTourInfo> GetAvailableGpxTours();
 
     void RemoveAvailableGpxTours(IEnumerable<LoadedGpxFileTourInfo> existingGpxTours);
 
     void UpdateGpxTourVisualization();
     
     void SetSelectedGpxTours(IReadOnlyList<LoadedGpxFileTourInfo> selection);
+    
+    IReadOnlyList<LoadedGpxFileTourInfo> GetSelectedGpxTours();
+
+    void ZoomToDefaultLocation();
+
+    void ZoomToTours(IReadOnlyList<LoadedGpxFileTourInfo> tours);
 }

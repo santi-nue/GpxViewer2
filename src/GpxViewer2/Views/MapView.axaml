@@ -7,13 +7,31 @@
              xmlns:local="clr-namespace:GpxViewer2.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GpxViewer2.Views.MapView"
+             x:DataType="local:MapViewModel"
              d:DataContext="{x:Static local:MapViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:MapViewModel}">
-    <mapsui:MapControl x:Name="CtrlMap"
-                       UseContinuousMouseWheelZoom="True"
-                       ContinuousMouseWheelZoomStepSize="0.2"
-                       PointerPressed="OnCtrlMap_PointerPressed"
-                       PointerReleased="OnCtrlMap_PointerReleased"
-                       PointerMoved="OnCtrlMap_PointerMoved"
-                       DoubleTapped="OnCtrlMap_DoubleTapped"/>
+    <Panel>
+        <mapsui:MapControl x:Name="CtrlMap"
+                           UseContinuousMouseWheelZoom="True"
+                           ContinuousMouseWheelZoomStepSize="0.2"
+                           PointerPressed="OnCtrlMap_PointerPressed"
+                           PointerReleased="OnCtrlMap_PointerReleased"
+                           PointerMoved="OnCtrlMap_PointerMoved"
+                           DoubleTapped="OnCtrlMap_DoubleTapped"/>
+        
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <StackPanel.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Margin" Value="5"></Setter>
+                </Style>
+            </StackPanel.Styles>
+            <Button Content="Zoom out"
+                    Command="{Binding Path=ZoomOutCommand}" />
+            <Button Content="Zoom to selection"
+                    Command="{Binding Path=ZoomToSelectionCommand}" />
+        </StackPanel>
+        
+    </Panel>
 </ext:MvvmUserControl>
