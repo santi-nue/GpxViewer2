@@ -42,14 +42,18 @@
     
     <ext:MainWindowFrame>
         <ext:MainWindowFrame.CustomTitleArea>
-            <Image Margin="0,6,6,6"
-                   VerticalAlignment="Center">
-                <Image.Source>
-                    <SvgImage Source="Assets/GPXviewer.svg" /> 
-                </Image.Source>
-            </Image>
-            <TextBlock Text="RK GPXviewer 2"
-                       VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Margin="6">
+                <Image Margin="0,0,6,0"
+                       VerticalAlignment="Center">
+                    <Image.Source>
+                        <SvgImage Source="Assets/GPXviewer.svg" /> 
+                    </Image.Source>
+                </Image>
+                <TextBlock Text="RK GPXviewer 2"
+                           FontSize="16"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
         </ext:MainWindowFrame.CustomTitleArea>
         
         <ext:MainWindowFrame.MainContentArea>
@@ -70,11 +74,12 @@
                     </MenuItem>
                 </Menu>
                 
-                <Grid ColumnDefinitions="200,3,*">
+                <Grid ColumnDefinitions="200,8,*"
+                      Margin="4,0,4,4">
         
                     <!-- Left side ('Route selection' and 'Route detail') -->
                     <Grid Grid.Column="0" 
-                          RowDefinitions="*,3,300">
+                          RowDefinitions="*,8,300">
                         <controls:RegionControl Grid.Row="0"
                                                 ViewModelType="{x:Type views:RouteSelectionViewModel}" />
                         <GridSplitter Grid.Row="1"
@@ -90,7 +95,7 @@
         
                     <!-- Right side ('Map' and 'Elevation profile') -->
                     <Grid Grid.Column="2" 
-                          RowDefinitions="*,3,200">
+                          RowDefinitions="*,8,200">
                         <controls:RegionControl Grid.Row="0"
                                                 ViewModelType="{x:Type views:MapViewModel}" />
                         <GridSplitter Grid.Row="1"

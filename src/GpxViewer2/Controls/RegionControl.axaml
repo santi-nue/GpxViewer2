@@ -9,19 +9,18 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <DockPanel LastChildFill="True" Margin="3">
-                            <Border DockPanel.Dock="Top" 
-                                    Background="{DynamicResource ComboBoxDropDownBackground}"
-                                    BorderThickness="0">
-                                <ContentPresenter Margin="4"
+                        <Border Background="{DynamicResource ComboBoxDropDownBackground}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                            <DockPanel LastChildFill="True" 
+                                       Margin="3">
+                                <ContentPresenter DockPanel.Dock="Top" 
+                                                  Margin="4"
                                                   Content="{TemplateBinding Header}" />
-                            </Border>
-
-                            <Border BorderBrush="{DynamicResource ComboBoxDropDownBackground}"
-                                    BorderThickness="2,0,2,2">
                                 <ContentPresenter Content="{TemplateBinding Content}" />
-                            </Border>
-                        </DockPanel>
+                            </DockPanel>
+                        </Border>
+
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -30,7 +29,8 @@
     
     <HeaderedContentControl x:Name="CtrlContentControl">
         <HeaderedContentControl.Header>
-            <TextBlock x:Name="CtrlTitle" />
+            <TextBlock x:Name="CtrlTitle" 
+                       FontWeight="Bold" />
         </HeaderedContentControl.Header>
     </HeaderedContentControl>
     

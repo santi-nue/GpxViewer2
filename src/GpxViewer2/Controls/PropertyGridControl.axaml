@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="3" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="7" />
             </Grid.ColumnDefinitions>
         </Grid>
     </ScrollViewer>

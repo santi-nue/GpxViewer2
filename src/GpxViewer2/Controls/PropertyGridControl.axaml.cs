@@ -103,7 +103,7 @@ public partial class PropertyGridControl : UserControl
             // Create category rows
             if (actProperty.Metadata.CategoryName != actCategory)
             {
-                this.GridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(35)});
+                this.GridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(40)});
 
                 actCategory = actProperty.Metadata.CategoryName;
 
@@ -116,22 +116,16 @@ public partial class PropertyGridControl : UserControl
                 txtHeader.SetValue(Grid.ColumnSpanProperty, 3);
                 txtHeader.SetValue(Grid.ColumnProperty, 0);
                 txtHeader.Margin = new Thickness(5d, 5d, 5d, 5d);
-                txtHeader.VerticalAlignment = VerticalAlignment.Bottom;
-                txtHeader.FontWeight = FontWeight.Bold;
+                txtHeader.VerticalAlignment = VerticalAlignment.Center;
                 this.GridMain.Children.Add(txtHeader);
-
-                var rect = new Rectangle
-                {
-                    Height = 1d,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    Margin = new Thickness(5d, 5d, 5d, 0d)
-                };
-                rect.Classes.Add("PropertyGridCategoryHeaderLine");
-
-                rect.SetValue(Grid.RowProperty, actRowIndex);
-                rect.SetValue(Grid.ColumnSpanProperty, 3);
-                rect.SetValue(Grid.ColumnProperty, 0);
-                this.GridMain.Children.Add(rect);
+                
+                var categorySeparator = new Separator();
+                categorySeparator.VerticalAlignment = VerticalAlignment.Bottom;
+                categorySeparator.Margin = new Thickness(5d, 5d, 0d, 5d);
+                categorySeparator.SetValue(Grid.RowProperty, actRowIndex);
+                categorySeparator.SetValue(Grid.ColumnSpanProperty, 3);
+                categorySeparator.SetValue(Grid.ColumnProperty, 0);
+                this.GridMain.Children.Add(categorySeparator);
 
                 actRowIndex++;
             }
