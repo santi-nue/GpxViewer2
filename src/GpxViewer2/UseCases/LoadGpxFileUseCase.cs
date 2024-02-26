@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GpxViewer2.Messages;
 using GpxViewer2.Services;
+using GpxViewer2.Services.GpxFileStore;
 using GpxViewer2.Services.RecentlyOpened;
 using GpxViewer2.ValueObjects;
 using RolandK.AvaloniaExtensions.ViewServices;
@@ -17,37 +19,47 @@ public class LoadGpxFileUseCase(
     public async Task LoadGpxFileAsync(
         IOpenFileViewService srvOpenFileDialog)
     {
-        var fileToOpen = await srvOpenFileDialog.ShowOpenFileDialogAsync(
+        var filesToOpen = await srvOpenFileDialog.ShowOpenMultipleFilesDialogAsync(
             [new FileDialogFilter("GPX-Files (*.gpx)", ["*.gpx"])],
             "Load GPX-File");
-        if (string.IsNullOrEmpty(fileToOpen)) { return; }
+        if (filesToOpen is null or []) { return; }
 
-        await this.LoadGpxFileAsync(fileToOpen);
+        await this.LoadGpxFileAsync(filesToOpen);
     }
 
     public async Task LoadGpxFileAsync(
-        string fileToOpen)
+        params string[] filesToOpen)
     {
-        var source = new FileOrDirectoryPath(fileToOpen);
-
-        var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
-        var newNodeLoaded = false;
-        if (repositoryNode == null)
+        var allNodes = new List<GpxFileRepositoryNode>(filesToOpen.Length);
+        var newNodes = new List<GpxFileRepositoryNode>(filesToOpen.Length);
+        var openedPaths = new List<string>(filesToOpen.Length);
+        foreach (var actFileToOpen in filesToOpen)
         {
-            repositoryNode = srvGpxFileRepository.LoadFileNode(source);
-            newNodeLoaded = true;
+            var source = new FileOrDirectoryPath(actFileToOpen);
+
+            var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
+            if (repositoryNode == null)
+            {
+                repositoryNode = srvGpxFileRepository.LoadFileNode(source);
+                newNodes.Add(repositoryNode);
+                openedPaths.Add(actFileToOpen);
+            }
+            allNodes.Add(repositoryNode);
         }
         
-        var loadedGpxTours = repositoryNode
-            .GetAssociatedToursDeep()
+        if (openedPaths.Count > 0)
+        {
+            await srvRecentlyOpened.AddOpenedAsync(openedPaths, RecentlyOpenedType.File);
+        }
+        
+        var loadedGpxTours = allNodes
+            .SelectMany(x => x.GetAssociatedToursDeep())
+            .Distinct()
             .ToArray();
         
-        await srvRecentlyOpened.AddOpenedAsync(
-            fileToOpen, RecentlyOpenedType.File);
-
-        if (newNodeLoaded)
+        if (newNodes.Count > 0)
         {
-            srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage([repositoryNode]));
+            srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage(newNodes));
         }
         srvMessagePublisher.Publish(new GpxToursSelectedMessage(loadedGpxTours));
         srvMessagePublisher.Publish(new ZoomToGpxToursRequestMessage(loadedGpxTours));

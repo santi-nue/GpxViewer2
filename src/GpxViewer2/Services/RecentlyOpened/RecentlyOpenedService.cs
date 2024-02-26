@@ -31,20 +31,31 @@ public class RecentlyOpenedService : IRecentlyOpenedService
 
     public async Task AddOpenedAsync(string path, RecentlyOpenedType type)
     {
-        if (string.IsNullOrEmpty(path))
+        await AddOpenedAsync([path], type);
+    }
+
+    /// <inheritdoc />
+    public async Task AddOpenedAsync(IReadOnlyList<string> paths, RecentlyOpenedType type)
+    {
+        if (paths.Count == 0)
         {
-            throw new ArgumentException(nameof(path));
+            throw new ArgumentException(nameof(paths));
         }
 
         var model = await this.ReadRecentlyOpenedAsync();
-        model.Entries.RemoveAll(
-            x => x.FullPath.Equals(path, StringComparison.InvariantCultureIgnoreCase));
-        model.Entries.Insert(0, new RecentlyOpenedFileOrDirectoryModel()
+        foreach (var actPath in paths)
         {
-            FullPath = path,
-            Type = type
-        });
-
+            if(string.IsNullOrEmpty(actPath)){ continue; }
+            
+            model.Entries.RemoveAll(
+                x => x.FullPath.Equals(actPath, StringComparison.InvariantCultureIgnoreCase));
+            model.Entries.Insert(0, new RecentlyOpenedFileOrDirectoryModel()
+            {
+                FullPath = actPath,
+                Type = type
+            });
+        }
+        
         while (model.Entries.Count > _maxEntryCount)
         {
             model.Entries.RemoveAt(model.Entries.Count - 1);
