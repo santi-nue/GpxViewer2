@@ -29,6 +29,22 @@
             <MenuItem Header="|"
                       IsHitTestVisible="False" />
             
+            <MenuItem Command="{Binding Path=SaveSelectedNodesCommand}"
+                      ToolTip.Tip="Save Selection">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-save"/>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding Path=SaveAllNodesCommand}"
+                      ToolTip.Tip="Save All">
+                <MenuItem.Header>
+                    <i:Icon Value="fa-save"/>
+                </MenuItem.Header>
+            </MenuItem>
+            
+            <MenuItem Header="|"
+                      IsHitTestVisible="False" />
+            
             <MenuItem Command="{Binding Path=ZoomToSelectedNodesCommand}"
                       ToolTip.Tip="Zoom to nodes">
                 <MenuItem.Header>

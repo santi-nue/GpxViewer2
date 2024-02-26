@@ -73,6 +73,7 @@ class Program
                 services.AddScoped<CloseFileOrDirectoryUseCase>();
                 services.AddScoped<LoadGpxFileUseCase>();
                 services.AddScoped<LoadGpxDirectoryUseCase>();
+                services.AddScoped<SaveNodeChangesUseCase>();
                 services.AddScoped<SelectGpxToursUseCase>();
                 services.AddScoped<UpdateTourPropertyUseCase>();
                 services.AddScoped<ZoomToGpxToursUseCase>();

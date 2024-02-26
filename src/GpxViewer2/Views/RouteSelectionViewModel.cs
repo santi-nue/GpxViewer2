@@ -157,18 +157,43 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
             _isInSelectionProcessing = false;
         }
     }
-    
-    private static void TriggerNodeTextChanged(IEnumerable<RouteSelectionNode> nodes, LoadedGpxFileTourInfo tour)
-    {
-        foreach (var actNode in nodes)
-        {
-            if (actNode.AssociatedTour == tour)
-            {
-                actNode.RaiseNodeTextChanged();
-            }
 
-            TriggerNodeTextChanged(actNode.ChildNodes, tour);
-        }
+    [RelayCommand]
+    private async void SaveSelectedNodes()
+    {
+        if (_routeSelectionViewService == null) { return; }
+        
+        await this.WrapWithErrorHandlingAsync(async () =>
+        {
+            var selectedNodes = _routeSelectionViewService.GetSelectedNodes();
+
+            var nodesToSave = selectedNodes
+                .Select(x => x.Node)
+                .Where(x => x.CanSave)
+                .Distinct()
+                .ToArray();
+
+            using var scope = this.GetScopedService(out SaveNodeChangesUseCase useCase);
+            await useCase.SaveChanges(nodesToSave);
+        });
+    }
+    
+    [RelayCommand]
+    private async void SaveAllNodes()
+    {
+        if (_routeSelectionViewService == null) { return; }
+        
+        await this.WrapWithErrorHandlingAsync(async () =>
+        {
+            var nodesToSave = RouteSelectionNode.LoopOverAllDeep(this.Nodes)
+                .Select(x => x.Node)
+                .Where(x => x.CanSave)
+                .Distinct()
+                .ToArray();
+
+            using var scope = this.GetScopedService(out SaveNodeChangesUseCase useCase);
+            await useCase.SaveChanges(nodesToSave);
+        });
     }
 
     private async void OnRouteSelectionViewService_NodeSelectionChanged(object? sender, EventArgs e)
@@ -232,9 +257,18 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         }
     }
 
-    private void OnMessageReceived(TourConfigurationChangedMessage message)
+    private void OnMessageReceived(TourConfigurationStateChangedMessage message)
     {
-        TriggerNodeTextChanged(this.Nodes, message.Tour);
+        foreach (var actNode in RouteSelectionNode.LoopOverAllDeep(this.Nodes))
+        {
+            foreach (var actTour in message.Tours)
+            {
+                if (actNode.AssociatedTour == actTour)
+                {
+                    actNode.RaiseNodeTextChanged();
+                }
+            }
+        }
     }
 
     /// <inheritdoc />

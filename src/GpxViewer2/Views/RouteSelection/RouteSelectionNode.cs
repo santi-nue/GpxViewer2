@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using GpxViewer2.Model;
@@ -64,6 +65,19 @@ public class RouteSelectionNode : INotifyPropertyChanged
         foreach (var actChildNode in node.ChildNodes)
         {
             this.ChildNodes.Add(new RouteSelectionNode(actChildNode));
+        }
+    }
+
+    public static IEnumerable<RouteSelectionNode> LoopOverAllDeep(IEnumerable<RouteSelectionNode> nodes)
+    {
+        foreach (var actNode in nodes)
+        {
+            yield return actNode;
+
+            foreach (var actNodeInner in LoopOverAllDeep(actNode.ChildNodes))
+            {
+                yield return actNodeInner;
+            }
         }
     }
 
