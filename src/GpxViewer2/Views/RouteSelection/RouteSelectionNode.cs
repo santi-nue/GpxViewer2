@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using GpxViewer2.Model;
 using GpxViewer2.Model.GpxXmlExtensions;
 using GpxViewer2.Services.GpxFileStore;
@@ -6,8 +7,11 @@ using GpxViewer2.Util;
 
 namespace GpxViewer2.Views.RouteSelection;
 
-public class RouteSelectionNode
+public class RouteSelectionNode : INotifyPropertyChanged
 {
+    /// <inheritdoc />
+    public event PropertyChangedEventHandler? PropertyChanged;
+    
     public ObservableCollection<RouteSelectionNode> ChildNodes { get; } = new();
 
     public LoadedGpxFileTourInfo? AssociatedTour { get; }
@@ -28,6 +32,8 @@ public class RouteSelectionNode
     public double ElevationDownMeters
         => this.AssociatedTour?.ElevationDownMeters ?? 0.0;
 
+    public string NodeText => this.Node.NodeText;
+    
     public string TooltipText
     {
         get
@@ -59,5 +65,12 @@ public class RouteSelectionNode
         {
             this.ChildNodes.Add(new RouteSelectionNode(actChildNode));
         }
+    }
+
+    public void RaiseNodeTextChanged()
+    {
+        this.PropertyChanged?.Invoke(
+            this, 
+            new PropertyChangedEventArgs(nameof(this.NodeText)));
     }
 }

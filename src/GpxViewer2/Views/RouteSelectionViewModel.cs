@@ -157,6 +157,19 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
             _isInSelectionProcessing = false;
         }
     }
+    
+    private static void TriggerNodeTextChanged(IEnumerable<RouteSelectionNode> nodes, LoadedGpxFileTourInfo tour)
+    {
+        foreach (var actNode in nodes)
+        {
+            if (actNode.AssociatedTour == tour)
+            {
+                actNode.RaiseNodeTextChanged();
+            }
+
+            TriggerNodeTextChanged(actNode.ChildNodes, tour);
+        }
+    }
 
     private async void OnRouteSelectionViewService_NodeSelectionChanged(object? sender, EventArgs e)
     {
@@ -217,6 +230,11 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
         {
             _isInSelectionProcessing = false;
         }
+    }
+
+    private void OnMessageReceived(TourConfigurationChangedMessage message)
+    {
+        TriggerNodeTextChanged(this.Nodes, message.Tour);
     }
 
     /// <inheritdoc />

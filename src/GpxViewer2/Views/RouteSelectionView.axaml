@@ -75,7 +75,7 @@
                                 IsVisible="{Binding Path=IsTourFinishedVisible}"/>
                         
                         <TextBlock Grid.Column="2" 
-                                   Text="{Binding Path=Node.NodeText}" />
+                                   Text="{Binding Path=NodeText}" />
                         
                         <StackPanel Grid.Column="4"
                                     Orientation="Horizontal"
