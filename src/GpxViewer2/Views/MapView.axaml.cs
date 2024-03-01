@@ -9,6 +9,7 @@ using Mapsui;
 using Mapsui.Animations;
 using Mapsui.Layers;
 using Mapsui.Nts;
+using Mapsui.Tiling;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 using RolandK.AvaloniaExtensions.ViewServices.Base;
 

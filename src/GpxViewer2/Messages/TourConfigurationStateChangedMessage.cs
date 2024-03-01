@@ -6,4 +6,4 @@ namespace GpxViewer2.Messages;
 
 [InProcessMessage]
 public record TourConfigurationStateChangedMessage(
-    IReadOnlyList<LoadedGpxFileTourInfo> Tours);
+    IReadOnlyList<LoadedGpxFileTourInfo> Tours, bool DataChanged);

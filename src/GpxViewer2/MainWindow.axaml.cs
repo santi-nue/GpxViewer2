@@ -108,4 +108,19 @@ public partial class MainWindow : MvvmWindow
                 break;
         }
     }
+
+    /// <inheritdoc />
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        base.OnClosing(e);
+        
+        if (this.DataContext is MainWindowViewModel viewModel)
+        {
+            var doContinue = viewModel.NotifyWindowClosing();
+            if (!doContinue)
+            {
+                e.Cancel = true;
+            }
+        }
+    }
 }

@@ -26,6 +26,6 @@ public class SaveNodeChangesUseCase(
             .Distinct()
             .ToArray();
         
-        srvMessagePublisher.Publish(new TourConfigurationStateChangedMessage(savedTours));
+        srvMessagePublisher.Publish(new TourConfigurationStateChangedMessage(savedTours, false));
     }
 }

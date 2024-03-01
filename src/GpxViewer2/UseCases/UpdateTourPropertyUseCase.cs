@@ -15,7 +15,7 @@ public class UpdateTourPropertyUseCase(IInProcessMessagePublisher messagePublish
             tour.File.ContentsChanged = true;
 
             messagePublisher.BeginPublish(
-                new TourConfigurationStateChangedMessage([tour]));
+                new TourConfigurationStateChangedMessage([tour], true));
         }
     }
 
@@ -27,7 +27,7 @@ public class UpdateTourPropertyUseCase(IInProcessMessagePublisher messagePublish
             tour.File.ContentsChanged = true;
 
             messagePublisher.BeginPublish(
-                new TourConfigurationStateChangedMessage([tour]));
+                new TourConfigurationStateChangedMessage([tour], true));
         }
     }
 
@@ -39,7 +39,7 @@ public class UpdateTourPropertyUseCase(IInProcessMessagePublisher messagePublish
             tour.File.ContentsChanged = true;
 
             messagePublisher.BeginPublish(
-                new TourConfigurationStateChangedMessage([tour]));
+                new TourConfigurationStateChangedMessage([tour], true));
         }
     }
 }

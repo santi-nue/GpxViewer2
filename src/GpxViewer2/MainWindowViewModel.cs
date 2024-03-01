@@ -23,6 +23,8 @@ public partial class MainWindowViewModel : OwnViewModelBase
     private readonly IRecentlyOpenedService _srvRecentlyOpened;
     private readonly IGpxFileRepositoryService _srvGpxFileRepository;
 
+    private bool _closeAllowed = false;
+
     [ObservableProperty]
     private IReadOnlyList<RecentlyOpenedFileOrDirectoryModel> _recentlyOpenedEntries = [];
 
@@ -89,6 +91,52 @@ public partial class MainWindowViewModel : OwnViewModelBase
         });
     }
 
+    public bool NotifyWindowClosing()
+    {
+        if (_closeAllowed) { return true; }
+        
+        var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
+        var anyContentsChanged = allNodes.Any(x => x.ContentsChanged);
+        if (!anyContentsChanged)
+        {
+            return true;
+        }
+        
+        this.TriggerSaveBeforeExit();
+
+        return false;
+    }
+
+    private async void TriggerSaveBeforeExit()
+    {
+        await this.WrapWithErrorHandlingAsync(async () =>
+        {
+            var srvMessageBox = base.GetViewService<IMessageBoxViewService>();
+            var result = await srvMessageBox.ShowAsync(
+                "Unsaved Changes",
+                "There are unsaved changes. Do you want to save them before closing?",
+                MessageBoxButtons.YesNoCancel);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    await SaveAllAsync();
+
+                    _closeAllowed = true;
+                    this.CloseHostWindow();
+                    break;
+
+                case MessageBoxResult.No:
+                    _closeAllowed = true;
+                    this.CloseHostWindow();
+                    break;
+
+                case MessageBoxResult.Cancel:
+                    return;
+            }
+        });
+    }
+
     private async void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)
     {
         await this.WrapWithErrorHandlingAsync(async () =>
@@ -96,6 +144,14 @@ public partial class MainWindowViewModel : OwnViewModelBase
             this.RecentlyOpenedEntries = 
                 await _srvRecentlyOpened.GetAllRecentlyOpenedAsync();
         });
+    }
+
+    private void OnMessageReceived(TourConfigurationStateChangedMessage message)
+    {
+        if (message.DataChanged)
+        {
+            _closeAllowed = false;
+        }
     }
 
     /// <inheritdoc />
