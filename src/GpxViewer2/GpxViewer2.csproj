@@ -6,6 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <ApplicationIcon>..\..\assets\GPXviewer.ico</ApplicationIcon>
     </PropertyGroup>
     
     <ItemGroup>
@@ -39,8 +40,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Content Include="..\..\assets\GPXviewer.ico">
+      <AvaloniaResource Include="..\..\assets\GPXviewer.ico">
         <Link>Assets\GPXviewer.ico</Link>
-      </Content>
+      </AvaloniaResource>
     </ItemGroup>
 </Project>

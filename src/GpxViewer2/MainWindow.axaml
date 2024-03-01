@@ -14,6 +14,7 @@
         ExtendClientAreaToDecorationsHint="True"
         Title="{Binding Path=Title}"
         ViewFor="{x:Type local:MainWindowViewModel}"
+        Icon="Assets/GPXviewer.ico"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
     <NativeMenu.Menu>
         <NativeMenu>
