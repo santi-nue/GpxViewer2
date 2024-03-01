@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -28,6 +29,26 @@ public partial class MainWindowViewModel : OwnViewModelBase
     [ObservableProperty]
     private IReadOnlyList<RecentlyOpenedFileOrDirectoryModel> _recentlyOpenedEntries = [];
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Title))]
+    private bool _anyDataChanged = false;
+    
+    public string Title
+    {
+        get
+        {
+            var strBuilder = new StringBuilder(128);
+            strBuilder.Append("RK GPXviewer 2");
+
+            if (this.AnyDataChanged)
+            {
+                strBuilder.Append('*');
+            }
+            
+            return strBuilder.ToString();
+        }
+    }
+    
     public MainWindowViewModel(
         IRecentlyOpenedService srvRecentlyOpened,
         IGpxFileRepositoryService srvGpxFileRepository)
@@ -152,6 +173,9 @@ public partial class MainWindowViewModel : OwnViewModelBase
         {
             _closeAllowed = false;
         }
+        
+        var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
+        this.AnyDataChanged = allNodes.Any(x => x.ContentsChanged);
     }
 
     /// <inheritdoc />

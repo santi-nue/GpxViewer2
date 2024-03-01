@@ -29,17 +29,14 @@
             <MenuItem Header="|"
                       IsHitTestVisible="False" />
             
-            <MenuItem Command="{Binding Path=SaveSelectedNodesCommand}"
-                      ToolTip.Tip="Save Selection">
+            <MenuItem ToolTip.Tip="Save">
                 <MenuItem.Header>
                     <i:Icon Value="fa-save"/>
                 </MenuItem.Header>
-            </MenuItem>
-            <MenuItem Command="{Binding Path=SaveAllNodesCommand}"
-                      ToolTip.Tip="Save All">
-                <MenuItem.Header>
-                    <i:Icon Value="fa-save"/>
-                </MenuItem.Header>
+                <MenuItem Command="{Binding Path=SaveSelectedNodesCommand}"
+                          Header="Save Selection" />
+                <MenuItem Command="{Binding Path=SaveAllNodesCommand}"
+                          Header="Save All" />
             </MenuItem>
             
             <MenuItem Header="|"

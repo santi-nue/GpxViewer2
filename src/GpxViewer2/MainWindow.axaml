@@ -12,7 +12,7 @@
         x:DataType="local:MainWindowViewModel"
         d:DataContext="{x:Static local:MainWindowViewModel.EmptyViewModel}"
         ExtendClientAreaToDecorationsHint="True"
-        Title="RK GPXviewer 2"
+        Title="{Binding Path=Title}"
         ViewFor="{x:Type local:MainWindowViewModel}"
         DataContext="{ext:CreateUsingDependencyInjection Type={x:Type local:MainWindowViewModel}}">
     <NativeMenu.Menu>
@@ -50,7 +50,7 @@
                         <SvgImage Source="Assets/GPXviewer.svg" /> 
                     </Image.Source>
                 </Image>
-                <TextBlock Text="RK GPXviewer 2"
+                <TextBlock Text="{Binding Path=Title}"
                            FontSize="16"
                            VerticalAlignment="Center"/>
             </StackPanel>

@@ -37,4 +37,10 @@
         <Link>Assets/GPXviewer.svg</Link>
       </AvaloniaResource>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="..\..\assets\GPXviewer.ico">
+        <Link>Assets\GPXviewer.ico</Link>
+      </Content>
+    </ItemGroup>
 </Project>
