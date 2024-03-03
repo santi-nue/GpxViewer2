@@ -5,6 +5,7 @@ using GpxViewer2.Model.GpxXmlExtensions;
 using GpxViewer2.Services;
 using GpxViewer2.Services.GpxFileStore;
 using GpxViewer2.Services.RecentlyOpened;
+using GpxViewer2.Services.StartupArguments;
 using GpxViewer2.UseCases;
 using GpxViewer2.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ class Program
     {
         try
         {
-            BuildAvaloniaApp()
+            BuildAvaloniaApp(args)
                 .StartWithClassicDesktopLifetime(args);
             return 0;
         }
@@ -38,7 +39,7 @@ class Program
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
+    public static AppBuilder BuildAvaloniaApp(string[] args)
     {
         IconProvider.Current
             .Register<FontAwesomeIconProvider>();
@@ -61,6 +62,7 @@ class Program
                 services.AddSingleton<IRecentlyOpenedService>(
                     _ => new RecentlyOpenedService(".RKGpxViewer2", 15));
                 services.AddSingleton<IGpxFileRepositoryService, GpxFileRepositoryService>();
+                services.AddSingleton<IStartupArgumentsContainer>(_ => new StartupArgumentsContainer(args));
 
                 // ViewModels
                 services.AddTransient<MainWindowViewModel>();

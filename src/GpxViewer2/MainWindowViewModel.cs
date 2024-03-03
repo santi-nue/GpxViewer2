@@ -19,12 +19,15 @@ public partial class MainWindowViewModel : OwnViewModelBase
 {
     public static readonly MainWindowViewModel EmptyViewModel = new(
         Substitute.For<IRecentlyOpenedService>(),
-        Substitute.For<IGpxFileRepositoryService>());
+        Substitute.For<IGpxFileRepositoryService>(),
+        Substitute.For<IStartupArgumentsContainer>());
 
     private readonly IRecentlyOpenedService _srvRecentlyOpened;
     private readonly IGpxFileRepositoryService _srvGpxFileRepository;
+    private readonly IStartupArgumentsContainer _srvStartupArgumentsContainer;
 
     private bool _closeAllowed = false;
+    private bool _isInitialLoad = true;
 
     [ObservableProperty]
     private IReadOnlyList<RecentlyOpenedFileOrDirectoryModel> _recentlyOpenedEntries = [];
@@ -51,10 +54,12 @@ public partial class MainWindowViewModel : OwnViewModelBase
     
     public MainWindowViewModel(
         IRecentlyOpenedService srvRecentlyOpened,
-        IGpxFileRepositoryService srvGpxFileRepository)
+        IGpxFileRepositoryService srvGpxFileRepository,
+        IStartupArgumentsContainer srvStartupArgumentsContainer)
     {
         _srvRecentlyOpened = srvRecentlyOpened;
         _srvGpxFileRepository = srvGpxFileRepository;
+        _srvStartupArgumentsContainer = srvStartupArgumentsContainer;
     }
     
     [RelayCommand]
@@ -110,6 +115,12 @@ public partial class MainWindowViewModel : OwnViewModelBase
             var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
             await useCase.SaveChangesAsync(allNodes);
         });
+    }
+
+    [RelayCommand]
+    private void Exit()
+    {
+        this.CloseHostWindow();
     }
 
     public bool NotifyWindowClosing()
@@ -190,6 +201,20 @@ public partial class MainWindowViewModel : OwnViewModelBase
                 this.RecentlyOpenedEntries = 
                     await _srvRecentlyOpened.GetAllRecentlyOpenedAsync();
             });
+
+            if ((!string.IsNullOrEmpty(_srvStartupArgumentsContainer.InitialFile)) &&
+                (_isInitialLoad))
+            {
+                _isInitialLoad = false;
+                await this.WrapWithErrorHandlingAsync(async () =>
+                {
+                    // Workaround: At this point, not all views are loaded
+                    await Task.Delay(100);
+
+                    using var scope = this.GetScopedService(out LoadGpxFileUseCase useCase);
+                    await useCase.LoadGpxFileAsync(_srvStartupArgumentsContainer.InitialFile);
+                });
+            }
         }
     }
 }

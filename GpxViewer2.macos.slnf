@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "GpxViewer2.sln",
+    "projects": [
+      "src\\GpxViewer2.ExceptionViewer\\GpxViewer2.ExceptionViewer.csproj",
+      "src\\GpxViewer2.Tests\\GpxViewer2.Tests.csproj",
+      "src\\GpxViewer2\\GpxViewer2.csproj"
+    ]
+  }
+}

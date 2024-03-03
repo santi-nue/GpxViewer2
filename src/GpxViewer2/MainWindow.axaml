@@ -72,6 +72,9 @@
                         <Separator />
                         <MenuItem Header="Save All"
                                   Command="{Binding Path=SaveAllCommand}" />
+                        <Separator />
+                        <MenuItem Header="Exit"
+                                  Command="{Binding Path=ExitCommand}" />
                     </MenuItem>
                 </Menu>
                 
