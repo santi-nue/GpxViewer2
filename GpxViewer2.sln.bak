@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpxViewer2.ExceptionViewer"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpxViewer2.Tests", "src\GpxViewer2.Tests\GpxViewer2.Tests.csproj", "{3FCCE84F-31A5-46F8-8422-2DF05D100F93}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GpxViewer2.WindowsApp", "src\GpxViewer2.WindowsApp\GpxViewer2.WindowsApp.wapproj", "{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GpxViewer2.WindowsApp", "GpxViewer2.WindowsApp\GpxViewer2.WindowsApp.wapproj", "{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
