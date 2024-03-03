@@ -1,4 +1,4 @@
-# RK GPXviewer 2 <img src="media/GPXviewer.svg" width="32" />
+# RK GPXviewer 2 <img src="assets/GPXviewer.svg" width="32" />
 ## About
 GPXviewer 2 is a cross-platform application to view .gpx (GPS Exchange Format) files. 
 I started developing the inital Version 1 in preparation for a tour over the alps in summer 2021 (see https://github.com/RolandKoenig/GpxViewer). 
