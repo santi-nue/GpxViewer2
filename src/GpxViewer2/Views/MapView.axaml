@@ -10,6 +10,10 @@
              x:DataType="local:MapViewModel"
              d:DataContext="{x:Static local:MapViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:MapViewModel}">
+    <ext:MvvmUserControl.Styles>
+        <StyleInclude Source="MapViewStyles.axaml" />
+    </ext:MvvmUserControl.Styles>
+    
     <Panel>
         <mapsui:MapControl x:Name="CtrlMap"
                            UseContinuousMouseWheelZoom="True"
@@ -22,9 +26,6 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
-            <StackPanel.Styles>
-                <StyleInclude Source="MapViewButtonStyles.axaml" />
-            </StackPanel.Styles>
             <Button Content="Zoom out"
                     Command="{Binding Path=ZoomOutCommand}" />
             <Button Content="Zoom to selection"
