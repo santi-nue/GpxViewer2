@@ -33,7 +33,7 @@ class Program
         }
         catch (Exception ex)
         {
-            GlobalErrorReporting.TryShowGlobalExceptionDialogInAnotherProcess(
+            GlobalErrorReporting.TryShowBlockingGlobalExceptionDialogInAnotherProcess(
                 ex, 
                 ".RKGpxViewer2",
                 "GpxViewer2.ExceptionViewer");

@@ -22,8 +22,9 @@
         <PackageReference Include="NSubstitute" Version="5.1.0" />
         <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.1.2" />
         <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.1.2" />
-        <PackageReference Include="RolandK.AvaloniaExtensions" Version="2.0.4" />
-        <PackageReference Include="RolandK.AvaloniaExtensions.DependencyInjection" Version="2.0.4" />
+        <PackageReference Include="RolandK.AvaloniaExtensions" Version="2.1.0" />
+        <PackageReference Include="RolandK.AvaloniaExtensions.DependencyInjection" Version="2.1.0" />
+        <PackageReference Include="RolandK.AvaloniaExtensions.ExceptionHandling" Version="2.1.0" />
         <PackageReference Include="RolandK.Formats.Gpx" Version="1.0.1" />
         <PackageReference Include="RolandK.InProcessMessaging" Version="1.0.3" />
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.16" />
@@ -42,7 +43,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\submodules\RolandK.AvaloniaExtensions.ExceptionHandling\src\RolandK.AvaloniaExtensions.ExceptionHandling\RolandK.AvaloniaExtensions.ExceptionHandling.csproj" />
       <ProjectReference Include="..\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj" />
     </ItemGroup>
 </Project>
