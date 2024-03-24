@@ -30,10 +30,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj" />
-    </ItemGroup>
-    
-    <ItemGroup>
       <AvaloniaResource Include="..\..\assets\GPXviewer.svg">
         <Link>Assets/GPXviewer.svg</Link>
       </AvaloniaResource>
@@ -43,5 +39,9 @@
       <AvaloniaResource Include="..\..\assets\GPXviewer.ico">
         <Link>Assets\GPXviewer.ico</Link>
       </AvaloniaResource>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\submodules\RolandK.AvaloniaExtensions.ExceptionHandling\src\RolandK.AvaloniaExtensions.ExceptionHandling\RolandK.AvaloniaExtensions.ExceptionHandling.csproj" />
     </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using System;
-using GpxViewer2.ExceptionViewer;
 using GpxViewer2.Model.GpxXmlExtensions;
 using GpxViewer2.Services;
 using GpxViewer2.Services.GpxFileStore;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 using RolandK.AvaloniaExtensions.DependencyInjection;
+using RolandK.AvaloniaExtensions.ExceptionHandling;
 using RolandK.Formats.Gpx;
 using RolandK.InProcessMessaging;
 
@@ -33,7 +33,10 @@ class Program
         }
         catch (Exception ex)
         {
-            GlobalErrorReporting.TryShowGlobalExceptionDialogInAnotherProcess(ex, "RKCheckList");
+            GlobalErrorReporting.TryShowGlobalExceptionDialogInAnotherProcess(
+                ex, 
+                "RKCheckList",
+                "RKCheckList.ExceptionViewer");
             return -1;
         }
     }
