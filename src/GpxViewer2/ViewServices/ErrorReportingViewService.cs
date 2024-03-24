@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using GpxViewer2.ExceptionViewer;
-using GpxViewer2.ExceptionViewer.Data;
+using RolandK.AvaloniaExtensions.ExceptionHandling.Data;
 using RolandK.AvaloniaExtensions.ViewServices.Base;
 
 namespace GpxViewer2.ViewServices;

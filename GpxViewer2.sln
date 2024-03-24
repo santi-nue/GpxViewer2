@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpxViewer2.Tests", "src\Gpx
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GpxViewer2.WindowsApp", "src\GpxViewer2.WindowsApp\GpxViewer2.WindowsApp.wapproj", "{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Submodules", "Submodules", "{D0518024-282A-446C-B3EE-C4D80DED21D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RolandK.AvaloniaExtensions.ExceptionHandling", "submodules\RolandK.AvaloniaExtensions.ExceptionHandling\src\RolandK.AvaloniaExtensions.ExceptionHandling\RolandK.AvaloniaExtensions.ExceptionHandling.csproj", "{27F8E97B-BE61-4962-9925-C44C110B7A08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,8 +119,31 @@ Global
 		{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}.Release|x86.ActiveCfg = Release|x86
 		{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}.Release|x86.Build.0 = Release|x86
 		{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}.Release|x86.Deploy.0 = Release|x86
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|ARM.Build.0 = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|x64.Build.0 = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Debug|x86.Build.0 = Debug|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|ARM.ActiveCfg = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|ARM.Build.0 = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|ARM64.Build.0 = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|x64.ActiveCfg = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|x64.Build.0 = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|x86.ActiveCfg = Release|Any CPU
+		{27F8E97B-BE61-4962-9925-C44C110B7A08}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27F8E97B-BE61-4962-9925-C44C110B7A08} = {D0518024-282A-446C-B3EE-C4D80DED21D8}
 	EndGlobalSection
 EndGlobal

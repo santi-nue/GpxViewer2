@@ -4,7 +4,8 @@
     "projects": [
       "src\\GpxViewer2.ExceptionViewer\\GpxViewer2.ExceptionViewer.csproj",
       "src\\GpxViewer2.Tests\\GpxViewer2.Tests.csproj",
-      "src\\GpxViewer2\\GpxViewer2.csproj"
+      "src\\GpxViewer2\\GpxViewer2.csproj",
+      "submodules\\RolandK.AvaloniaExtensions.ExceptionHandling\\src\\RolandK.AvaloniaExtensions.ExceptionHandling\\RolandK.AvaloniaExtensions.ExceptionHandling.csproj"
     ]
   }
 }

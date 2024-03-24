@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using GpxViewer2.ExceptionViewer.Data;
+using RolandK.AvaloniaExtensions.ExceptionHandling.Data;
 
 namespace GpxViewer2.ExceptionViewer;
 
