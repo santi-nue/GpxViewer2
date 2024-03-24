@@ -37,7 +37,7 @@ class Program
                 ex, 
                 ".RKGpxViewer2",
                 "GpxViewer2.ExceptionViewer");
-            return -1;
+            throw;
         }
     }
 
