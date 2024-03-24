@@ -43,5 +43,6 @@
     
     <ItemGroup>
       <ProjectReference Include="..\..\submodules\RolandK.AvaloniaExtensions.ExceptionHandling\src\RolandK.AvaloniaExtensions.ExceptionHandling\RolandK.AvaloniaExtensions.ExceptionHandling.csproj" />
+      <ProjectReference Include="..\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj" />
     </ItemGroup>
 </Project>

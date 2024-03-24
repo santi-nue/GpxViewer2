@@ -35,8 +35,8 @@ class Program
         {
             GlobalErrorReporting.TryShowGlobalExceptionDialogInAnotherProcess(
                 ex, 
-                "RKCheckList",
-                "RKCheckList.ExceptionViewer");
+                ".RKGpxViewer2",
+                "GpxViewer2.ExceptionViewer");
             return -1;
         }
     }
