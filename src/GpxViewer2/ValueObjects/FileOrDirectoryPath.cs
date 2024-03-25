@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GpxViewer2.ValueObjects;
 
@@ -12,7 +8,7 @@ namespace GpxViewer2.ValueObjects;
 public readonly struct FileOrDirectoryPath(string path)
 {
     public static readonly FileOrDirectoryPath Empty = new();
-    
+
     private readonly string? _path = ConvertForOsCasingBehavior(System.IO.Path.GetFullPath(path));
 
     public string Path => _path ?? string.Empty;
@@ -22,12 +18,12 @@ public readonly struct FileOrDirectoryPath(string path)
     {
         return _path ?? nameof(FileOrDirectoryPath);
     }
-    
+
     public bool Equals(FileOrDirectoryPath other)
     {
         return this.Path == other.Path;
     }
-    
+
     private static string ConvertForOsCasingBehavior(string path)
     {
         if (OperatingSystem.IsWindows())

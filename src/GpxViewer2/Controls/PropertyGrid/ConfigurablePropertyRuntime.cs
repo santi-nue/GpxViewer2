@@ -62,8 +62,14 @@ internal class ConfigurablePropertyRuntime : ValidatableViewModelBase
         if (value == null)
         {
             var targetType = _descriptor.PropertyType;
-            if (targetType.IsValueType) { _descriptor.SetValue(_hostObject, Activator.CreateInstance(targetType)); }
-            else { _descriptor.SetValue(_hostObject, null); }
+            if (targetType.IsValueType)
+            {
+                _descriptor.SetValue(_hostObject, Activator.CreateInstance(targetType));
+            }
+            else
+            {
+                _descriptor.SetValue(_hostObject, null);
+            }
         }
         else
         {
@@ -88,7 +94,8 @@ internal class ConfigurablePropertyRuntime : ValidatableViewModelBase
         ctx.MemberName = _metadata.PropertyName;
         foreach (var actAttrib in _descriptor.Attributes)
         {
-            if (!(actAttrib is ValidationAttribute actValidAttrib)) { continue; }
+            if (!(actAttrib is ValidationAttribute actValidAttrib))
+            { continue; }
 
             var validationResult = actValidAttrib.GetValidationResult(this.ValueAccessor, ctx);
             if (validationResult != null)

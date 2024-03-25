@@ -7,12 +7,12 @@ using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Services.GpxFileStore;
 
-public abstract class GpxFileRepositoryNode 
+public abstract class GpxFileRepositoryNode
 {
     public List<GpxFileRepositoryNode> ChildNodes { get; } = new();
 
     public GpxFileRepositoryNode? Parent { get; set; }
-    
+
     public abstract FileOrDirectoryPath Source { get; }
 
     public string NodeText
@@ -22,7 +22,10 @@ public abstract class GpxFileRepositoryNode
             using (_ = PooledStringBuilders.Current.UseStringBuilder(out var strBuilder))
             {
                 strBuilder.Append(this.GetNodeText());
-                if (this.ContentsChanged) { strBuilder.Append('*'); }
+                if (this.ContentsChanged)
+                {
+                    strBuilder.Append('*');
+                }
                 return strBuilder.ToString();
             }
         }
@@ -32,10 +35,17 @@ public abstract class GpxFileRepositoryNode
     {
         get
         {
-            if (this.HasThisNodesContentsChanged()) { return true; }
+            if (this.HasThisNodesContentsChanged())
+            {
+                return true;
+            }
+            
             foreach (var actChildNode in this.ChildNodes)
             {
-                if (actChildNode.ContentsChanged) { return true; }
+                if (actChildNode.ContentsChanged)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -87,13 +97,19 @@ public abstract class GpxFileRepositoryNode
     public IEnumerable<LoadedGpxFile> GetAssociatedGpxFilesDeep()
     {
         var thisGpxFile = this.GetAssociatedGpxFile();
-        if (thisGpxFile != null) { yield return thisGpxFile; }
+        if (thisGpxFile != null)
+        {
+            yield return thisGpxFile;
+        }
 
         foreach (var actChildNode in this.ChildNodes)
         {
-            if(actChildNode is GpxFileRepositoryNodeTour){ continue; }
+            if (actChildNode is GpxFileRepositoryNodeTour)
+            {
+                continue;
+            }
 
-            foreach(var actAssociatedGpxFile in actChildNode.GetAssociatedGpxFilesDeep())
+            foreach (var actAssociatedGpxFile in actChildNode.GetAssociatedGpxFilesDeep())
             {
                 yield return actAssociatedGpxFile;
             }
@@ -111,7 +127,7 @@ public abstract class GpxFileRepositoryNode
 
         foreach (var actChildNode in this.ChildNodes)
         {
-            foreach(var actTour in actChildNode.GetAssociatedToursDeep())
+            foreach (var actTour in actChildNode.GetAssociatedToursDeep())
             {
                 yield return actTour;
             }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using RolandK.Formats.Gpx;
 
 namespace GpxViewer2.Model;
@@ -10,9 +6,9 @@ namespace GpxViewer2.Model;
 public class LoadedGpxFileTourSegmentInfo
 {
     public LoadedGpxFileTourInfo Tour { get; }
-    
+
     public List<GpxWaypoint> Points { get; }
-        
+
     public LoadedGpxFileTourSegmentInfo(
         LoadedGpxFileTourInfo tour,
         GpxRoute route)

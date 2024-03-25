@@ -14,7 +14,10 @@ internal class ValidatableViewModelBase : PropertyChangedBase, INotifyDataErrorI
     /// <inheritdoc />
     public virtual IEnumerable GetErrors(string? propertyName)
     {
-        if (propertyName == null) { return NO_ERRORS; }
+        if (propertyName == null)
+        {
+            return NO_ERRORS;
+        }
 
         if (_errorsByPropertyName.TryGetValue(propertyName, out var errorList))
         {
@@ -41,7 +44,7 @@ internal class ValidatableViewModelBase : PropertyChangedBase, INotifyDataErrorI
         }
         else
         {
-            _errorsByPropertyName.Add(propertyName, new List<string>{ error });
+            _errorsByPropertyName.Add(propertyName, new List<string> { error });
         }
 
         this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using GpxViewer2.Model.GpxXmlExtensions;
 using GpxViewer2.Util;
 using RolandK.Formats.Gpx;
@@ -12,7 +8,7 @@ namespace GpxViewer2.Model;
 public class LoadedGpxFileTourInfo
 {
     public LoadedGpxFile File { get; }
-        
+
     public GpxTrack? RawTrackData { get; }
     public GpxRoute? RawRouteData { get; }
     public GpxTrackOrRoute RawTrackOrRoute { get; }
@@ -22,7 +18,7 @@ public class LoadedGpxFileTourInfo
     public List<LoadedGpxFileTourSegmentInfo> Segments { get; }
 
     public List<LoadedGpxFileWaypointInfo> Waypoints { get; }
-        
+
     public double DistanceKm { get; private set; } = 0.0;
 
     public double ElevationUpMeters { get; private set; } = 0.0;
@@ -32,7 +28,7 @@ public class LoadedGpxFileTourInfo
     public int CountSegments { get; private set; } = 0;
 
     public int CountWaypointsWithinSegments { get; private set; } = 0;
-        
+
     public LoadedGpxFileTourInfo(LoadedGpxFile file, GpxRoute rawRouteData)
     {
         this.File = file;
@@ -62,7 +58,7 @@ public class LoadedGpxFileTourInfo
         this.RawTourExtensionData = rawTrackData.Extensions.GetOrCreateExtension<TrackExtension>();
 
         this.Segments = new List<LoadedGpxFileTourSegmentInfo>(rawTrackData.Segments.Count);
-        foreach(var actSegment in rawTrackData.Segments)
+        foreach (var actSegment in rawTrackData.Segments)
         {
             this.Segments.Add(new LoadedGpxFileTourSegmentInfo(
                 this,
@@ -83,11 +79,14 @@ public class LoadedGpxFileTourInfo
         var waypointCount = 0;
         foreach (var actSegment in this.Segments)
         {
-            if (actSegment.Points.Count <= 1) { continue; }
+            if (actSegment.Points.Count <= 1)
+            {
+                continue;
+            }
             segmentCount++;
 
             var lastPoint = actSegment.Points[0];
-            foreach (var actPoint in actSegment.Points.GetRange(1, actSegment.Points.Count -1))
+            foreach (var actPoint in actSegment.Points.GetRange(1, actSegment.Points.Count - 1))
             {
                 waypointCount++;
                 distanceMeters += GeoCalculator.CalculateDistanceMeters(
@@ -97,9 +96,15 @@ public class LoadedGpxFileTourInfo
                 {
                     var elevationLast = (double)lastPoint.Elevation!;
                     var elevationAct = (double)actPoint.Elevation!;
-                    if (elevationLast.EqualsWithTolerance(elevationAct)){ }
-                    if (elevationAct > elevationLast) { elevationUpMeters += (elevationAct - elevationLast); }
-                    else { elevationDownMeters += (elevationLast - elevationAct); }
+                    // if (elevationLast.EqualsWithTolerance(elevationAct)) { }
+                    if (elevationAct > elevationLast)
+                    {
+                        elevationUpMeters += (elevationAct - elevationLast);
+                    }
+                    else
+                    {
+                        elevationDownMeters += (elevationLast - elevationAct);
+                    }
                 }
 
                 lastPoint = actPoint;

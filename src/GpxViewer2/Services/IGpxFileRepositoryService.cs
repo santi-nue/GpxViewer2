@@ -9,7 +9,7 @@ public interface IGpxFileRepositoryService
     IReadOnlyList<GpxFileRepositoryNode> GetAllLoadedNodes();
 
     GpxFileRepositoryNode? TryGetExistingNode(FileOrDirectoryPath fileOrDirectoryPath);
-    
+
     GpxFileRepositoryNode LoadFileNode(FileOrDirectoryPath filePath);
 
     GpxFileRepositoryNode LoadDirectoryNode(FileOrDirectoryPath directoryPath);

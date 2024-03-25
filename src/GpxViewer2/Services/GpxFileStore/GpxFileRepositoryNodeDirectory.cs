@@ -15,7 +15,7 @@ namespace GpxViewer2.Services.GpxFileStore
 
         /// <inheritdoc />
         public override FileOrDirectoryPath Source => this.DirectoryPath;
-        
+
         /// <inheritdoc />
         public override bool CanSave
         {
@@ -36,16 +36,19 @@ namespace GpxViewer2.Services.GpxFileStore
                 this.ChildNodes.Add(childDirectory);
             }
 
-            foreach(var actFilePath in Directory.GetFiles(this.DirectoryPath.Path))
+            foreach (var actFilePath in Directory.GetFiles(this.DirectoryPath.Path))
             {
                 var actFileExtension = Path.GetExtension(actFilePath);
-                if (!actFileExtension.Equals(".gpx", StringComparison.OrdinalIgnoreCase)){ continue; }
+                if (!actFileExtension.Equals(".gpx", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
 
                 var childFile = new GpxFileRepositoryNodeFile(new FileOrDirectoryPath(actFilePath));
                 childFile.Parent = this;
                 this.ChildNodes.Add(childFile);
             }
-            
+
             this.ChildNodes.Sort((x, y) => x.NodeText.CompareTo(y.NodeText));
         }
 

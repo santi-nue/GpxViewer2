@@ -13,10 +13,10 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
 {
     private object? _associatedView;
     private IEnumerable<MessageSubscription>? _messageSubscriptions;
-    
+
     /// <inheritdoc />
     public event EventHandler<CloseWindowRequestEventArgs>? CloseWindowRequest;
-    
+
     /// <inheritdoc />
     public event EventHandler<ViewServiceRequestEventArgs>? ViewServiceRequest;
 
@@ -38,7 +38,7 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
         this.ViewServiceRequest?.Invoke(this, requestViewServiceArgs);
         return requestViewServiceArgs.ViewService as T;
     }
-    
+
     protected T GetViewService<T>()
         where T : class
     {
@@ -57,9 +57,9 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
         {
             throw new InvalidOperationException("Unable to call Close on host window!");
         }
-        
+
         this.CloseWindowRequest.Invoke(
-            this, 
+            this,
             new CloseWindowRequestEventArgs(dialogResult));
     }
 
@@ -75,7 +75,7 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
             await srvErrorReporting.ShowErrorDialogAsync(ex);
         }
     }
-    
+
     protected async Task WrapWithErrorHandlingAsync(Func<Task> asyncFunc)
     {
         try
@@ -96,21 +96,21 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
         srvServiceProvider.GetService(out service);
     }
 
-    protected IDisposable GetScopedService<TService>(out TService service) 
+    protected IDisposable GetScopedService<TService>(out TService service)
         where TService : notnull
     {
         var srvServiceProvider = this.GetViewService<IServiceProviderViewService>();
         return srvServiceProvider.GetScopedUseCase(out service);
     }
-    
-    protected IDisposable GetScopedService<TService1, TService2>(out TService1 service1, out TService2 service2) 
+
+    protected IDisposable GetScopedService<TService1, TService2>(out TService1 service1, out TService2 service2)
         where TService1 : notnull
         where TService2 : notnull
     {
         var srvServiceProvider = this.GetViewService<IServiceProviderViewService>();
         return srvServiceProvider.GetScopedUseCase(out service1, out service2);
     }
-    
+
     protected virtual void OnAssociatedViewChanged(object? associatedView)
     {
         if (_messageSubscriptions != null)
@@ -123,7 +123,7 @@ public class OwnViewModelBase : ObservableObject, IAttachableViewModel
         {
             var srvServiceProvider = GetViewService<IServiceProviderViewService>();
             srvServiceProvider.GetService(out IInProcessMessageSubscriber srvMessageSubscriber);
-            
+
             _messageSubscriptions = srvMessageSubscriber.SubscribeAllWeak(this);
         }
     }

@@ -17,7 +17,7 @@ public partial class App : Application
     {
         this.UrlsOpened += this.OnUrlsOpened;
     }
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -32,20 +32,26 @@ public partial class App : Application
 
         base.OnFrameworkInitializationCompleted();
     }
-    
+
     private async void OnUrlsOpened(object? sender, UrlOpenedEventArgs e)
     {
-        if (e.Urls.Length == 0) { return; }
+        if (e.Urls.Length == 0)
+        {
+            return;
+        }
 
         try
         {
             var fileUrl = new Uri(e.Urls.First(), UriKind.Absolute);
             var filePath = HttpUtility.UrlDecode(fileUrl.AbsolutePath);
-            if (!File.Exists(filePath)) { return; }
-            
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
             var serviceProvider = this.GetServiceProvider();
             using var scope = serviceProvider.CreateScope();
-            
+
             var useCaseLoadFile = scope.ServiceProvider.GetRequiredService<LoadGpxFileUseCase>();
             await useCaseLoadFile.LoadGpxFileAsync(filePath);
         }

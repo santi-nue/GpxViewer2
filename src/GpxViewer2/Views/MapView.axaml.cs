@@ -25,43 +25,43 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         new TourVisualizationDetailLevel(500, 20),
         new TourVisualizationDetailLevel(double.MaxValue, 30)
     };
-    
+
     private static readonly MRect DEFAULT_VIEW_BOX = new MRect(
         -7637335.834571721, 1578946.9985836577,
         9063849.0976259485, 10564256.424126934);
 
     private TourVisualizationDetailLevel? _lastDetailLevel;
-    
+
     private MemoryLayer _lineStringLayerForAll;
     private MemoryLayer _lineStringLayerForSelection;
-    
+
     private DateTimeOffset _lastPointerPressTimestamp = DateTimeOffset.MinValue;
 
     private LoadedGpxFileTourInfo? _lastPressedTour;
-    
+
     /// <inheritdoc />
     public event EventHandler<RouteClickedEventArgs>? RouteClicked;
-    
+
     /// <inheritdoc />
     public event EventHandler<RouteClickedEventArgs>? RouteDoubleClicked;
-    
+
     /// <inheritdoc />
     public event EventHandler<ViewServiceRequestEventArgs>? ViewServiceRequest;
-    
+
     public MapView()
     {
         this.InitializeComponent();
-        
+
         _lineStringLayerForAll = new MemoryLayer();
         _lineStringLayerForAll.IsMapInfoLayer = true;
         _lineStringLayerForSelection = new MemoryLayer();
-        
+
         this.CtrlMap.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
         this.CtrlMap.Map.Layers.Add(_lineStringLayerForSelection);
         this.CtrlMap.Map.Layers.Add(_lineStringLayerForAll);
         this.CtrlMap.UnSnapRotationDegrees = 30;
         this.CtrlMap.ReSnapRotationDegrees = 5;
-        
+
         this.CtrlMap.Map.Navigator.ViewportChanged += this.OnCtrlMap_Navigator_OnViewportChanged;
 
         this.ViewServices.Add(this);
@@ -69,7 +69,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
 
     private static TourVisualizationDetailLevel GetDetailLevel(double resolution)
     {
-        foreach(var actDetailLevel in DETAIL_LEVELS)
+        foreach (var actDetailLevel in DETAIL_LEVELS)
         {
             if (resolution <= actDetailLevel.MaxResolution)
             {
@@ -103,7 +103,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                     return result;
                 }))
             .ToArray();
-        
+
         this.CtrlMap.RefreshGraphics();
     }
 
@@ -113,7 +113,8 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         _lineStringLayerForAll.Features = _lineStringLayerForAll.Features
             .Where(x =>
             {
-                if (x is not GeometryFeatureWithMetadata feature) { return true; }
+                if (x is not GeometryFeatureWithMetadata feature)
+                { return true; }
 
                 return !existingGpxTours.Contains(feature.Tour);
             })
@@ -121,12 +122,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         _lineStringLayerForSelection.Features = _lineStringLayerForAll.Features
             .Where(x =>
             {
-                if (x is not GeometryFeatureWithMetadata feature) { return true; }
+                if (x is not GeometryFeatureWithMetadata feature)
+                { return true; }
 
                 return !existingGpxTours.Contains(feature.Tour);
             })
             .ToArray();
-        
+
         this.CtrlMap.RefreshGraphics();
     }
 
@@ -141,7 +143,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             _lastDetailLevel = currentDetaiLevel;
             recreateLines = true;
         }
-        
+
         foreach (var actFeature in _lineStringLayerForAll.Features)
         {
             if ((actFeature is not GeometryFeatureWithMetadata featureWithMetadata) ||
@@ -171,7 +173,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 {
                     continue;
                 }
-                
+
                 featureWithMetadata.Geometry =
                     featureWithMetadata.Points.GpxWaypointsToMapsuiGeometry(this.GetTourPointsToSkip());
             }
@@ -187,7 +189,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             500L,
             Easing.Linear);
     }
-    
+
     public void ZoomToTours(IReadOnlyList<LoadedGpxFileTourInfo> tours)
     {
         var rectBuilder = new NavigationMRectBuilder();
@@ -222,20 +224,34 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         var result = new List<LoadedGpxFileTourInfo>(_lineStringLayerForAll.Features.Count());
         foreach (var actFeature in _lineStringLayerForAll.Features)
         {
-            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata) { continue; }
-            if (actFeatureWithMetadata.Tour == null) {continue; }
+            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata)
+            {
+                continue;
+            }
+
+            if (actFeatureWithMetadata.Tour == null)
+            {
+                continue;
+            }
             result.Add(actFeatureWithMetadata.Tour);
         }
         return result;
     }
-    
+
     public IReadOnlyList<LoadedGpxFileTourInfo> GetSelectedGpxTours()
     {
         var result = new List<LoadedGpxFileTourInfo>(_lineStringLayerForSelection.Features.Count());
         foreach (var actFeature in _lineStringLayerForSelection.Features)
         {
-            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata) { continue; }
-            if (actFeatureWithMetadata.Tour == null) {continue; }
+            if (actFeature is not GeometryFeatureWithMetadata actFeatureWithMetadata)
+            {
+                continue;
+            }
+
+            if (actFeatureWithMetadata.Tour == null)
+            {
+                continue;
+            }
             result.Add(actFeatureWithMetadata.Tour);
         }
         return result;
@@ -264,7 +280,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
                 })
                 .ToArray();
         }
-        
+
         this.CtrlMap.RefreshGraphics();
     }
 
@@ -272,10 +288,13 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     {
         _lastPointerPressTimestamp = DateTimeOffset.UtcNow;
     }
-    
+
     private void OnCtrlMap_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        if (DateTimeOffset.UtcNow - _lastPointerPressTimestamp > TimeSpan.FromMilliseconds(300)) { return; }
+        if (DateTimeOffset.UtcNow - _lastPointerPressTimestamp > TimeSpan.FromMilliseconds(300))
+        {
+            return;
+        }
 
         if (e.InitialPressMouseButton == MouseButton.Right)
         {
@@ -287,7 +306,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
         if (e.InitialPressMouseButton == MouseButton.Left)
         {
             var mousePosition = e.GetCurrentPoint(this.CtrlMap);
-        
+
             var clickInfo = this.CtrlMap.GetMapInfo(
                 new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
                 3);
@@ -303,7 +322,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             }
         }
     }
-    
+
     private void OnCtrlMap_DoubleTapped(object? sender, TappedEventArgs e)
     {
         if (_lastPressedTour != null)
@@ -316,7 +335,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
     private void OnCtrlMap_PointerMoved(object? sender, PointerEventArgs e)
     {
         var mousePosition = e.GetCurrentPoint(this.CtrlMap);
-        
+
         var mouseLocationInfo = this.CtrlMap.GetMapInfo(
             new MPoint(mousePosition.Position.X, mousePosition.Position.Y),
             3);
@@ -325,7 +344,7 @@ public partial class MapView : MvvmUserControl, IMapsViewService
             ? new Cursor(StandardCursorType.Hand)
             : Cursor.Default;
     }
-    
+
     private void OnCtrlMap_Navigator_OnViewportChanged(object? sender, PropertyChangedEventArgs e)
     {
         this.UpdateGpxTourVisualization();

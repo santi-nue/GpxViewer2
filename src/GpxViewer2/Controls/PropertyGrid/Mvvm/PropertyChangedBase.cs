@@ -26,7 +26,10 @@ internal class PropertyChangedBase : INotifyPropertyChanged
     /// desired value.</returns>
     protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
     {
-        if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+        if (EqualityComparer<T>.Default.Equals(storage, value))
+        {
+            return false;
+        }
 
         storage = value;
         this.RaisePropertyChanged(propertyName);
@@ -51,7 +54,10 @@ internal class PropertyChangedBase : INotifyPropertyChanged
     protected virtual bool SetProperty<T>(ref T storage, T value, Action onChanged,
         [CallerMemberName] string propertyName = "")
     {
-        if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+        if (EqualityComparer<T>.Default.Equals(storage, value))
+        {
+            return false;
+        }
 
         storage = value;
         onChanged.Invoke();
@@ -68,13 +74,19 @@ internal class PropertyChangedBase : INotifyPropertyChanged
         this.PropertyChanged?.Invoke(this, changeArgs);
 
         // Trigger weak event targets
-        if (_weakChangeTargets == null) { return; }
+        if (_weakChangeTargets == null)
+        {
+            return;
+        }
         for (var loop = 0; loop < _weakChangeTargets.Count; loop++)
         {
             var actEntry = _weakChangeTargets[loop];
             if (actEntry.Key.IsAlive)
             {
-                try { actEntry.Action(this, changeArgs); }
+                try
+                {
+                    actEntry.Action(this, changeArgs);
+                }
                 catch (Exception)
                 {
                     _weakChangeTargets.RemoveAt(loop);
@@ -87,7 +99,11 @@ internal class PropertyChangedBase : INotifyPropertyChanged
                 loop--;
             }
         }
-        if (_weakChangeTargets.Count == 0) { _weakChangeTargets = null; }
+
+        if (_weakChangeTargets.Count == 0)
+        {
+            _weakChangeTargets = null;
+        }
     }
 
     public void RegisterWeakPropertyChangedTarget(WeakReference key, Action<object, PropertyChangedEventArgs> action)

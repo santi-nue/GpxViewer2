@@ -10,7 +10,7 @@ namespace GpxViewer2.Controls.PropertyGrid;
 public class PropertyGridEditControlFactory
 {
     public virtual Control CreateControl(
-        ConfigurablePropertyMetadata property, 
+        ConfigurablePropertyMetadata property,
         string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {
@@ -37,7 +37,7 @@ public class PropertyGridEditControlFactory
     }
 
     protected virtual Control CreateCheckBoxControl(
-        ConfigurablePropertyMetadata property, 
+        ConfigurablePropertyMetadata property,
         string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {

@@ -12,9 +12,9 @@ namespace GpxViewer2.Views;
 public partial class MapViewModel : OwnViewModelBase, INavigationTarget
 {
     public static readonly MapViewModel EmptyViewModel = new();
-    
+
     private IMapsViewService? _attachedMapsViewService;
-    
+
     /// <inheritdoc />
     public string Title { get; } = "Map";
 
@@ -31,7 +31,8 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         {
             var srvMap = this.GetViewService<IMapsViewService>();
             var selectedTours = srvMap.GetSelectedGpxTours();
-            if (selectedTours.Count == 0) { return; }
+            if (selectedTours.Count == 0)
+            { return; }
 
             using var scope = this.GetScopedService(out ZoomToGpxToursUseCase useCase);
             useCase.ZoomToGpxTours(selectedTours);
@@ -44,7 +45,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
         this.WrapWithErrorHandling(() =>
         {
             var srvMap = this.GetViewService<IMapsViewService>();
-            
+
             var allTours = srvMap.GetAvailableGpxTours();
             if (allTours.Count > 0)
             {
@@ -56,7 +57,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
             }
         });
     }
-    
+
     private void OnAttachedMapsViewService_RouteClicked(object? sender, RouteClickedEventArgs e)
     {
         this.WrapWithErrorHandling(() =>
@@ -72,11 +73,14 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
             useCase.SelectGpxTours([e.ClickedGpxTour], false);
         });
     }
-    
+
     private void OnAttachedMapsViewService_RouteDoubleClicked(object? sender, RouteClickedEventArgs e)
     {
-        if (e.ClickedGpxTour == null) { return; }
-        
+        if (e.ClickedGpxTour == null)
+        {
+            return;
+        }
+
         this.WrapWithErrorHandling(() =>
         {
             using var scope = this.GetScopedService(out SelectGpxToursUseCase useCase);
@@ -85,7 +89,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
                 true);
         });
     }
-    
+
     public void OnMessageReceived(GpxFileRepositoryNodesLoadedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
@@ -95,7 +99,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
             srvMaps.AddAvailableGpxTours(actNode.GetAssociatedToursDeep());
         }
     }
-    
+
     public void OnMessageReceived(GpxToursSelectedMessage message)
     {
         var srvMaps = this.GetViewService<IMapsViewService>();
@@ -135,7 +139,7 @@ public partial class MapViewModel : OwnViewModelBase, INavigationTarget
             _attachedMapsViewService.RouteDoubleClicked -= OnAttachedMapsViewService_RouteDoubleClicked;
             _attachedMapsViewService = null;
         }
-        
+
         if (associatedView is IMapsViewService attachedMapsViewService)
         {
             _attachedMapsViewService = attachedMapsViewService;

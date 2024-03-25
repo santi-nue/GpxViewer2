@@ -20,7 +20,7 @@ public partial class RouteDetailViewModel : OwnViewModelBase, INavigationTarget
 
     [ObservableProperty]
     private SelectedTourPropertiesViewModel? _selectedTour = null;
-    
+
     /// <inheritdoc />
     public string Title { get; } = "Selected Tour";
 
@@ -43,7 +43,7 @@ public partial class RouteDetailViewModel : OwnViewModelBase, INavigationTarget
         {
             this.SelectedTour = null;
         }
-        
+
         this.SelectedRouteDescription = message.GpxTours.Count switch
         {
             0 => "None",

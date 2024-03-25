@@ -76,11 +76,21 @@ internal class PropertyGridViewModel : PropertyChangedBase
         // Create a viewmodel for each property
         foreach (PropertyDescriptor? actProperty in properties)
         {
-            if (actProperty == null){ continue; }
-            if (!actProperty.IsBrowsable){ continue; }
+            if (actProperty == null)
+            {
+                continue;
+            }
+
+            if (!actProperty.IsBrowsable)
+            {
+                continue;
+            }
 
             var propMetadata = new ConfigurablePropertyRuntime(actProperty, selectedObject, _propertyContractResolver);
-            if(propMetadata.Metadata.ValueType == PropertyValueType.Unsupported){ continue; }
+            if (propMetadata.Metadata.ValueType == PropertyValueType.Unsupported)
+            {
+                continue;
+            }
 
             newPropertyMetadata.Add(propMetadata);
         }

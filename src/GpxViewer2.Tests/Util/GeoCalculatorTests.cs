@@ -12,14 +12,14 @@ public class GeoCalculatorTests
         // Arrange
         var point1 = new GpxWaypoint // New York
         {
-            Latitude = 40.7128, 
+            Latitude = 40.7128,
             Longitude = -74.0060
-        }; 
+        };
         var point2 = new GpxWaypoint // Los Angeles
         {
-            Latitude = 34.0522, 
+            Latitude = 34.0522,
             Longitude = -118.2437
-        }; 
+        };
 
         // Assume we know the distance between these two cities
         var expectedDistance = 3940000;

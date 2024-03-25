@@ -36,7 +36,7 @@ public partial class PropertyGridControl : UserControl
         get => _selectedObject;
         set
         {
-            var changed= _selectedObject != value;
+            var changed = _selectedObject != value;
             _selectedObject = value;
 
             if (changed)
@@ -65,7 +65,7 @@ public partial class PropertyGridControl : UserControl
     public PropertyGridControl()
     {
         this.InitializeComponent();
-        
+
         _propertyGridVM = new PropertyGridViewModel();
         this.GridMain.DataContext = _propertyGridVM;
     }
@@ -96,14 +96,15 @@ public partial class PropertyGridControl : UserControl
         var actRowIndex = 0;
         var actCategory = string.Empty;
         var editControlFactory = this.EditControlFactory;
-        if (editControlFactory == null) { editControlFactory = new PropertyGridEditControlFactory(); }
+        if (editControlFactory == null)
+        { editControlFactory = new PropertyGridEditControlFactory(); }
 
         foreach (var actProperty in _propertyGridVM.PropertyMetadata)
         {
             // Create category rows
             if (actProperty.Metadata.CategoryName != actCategory)
             {
-                this.GridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(40)});
+                this.GridMain.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
 
                 actCategory = actProperty.Metadata.CategoryName;
 
@@ -118,7 +119,7 @@ public partial class PropertyGridControl : UserControl
                 txtHeader.Margin = new Thickness(5d, 5d, 5d, 5d);
                 txtHeader.VerticalAlignment = VerticalAlignment.Center;
                 this.GridMain.Children.Add(txtHeader);
-                
+
                 var categorySeparator = new Separator();
                 categorySeparator.VerticalAlignment = VerticalAlignment.Bottom;
                 categorySeparator.Margin = new Thickness(5d, 5d, 0d, 5d);
@@ -143,7 +144,7 @@ public partial class PropertyGridControl : UserControl
             ctrlTextContainer.SetValue(Grid.ColumnProperty, 0);
             ctrlTextContainer.VerticalAlignment = VerticalAlignment.Top;
             this.GridMain.Children.Add(ctrlTextContainer);
-            
+
             // Create and configure row editor
             var ctrlValueEdit = editControlFactory.CreateControl(actProperty.Metadata, nameof(actProperty.ValueAccessor), allPropertiesMetadata);
             this.GridMain.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
@@ -173,7 +174,8 @@ public partial class PropertyGridControl : UserControl
 
     public static void SetToolTip(AvaloniaObject targetObject, string toolTip)
     {
-        if (string.IsNullOrEmpty(toolTip)) { return; }
+        if (string.IsNullOrEmpty(toolTip))
+        { return; }
         targetObject.SetValue(ToolTip.TipProperty, toolTip);
     }
 }

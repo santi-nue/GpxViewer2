@@ -42,7 +42,10 @@ public class PooledStringBuilders
         }
         else
         {
-            if (result.Capacity < requiredCapacity) { result.EnsureCapacity(requiredCapacity); }
+            if (result.Capacity < requiredCapacity)
+            {
+                result.EnsureCapacity(requiredCapacity);
+            }
         }
         return result;
     }

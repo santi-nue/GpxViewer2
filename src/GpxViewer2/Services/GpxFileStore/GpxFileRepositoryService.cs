@@ -7,7 +7,7 @@ namespace GpxViewer2.Services.GpxFileStore;
 public class GpxFileRepositoryService : IGpxFileRepositoryService
 {
     private List<GpxFileRepositoryNode> _loadedNodes = new();
-    
+
     /// <inheritdoc />
     public IReadOnlyList<GpxFileRepositoryNode> GetAllLoadedNodes()
     {
@@ -22,10 +22,16 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
     {
         foreach (var actNode in nodes)
         {
-            if (actNode.Source.Equals(pathToSearch)) { return actNode; }
+            if (actNode.Source.Equals(pathToSearch))
+            {
+                return actNode;
+            }
 
             var childNodeResult = TryGetExistingNode(pathToSearch, actNode.ChildNodes);
-            if (childNodeResult != null) { return childNodeResult; }
+            if (childNodeResult != null)
+            {
+                return childNodeResult;
+            }
         }
 
         return null;
@@ -53,7 +59,7 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
 
         return false;
     }
-    
+
     /// <summary>
     /// Checks whether there is an existing node loaded from given <see cref="FileOrDirectoryPath"/>
     /// </summary>
@@ -68,7 +74,7 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
     {
         return TryGetExistingNode(fileOrDirectoryPath, _loadedNodes);
     }
-    
+
     /// <inheritdoc />
     public GpxFileRepositoryNode LoadFileNode(FileOrDirectoryPath filePath)
     {
@@ -76,12 +82,12 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
         {
             throw new InvalidOperationException($"File {filePath} already loaded!");
         }
-        
+
         var gpxFileNode = new GpxFileRepositoryNodeFile(filePath);
         _loadedNodes.Add(gpxFileNode);
         return gpxFileNode;
     }
-    
+
     /// <inheritdoc />
     public GpxFileRepositoryNode LoadDirectoryNode(FileOrDirectoryPath directoryPath)
     {
@@ -89,7 +95,7 @@ public class GpxFileRepositoryService : IGpxFileRepositoryService
         {
             throw new InvalidOperationException($"Directory {directoryPath} already loaded!");
         }
-        
+
         var gpxFileNode = new GpxFileRepositoryNodeDirectory(directoryPath);
         _loadedNodes.Add(gpxFileNode);
         return gpxFileNode;

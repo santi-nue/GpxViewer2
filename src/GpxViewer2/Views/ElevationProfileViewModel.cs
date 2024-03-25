@@ -19,13 +19,13 @@ public partial class ElevationProfileViewModel : OwnViewModelBase, INavigationTa
     public static readonly ElevationProfileViewModel EmptyViewModel = new();
 
     private LoadedGpxFileTourInfo? _selectedTour;
-    
+
     [ObservableProperty]
     private ISeries[] _series = [];
-    
+
     /// <inheritdoc />
     public string Title { get; } = "Navigation profile";
-    
+
     /// <inheritdoc />
     public Control CreateViewInstance()
     {
@@ -58,13 +58,13 @@ public partial class ElevationProfileViewModel : OwnViewModelBase, INavigationTa
                     {
                         lastPoint = actPoint;
                         return new ObservablePoint(
-                            actDistanceM / 1000.0, 
+                            actDistanceM / 1000.0,
                             actPoint.Elevation ?? 0.0);
                     }
-                    
+
                     actDistanceM += GeoCalculator.CalculateDistanceMeters(lastPoint, actPoint);
                     lastPoint = actPoint;
-                    
+
                     return new ObservablePoint(
                         actDistanceM / 1000.0,
                         actPoint.Elevation ?? 0.0);

@@ -22,7 +22,10 @@ public class LoadGpxFileUseCase(
         var filesToOpen = await srvOpenFileDialog.ShowOpenMultipleFilesDialogAsync(
             [new FileDialogFilter("GPX-Files (*.gpx)", ["*.gpx"])],
             "Load GPX-File");
-        if (filesToOpen is null or []) { return; }
+        if (filesToOpen is null or [])
+        {
+            return;
+        }
 
         await this.LoadGpxFileAsync(filesToOpen);
     }
@@ -46,17 +49,17 @@ public class LoadGpxFileUseCase(
             }
             allNodes.Add(repositoryNode);
         }
-        
+
         if (openedPaths.Count > 0)
         {
             await srvRecentlyOpened.AddOpenedAsync(openedPaths, RecentlyOpenedType.File);
         }
-        
+
         var loadedGpxTours = allNodes
             .SelectMany(x => x.GetAssociatedToursDeep())
             .Distinct()
             .ToArray();
-        
+
         if (newNodes.Count > 0)
         {
             srvMessagePublisher.Publish(new GpxFileRepositoryNodesLoadedMessage(newNodes));

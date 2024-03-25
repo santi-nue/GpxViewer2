@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using RolandK.Formats.Gpx;
 
 namespace GpxViewer2.Model;
@@ -35,7 +31,7 @@ public class LoadedGpxFile
         {
             this.Tours.Add(new LoadedGpxFileTourInfo(this, actRawRouteInfo));
         }
-        foreach(var actRawTrackData in gpxFile.Tracks)
+        foreach (var actRawTrackData in gpxFile.Tracks)
         {
             this.Tours.Add(new LoadedGpxFileTourInfo(this, actRawTrackData));
         }

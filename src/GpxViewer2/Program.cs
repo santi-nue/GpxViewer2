@@ -1,5 +1,5 @@
-﻿using Avalonia;
-using System;
+﻿using System;
+using Avalonia;
 using GpxViewer2.Model.GpxXmlExtensions;
 using GpxViewer2.Services;
 using GpxViewer2.Services.GpxFileStore;
@@ -34,7 +34,7 @@ public static class Program
         catch (Exception ex)
         {
             GlobalErrorReporting.TryShowBlockingGlobalExceptionDialogInAnotherProcess(
-                ex, 
+                ex,
                 ".RKGpxViewer2",
                 "GpxViewer2.ExceptionViewer");
             throw;
@@ -47,12 +47,12 @@ public static class Program
     {
         IconProvider.Current
             .Register<FontAwesomeIconProvider>();
-        
+
         // Register GpxFile extensions
         GpxFile.RegisterExtensionType(typeof(TrackExtension));
         GpxFile.RegisterExtensionType(typeof(RouteExtension));
         GpxFile.RegisterNamespace("rkgpxv", "http://gpxviewer.rolandk.net/");
-        
+
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()

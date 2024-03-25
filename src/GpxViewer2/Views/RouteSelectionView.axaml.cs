@@ -14,7 +14,7 @@ public partial class RouteSelectionView : MvvmUserControl, IRouteSelectionViewSe
 {
     /// <inheritdoc />
     public event EventHandler? NodeSelectionChanged;
-    
+
     public RouteSelectionView()
     {
         this.InitializeComponent();

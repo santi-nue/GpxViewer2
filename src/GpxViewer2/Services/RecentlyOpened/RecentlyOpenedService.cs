@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -45,8 +44,11 @@ public class RecentlyOpenedService : IRecentlyOpenedService
         var model = await this.ReadRecentlyOpenedAsync();
         foreach (var actPath in paths)
         {
-            if(string.IsNullOrEmpty(actPath)){ continue; }
-            
+            if (string.IsNullOrEmpty(actPath))
+            {
+                continue;
+            }
+
             model.Entries.RemoveAll(
                 x => x.FullPath.Equals(actPath, StringComparison.InvariantCultureIgnoreCase));
             model.Entries.Insert(0, new RecentlyOpenedFileOrDirectoryModel()
@@ -55,7 +57,7 @@ public class RecentlyOpenedService : IRecentlyOpenedService
                 Type = type
             });
         }
-        
+
         while (model.Entries.Count > _maxEntryCount)
         {
             model.Entries.RemoveAt(model.Entries.Count - 1);

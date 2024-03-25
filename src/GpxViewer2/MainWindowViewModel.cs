@@ -35,7 +35,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Title))]
     private bool _anyDataChanged = false;
-    
+
     public string Title
     {
         get
@@ -47,11 +47,11 @@ public partial class MainWindowViewModel : OwnViewModelBase
             {
                 strBuilder.Append('*');
             }
-            
+
             return strBuilder.ToString();
         }
     }
-    
+
     public MainWindowViewModel(
         IRecentlyOpenedService srvRecentlyOpened,
         IGpxFileRepositoryService srvGpxFileRepository,
@@ -61,7 +61,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
         _srvGpxFileRepository = srvGpxFileRepository;
         _srvStartupArgumentsContainer = srvStartupArgumentsContainer;
     }
-    
+
     [RelayCommand]
     private async Task LoadFileAsync()
     {
@@ -72,7 +72,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
                 this.GetViewService<IOpenFileViewService>());
         });
     }
-    
+
     [RelayCommand]
     private async Task LoadDirectoryAsync()
     {
@@ -95,7 +95,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
                     await useCase.LoadGpxDirectoryAsync(recentlyOpenedEntry.FullPath);
                 }
                 break;
-            
+
             case RecentlyOpenedType.File:
                 {
                     using var scope = this.GetScopedService(out LoadGpxFileUseCase useCase);
@@ -125,15 +125,16 @@ public partial class MainWindowViewModel : OwnViewModelBase
 
     public bool NotifyWindowClosing()
     {
-        if (_closeAllowed) { return true; }
-        
+        if (_closeAllowed)
+        { return true; }
+
         var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
         var anyContentsChanged = allNodes.Any(x => x.ContentsChanged);
         if (!anyContentsChanged)
         {
             return true;
         }
-        
+
         this.TriggerSaveBeforeExit();
 
         return false;
@@ -173,7 +174,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
     {
         await this.WrapWithErrorHandlingAsync(async () =>
         {
-            this.RecentlyOpenedEntries = 
+            this.RecentlyOpenedEntries =
                 await _srvRecentlyOpened.GetAllRecentlyOpenedAsync();
         });
     }
@@ -184,7 +185,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
         {
             _closeAllowed = false;
         }
-        
+
         var allNodes = _srvGpxFileRepository.GetAllLoadedNodes();
         this.AnyDataChanged = allNodes.Any(x => x.ContentsChanged);
     }
@@ -198,7 +199,7 @@ public partial class MainWindowViewModel : OwnViewModelBase
         {
             await this.WrapWithErrorHandlingAsync(async () =>
             {
-                this.RecentlyOpenedEntries = 
+                this.RecentlyOpenedEntries =
                     await _srvRecentlyOpened.GetAllRecentlyOpenedAsync();
             });
 

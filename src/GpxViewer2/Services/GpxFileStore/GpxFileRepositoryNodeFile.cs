@@ -17,7 +17,7 @@ namespace GpxViewer2.Services.GpxFileStore
         private Exception? _fileLoadError;
 
         public FileOrDirectoryPath FilePath { get; }
-        
+
         /// <inheritdoc />
         public override FileOrDirectoryPath Source => this.FilePath;
 
@@ -36,7 +36,7 @@ namespace GpxViewer2.Services.GpxFileStore
                 _gpxFile = new LoadedGpxFile(
                     Path.GetFileName(filePath.Path),
                     GpxFile.Load(
-                        filePath.Path, 
+                        filePath.Path,
                         GpxFileDeserializationMethod.Compatibility));
             }
             catch (Exception e)
@@ -44,7 +44,7 @@ namespace GpxViewer2.Services.GpxFileStore
                 _gpxFile = null;
                 _fileLoadError = e;
             }
-            
+
             this.InitializeProperties();
         }
 
@@ -71,22 +71,25 @@ namespace GpxViewer2.Services.GpxFileStore
                     break;
 
                 case > 1:
-                {
-                    foreach (var actTour in _gpxFile.Tours)
                     {
-                        var newChildNode = new GpxFileRepositoryNodeTour(_gpxFile, actTour);
-                        newChildNode.Parent = this;
-                        this.ChildNodes.Add(newChildNode);
+                        foreach (var actTour in _gpxFile.Tours)
+                        {
+                            var newChildNode = new GpxFileRepositoryNodeTour(_gpxFile, actTour);
+                            newChildNode.Parent = this;
+                            this.ChildNodes.Add(newChildNode);
+                        }
+                        break;
                     }
-                    break;
-                }
             }
         }
 
         /// <inheritdoc />
         protected override async ValueTask SaveThisNodesContentsAsync()
         {
-            if (_gpxFile == null) { return; }
+            if (_gpxFile == null)
+            {
+                return;
+            }
 
             await Task.Factory.StartNew(
                 () => GpxFile.Save(_gpxFile.RawGpxFile, this.FilePath.Path));

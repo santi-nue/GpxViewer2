@@ -63,14 +63,14 @@ public static class GpxRenderingHelper
             }
         }
     };
-    
+
     public static LineString? GpxWaypointsToMapsuiGeometry(
         this IReadOnlyList<GpxWaypoint> waypoints,
         int skipPointsCount)
     {
         var linePoints = new List<Coordinate>();
         // var pointCount = 0;
-        for(var loop=0; loop<waypoints.Count; loop++)
+        for (var loop = 0; loop < waypoints.Count; loop++)
         {
             if ((loop < waypoints.Count - 1) &&
                 (skipPointsCount != 0) &&
@@ -80,20 +80,24 @@ public static class GpxRenderingHelper
             }
 
             var actPoint = waypoints[loop];
-            
+
             var point = SphericalMercator.FromLonLat(actPoint.Longitude, actPoint.Latitude);
             linePoints.Add(new Coordinate(point.x, point.y));
         }
-        if (linePoints.Count < 2) { return null; }
+
+        if (linePoints.Count < 2)
+        {
+            return null;
+        }
 
         return new LineString(linePoints.ToArray());
     }
-    
+
     public static IStyle CreateLineStringStyle(GpxTourLineStringType lineStringType)
     {
         return _lineStringStyles[lineStringType];
     }
-    
+
     public static IStyle CreateLineStringStyleForTour(LoadedGpxFileTourInfo tour)
     {
         var lineStringType = tour.RawTourExtensionData.State switch
@@ -102,7 +106,7 @@ public static class GpxRenderingHelper
             GpxTrackState.Succeeded => GpxTourLineStringType.Succeeded,
             _ => GpxTourLineStringType.Default
         };
-        
+
         return _lineStringStyles[lineStringType];
     }
 }

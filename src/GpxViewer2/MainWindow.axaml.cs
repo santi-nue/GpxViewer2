@@ -15,11 +15,11 @@ public partial class MainWindow : MvvmWindow
     public MainWindow()
     {
         this.InitializeComponent();
-        
+
         this.ViewServices.Add(new ServiceProviderViewService(this));
         this.ViewServices.Add(new ErrorReportingViewService(this));
     }
-    
+
     private void UpdateMenuBars()
     {
         IReadOnlyList<RecentlyOpenedFileOrDirectoryModel> recentlyOpenedEntries = [];
@@ -43,7 +43,7 @@ public partial class MainWindow : MvvmWindow
             });
         }
         this.MnuRecentlyOpened.IsEnabled = this.MnuRecentlyOpened.Items.Count > 0;
-        
+
         // Update native menu
         var nativeMenuRecentlyOpened = FindTaggedItemInNativeMenu(NativeMenu.GetMenu(this)!, "RecentlyOpened");
         if ((nativeMenuRecentlyOpened != null) &&
@@ -51,7 +51,7 @@ public partial class MainWindow : MvvmWindow
         {
             var newChildNativeMenu = nativeMenuRecentlyOpened.Menu;
             newChildNativeMenu.Items.Clear();
-            
+
             foreach (var actRecentlyOpenedEntry in recentlyOpenedEntries)
             {
                 var actDisplayName = Path.GetFileName(actRecentlyOpenedEntry.FullPath);
@@ -65,12 +65,12 @@ public partial class MainWindow : MvvmWindow
             nativeMenuRecentlyOpened.IsEnabled = newChildNativeMenu.Items.Count > 0;
         }
     }
-    
+
     private static NativeMenuTaggedItem? FindTaggedItemInNativeMenu(NativeMenu menu, string tag)
     {
         foreach (var actItem in menu.Items)
         {
-            if((actItem is NativeMenuTaggedItem taggedItem) &&
+            if ((actItem is NativeMenuTaggedItem taggedItem) &&
                (taggedItem.Tag.Equals(tag, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return taggedItem;
@@ -89,7 +89,7 @@ public partial class MainWindow : MvvmWindow
 
         return null;
     }
-    
+
     protected override void OnViewModelAttached(ViewModelAttachedEventArgs args)
     {
         base.OnViewModelAttached(args);
@@ -113,7 +113,7 @@ public partial class MainWindow : MvvmWindow
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
-        
+
         if (this.DataContext is MainWindowViewModel viewModel)
         {
             var doContinue = viewModel.NotifyWindowClosing();

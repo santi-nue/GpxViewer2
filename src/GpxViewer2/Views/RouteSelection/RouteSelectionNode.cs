@@ -12,16 +12,16 @@ public class RouteSelectionNode : INotifyPropertyChanged
 {
     /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
-    
+
     public ObservableCollection<RouteSelectionNode> ChildNodes { get; } = new();
 
     public LoadedGpxFileTourInfo? AssociatedTour { get; }
-    
+
     public GpxFileRepositoryNode Node { get; }
 
     public bool HasAssociatedTour => AssociatedTour != null;
-    
-    public bool IsTourFinishedVisible 
+
+    public bool IsTourFinishedVisible
         => this.AssociatedTour?.RawTourExtensionData.State == GpxTrackState.Succeeded;
 
     public double DistanceKm
@@ -34,7 +34,7 @@ public class RouteSelectionNode : INotifyPropertyChanged
         => this.AssociatedTour?.ElevationDownMeters ?? 0.0;
 
     public string NodeText => this.Node.NodeText;
-    
+
     public string TooltipText
     {
         get
@@ -61,7 +61,7 @@ public class RouteSelectionNode : INotifyPropertyChanged
     {
         this.Node = node;
         this.AssociatedTour = node.GetAssociatedTour();
-        
+
         foreach (var actChildNode in node.ChildNodes)
         {
             this.ChildNodes.Add(new RouteSelectionNode(actChildNode));
@@ -84,7 +84,7 @@ public class RouteSelectionNode : INotifyPropertyChanged
     public void RaiseNodeTextChanged()
     {
         this.PropertyChanged?.Invoke(
-            this, 
+            this,
             new PropertyChangedEventArgs(nameof(this.NodeText)));
     }
 }

@@ -20,7 +20,10 @@ public class LoadGpxDirectoryUseCase(
     {
         var directoryToOpen = await srvOpenDirectoryDialog.ShowOpenDirectoryDialogAsync(
             "Load Directory");
-        if (string.IsNullOrEmpty(directoryToOpen)) { return; }
+        if (string.IsNullOrEmpty(directoryToOpen))
+        {
+            return;
+        }
 
         await this.LoadGpxDirectoryAsync(directoryToOpen);
     }
@@ -29,7 +32,7 @@ public class LoadGpxDirectoryUseCase(
         string directoryToOpen)
     {
         var source = new FileOrDirectoryPath(directoryToOpen);
-        
+
         var repositoryNode = srvGpxFileRepository.TryGetExistingNode(source);
         var newNodeLoaded = false;
         if (repositoryNode == null)
@@ -37,7 +40,7 @@ public class LoadGpxDirectoryUseCase(
             repositoryNode = srvGpxFileRepository.LoadDirectoryNode(source);
             newNodeLoaded = true;
         }
-        
+
         var loadedGpxTours = repositoryNode
             .GetAssociatedToursDeep()
             .ToArray();

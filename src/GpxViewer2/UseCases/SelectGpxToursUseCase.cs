@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using GpxViewer2.Messages;
 using GpxViewer2.Model;
-using GpxViewer2.Views.Maps;
 using RolandK.InProcessMessaging;
 
 namespace GpxViewer2.UseCases;

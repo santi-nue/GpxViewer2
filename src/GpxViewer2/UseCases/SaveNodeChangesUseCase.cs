@@ -25,7 +25,7 @@ public class SaveNodeChangesUseCase(
             .SelectMany(x => x.GetAssociatedToursDeep())
             .Distinct()
             .ToArray();
-        
+
         srvMessagePublisher.Publish(new TourConfigurationStateChangedMessage(savedTours, false));
     }
 }

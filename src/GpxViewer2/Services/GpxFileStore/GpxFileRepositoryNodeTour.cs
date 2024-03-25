@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GpxViewer2.Model;
+﻿using GpxViewer2.Model;
 using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Services.GpxFileStore
@@ -13,7 +8,7 @@ namespace GpxViewer2.Services.GpxFileStore
     {
         /// <inheritdoc />
         public override bool CanSave => false;
-        
+
         /// <inheritdoc />
         public override FileOrDirectoryPath Source => FileOrDirectoryPath.Empty;
 

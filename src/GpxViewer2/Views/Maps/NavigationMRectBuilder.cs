@@ -10,10 +10,19 @@ internal class NavigationMRectBuilder
 
     public void TryAddFeature(IFeature feature)
     {
-        if (feature.Extent == null) { return; }
-        
-        if (_rect == null) { _rect = feature.Extent; }
-        else { _rect = _rect.Join(feature.Extent); }
+        if (feature.Extent == null)
+        {
+            return;
+        }
+
+        if (_rect == null)
+        {
+            _rect = feature.Extent;
+        }
+        else
+        {
+            _rect = _rect.Join(feature.Extent);
+        }
     }
 
     public MRect? TryBuild()

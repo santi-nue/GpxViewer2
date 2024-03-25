@@ -1,5 +1,5 @@
-using GpxViewer2.ValueObjects;
 using FluentAssertions;
+using GpxViewer2.ValueObjects;
 
 namespace GpxViewer2.Tests.ValueObjects;
 
@@ -57,7 +57,7 @@ public class FileOrDirectoryPathTests
         filePath.ToString().Should().NotBe("file.txt");
         filePath.ToString().Should().EndWith("file.txt");
     }
-    
+
     [Fact]
     public void OperatorEqual_ReturnsTrueForSamePaths()
     {

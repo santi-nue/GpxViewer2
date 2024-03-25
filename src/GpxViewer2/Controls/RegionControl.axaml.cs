@@ -16,7 +16,7 @@ public partial class RegionControl : UserControl
             x => x.ViewModelType,
             (x, y) => x.ViewModelType = y,
             defaultBindingMode: BindingMode.OneTime);
-    
+
     public string? TitleText
     {
         get => this.CtrlTitle.Text;
@@ -28,7 +28,7 @@ public partial class RegionControl : UserControl
         get;
         set;
     }
-    
+
     public RegionControl()
     {
         this.InitializeComponent();
@@ -36,8 +36,11 @@ public partial class RegionControl : UserControl
 
     private void ApplyTargetView()
     {
-        if (this.ViewModelType == null) { return; }
-        
+        if (this.ViewModelType == null)
+        {
+            return;
+        }
+
         var serviceProvider = this.GetServiceProvider();
         var targetViewModel = serviceProvider.GetService(this.ViewModelType);
         if (targetViewModel is not INavigationTarget navigationTarget)
@@ -47,7 +50,7 @@ public partial class RegionControl : UserControl
 
         var targetView = navigationTarget.CreateViewInstance();
         targetView.DataContext = navigationTarget;
-        
+
         this.TitleText = navigationTarget.Title;
         this.CtrlContentControl.Content = targetView;
     }
