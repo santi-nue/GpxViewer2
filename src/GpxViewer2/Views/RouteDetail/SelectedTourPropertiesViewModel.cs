@@ -30,6 +30,13 @@ public class SelectedTourPropertiesViewModel(
         set => useCase.SetTourState(tour, value);
     }
 
+    [Category("Metadata")]
+    public bool IsTopTour
+    {
+        get => tour.RawTourExtensionData.IsTopTour;
+        set => useCase.SetTourIsTopTourValue(tour, value);
+    }
+
     [Category("Metrics")]
     public string DistanceKm => tour.DistanceKm.ToString("N1");
 

@@ -24,6 +24,9 @@ public class RouteSelectionNode : INotifyPropertyChanged
     public bool IsTourFinishedVisible
         => this.AssociatedTour?.RawTourExtensionData.State == GpxTrackState.Succeeded;
 
+    public bool IsTopTourVisible
+        => this.AssociatedTour?.RawTourExtensionData.IsTopTour == true;
+
     public double DistanceKm
         => this.AssociatedTour?.DistanceKm ?? 0.0;
 
@@ -41,7 +44,14 @@ public class RouteSelectionNode : INotifyPropertyChanged
         {
             using var scope = PooledStringBuilders.Current.UseStringBuilder(out var stringBuilder);
 
+            if ((this.AssociatedTour != null) &&
+                (this.AssociatedTour.RawTourExtensionData.IsTopTour))
+            {
+                stringBuilder.Append("TOP! ");
+            }
+            
             stringBuilder.Append(this.Node.NodeText);
+            
             if (this.AssociatedTour != null)
             {
                 stringBuilder.Append(", ");
@@ -81,10 +91,19 @@ public class RouteSelectionNode : INotifyPropertyChanged
         }
     }
 
-    public void RaiseNodeTextChanged()
+    public void RaiseNodePropertiesChanged()
     {
         this.PropertyChanged?.Invoke(
             this,
             new PropertyChangedEventArgs(nameof(this.NodeText)));
+        this.PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(nameof(this.TooltipText)));
+        this.PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(nameof(this.IsTopTourVisible)));
+        this.PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(nameof(this.IsTourFinishedVisible)));
     }
 }

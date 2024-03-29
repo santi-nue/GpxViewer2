@@ -304,7 +304,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
             {
                 if (actNode.AssociatedTour == actTour)
                 {
-                    actNode.RaiseNodeTextChanged();
+                    actNode.RaiseNodePropertiesChanged();
                 }
             }
         }

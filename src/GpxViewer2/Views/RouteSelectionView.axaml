@@ -11,6 +11,21 @@
              x:DataType="local:RouteSelectionViewModel"
              d:DataContext="{x:Static local:RouteSelectionViewModel.EmptyViewModel}"
              ViewFor="{x:Type local:RouteSelectionViewModel}">
+    <ext:MvvmUserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="StartBackgroundBrush" 
+                                     Color="#DDDD00" /> 
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="StartBackgroundBrush" 
+                                     Color="DarkGoldenrod" /> 
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </ext:MvvmUserControl.Resources>
+    
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Command="{Binding Path=LoadGpxFileCommand}"
@@ -85,14 +100,25 @@
                         
                         <i:Icon Grid.Column="0"
                                 Value="fa-check"
-                                IsVisible="{Binding Path=IsTourFinishedVisible}"/>
+                                IsVisible="{Binding Path=IsTourFinishedVisible}" />
                         
-                        <TextBlock Grid.Column="2" 
-                                   Text="{Binding Path=NodeText}" />
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Path=NodeText}" />
+                            <i:Icon Margin="5,0,0,0"
+                                    Value="fa-star"
+                                    Width="12"
+                                    Height="12"
+                                    Foreground="{DynamicResource StartBackgroundBrush}"
+                                    IsVisible="{Binding Path=IsTopTourVisible}" 
+                                    VerticalAlignment="Top" />
+                        </StackPanel>
                         
                         <StackPanel Grid.Column="4"
                                     Orientation="Horizontal"
-                                    IsVisible="{Binding Path=HasAssociatedTour}">
+                                    IsVisible="{Binding Path=HasAssociatedTour}"
+                                    VerticalAlignment="Center">
                             <i:Icon Value="fa-route"
                                     Margin="0,0,2,0"/>
                             <TextBlock Text="{Binding Path=DistanceKm, StringFormat=N1}" />

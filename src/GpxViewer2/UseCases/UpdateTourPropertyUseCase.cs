@@ -42,4 +42,16 @@ public class UpdateTourPropertyUseCase(IInProcessMessagePublisher messagePublish
                 new TourConfigurationStateChangedMessage([tour], true));
         }
     }
+
+    public void SetTourIsTopTourValue(LoadedGpxFileTourInfo tour, bool isTopTour)
+    {
+        if (tour.RawTourExtensionData.IsTopTour != isTopTour)
+        {
+            tour.RawTourExtensionData.IsTopTour = isTopTour;
+            tour.File.ContentsChanged = true;
+
+            messagePublisher.BeginPublish(
+                new TourConfigurationStateChangedMessage([tour], true));
+        }
+    }
 }
