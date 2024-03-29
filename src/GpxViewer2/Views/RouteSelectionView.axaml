@@ -99,21 +99,40 @@
                         </Grid.ColumnDefinitions>
                         
                         <i:Icon Grid.Column="0"
+                                Value="fa-star"
+                                Foreground="{DynamicResource StartBackgroundBrush}"
+                                IsVisible="{Binding Path=IsTopTourVisible}" 
+                                VerticalAlignment="Center">
+                            <i:Icon.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1.3"
+                                                    ScaleY="1.3" />
+                                    <TranslateTransform Y="-1" />
+                                </TransformGroup>
+                            </i:Icon.RenderTransform>
+                        </i:Icon>
+                        <i:Icon Grid.Column="0"
                                 Value="fa-check"
-                                IsVisible="{Binding Path=IsTourFinishedVisible}" />
+                                IsVisible="{Binding Path=IsTourFinishedVisible}"
+                                VerticalAlignment="Center">
+                            <i:Icon.RenderTransform>
+                                <ScaleTransform ScaleX="0.8"
+                                                ScaleY="0.8" />
+                            </i:Icon.RenderTransform>
+                        </i:Icon>
+                        <i:Icon Grid.Column="0"
+                                Value="fa-location-crosshairs"
+                                IsVisible="{Binding Path=IsTourPlannedVisible}"
+                                VerticalAlignment="Center">
+                            <i:Icon.RenderTransform>
+                                <ScaleTransform ScaleX="0.8"
+                                                ScaleY="0.8" />
+                            </i:Icon.RenderTransform>
+                        </i:Icon>
                         
-                        <StackPanel Grid.Column="2"
-                                    Orientation="Horizontal"
-                                    VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Path=NodeText}" />
-                            <i:Icon Margin="5,0,0,0"
-                                    Value="fa-star"
-                                    Width="12"
-                                    Height="12"
-                                    Foreground="{DynamicResource StartBackgroundBrush}"
-                                    IsVisible="{Binding Path=IsTopTourVisible}" 
-                                    VerticalAlignment="Top" />
-                        </StackPanel>
+                        <TextBlock Grid.Column="2" 
+                                   Text="{Binding Path=NodeText}"
+                                   VerticalAlignment="Center"/>
                         
                         <StackPanel Grid.Column="4"
                                     Orientation="Horizontal"

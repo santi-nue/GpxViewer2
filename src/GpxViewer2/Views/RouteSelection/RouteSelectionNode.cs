@@ -24,6 +24,9 @@ public class RouteSelectionNode : INotifyPropertyChanged
     public bool IsTourFinishedVisible
         => this.AssociatedTour?.RawTourExtensionData.State == GpxTrackState.Succeeded;
 
+    public bool IsTourPlannedVisible
+        => this.AssociatedTour?.RawTourExtensionData.State == GpxTrackState.Planned;
+    
     public bool IsTopTourVisible
         => this.AssociatedTour?.RawTourExtensionData.IsTopTour == true;
 
@@ -105,5 +108,8 @@ public class RouteSelectionNode : INotifyPropertyChanged
         this.PropertyChanged?.Invoke(
             this,
             new PropertyChangedEventArgs(nameof(this.IsTourFinishedVisible)));
+        this.PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(nameof(this.IsTourPlannedVisible)));
     }
 }
