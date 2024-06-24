@@ -45,8 +45,9 @@ public class FileOrDirectoryPathTests
     public void ToString_ReturnsCorrectlyFormattedString()
     {
         var filePath = new FileOrDirectoryPath("/path/to/file.txt");
+        var fullPath = Path.GetFullPath("/path/to/file.txt");
 
-        filePath.ToString().Should().Be("/path/to/file.txt");
+        filePath.ToString().Should().Be(fullPath);
     }
 
     [Fact]
