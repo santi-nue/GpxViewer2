@@ -45,4 +45,10 @@ public class SelectedTourPropertiesViewModel(
 
     [Category("Metrics")]
     public string ElevationDownMeters => tour.ElevationDownMeters.ToString("N0");
+
+    [Category("Metrics")]
+    public string ElevationMaxMeters => tour.ElevationMaxMeters.ToString("N0");
+
+    [Category("Metrics")]
+    public string ElevationMinMeters => tour.ElevationMinMeters.ToString("N0");
 }

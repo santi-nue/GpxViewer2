@@ -25,6 +25,10 @@ public class LoadedGpxFileTourInfo
 
     public double ElevationDownMeters { get; private set; } = 0.0;
 
+    public double ElevationMaxMeters { get; private set; } = 0.0;
+
+    public double ElevationMinMeters { get; private set; } = 0.0;
+
     public int CountSegments { get; private set; } = 0;
 
     public int CountWaypointsWithinSegments { get; private set; } = 0;
@@ -75,6 +79,8 @@ public class LoadedGpxFileTourInfo
         var distanceMeters = 0.0;
         var elevationUpMeters = 0.0;
         var elevationDownMeters = 0.0;
+        var elevationMaxMeters = double.MinValue;
+        var elevationMinMeters = double.MaxValue;
         var segmentCount = 0;
         var waypointCount = 0;
         foreach (var actSegment in this.Segments)
@@ -91,6 +97,13 @@ public class LoadedGpxFileTourInfo
                 waypointCount++;
                 distanceMeters += GeoCalculator.CalculateDistanceMeters(
                     lastPoint, actPoint);
+
+                if (actPoint.ElevationSpecified)
+                {
+                    var elevationAct = (double)actPoint.Elevation!;
+                    if (elevationAct > elevationMaxMeters) { elevationMaxMeters = elevationAct; }
+                    if (elevationAct < elevationMinMeters) { elevationMinMeters = elevationAct; }
+                }
 
                 if (lastPoint.ElevationSpecified && actPoint.ElevationSpecified)
                 {
@@ -114,6 +127,8 @@ public class LoadedGpxFileTourInfo
         this.DistanceKm = distanceMeters / 1000.0;
         this.ElevationUpMeters = elevationUpMeters;
         this.ElevationDownMeters = elevationDownMeters;
+        this.ElevationMaxMeters = elevationMaxMeters == double.MinValue ? 0.0 : elevationMaxMeters;
+        this.ElevationMinMeters = elevationMinMeters == double.MaxValue ? 0.0 : elevationMinMeters;
         this.CountSegments = segmentCount;
         this.CountWaypointsWithinSegments = waypointCount;
     }
