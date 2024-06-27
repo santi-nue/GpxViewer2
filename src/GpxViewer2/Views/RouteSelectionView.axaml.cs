@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using GpxViewer2.Views.RouteSelection;
 using RolandK.AvaloniaExtensions.Mvvm.Controls;
 
@@ -45,6 +46,39 @@ public partial class RouteSelectionView : MvvmUserControl, IRouteSelectionViewSe
     {
         var newList = new AvaloniaList<RouteSelectionNode>(nodes);
         this.CtrlNodeTree.SelectedItems = newList;
+
+        if (newList.Count > 0)
+        {
+            // Expand parent chain of given nodes
+            foreach (var actNode in nodes)
+            {
+                if (actNode.ParentNode == null)
+                { continue; }
+                this.EnsureNodesOpened(actNode.ParentNode);
+            }
+
+            // Bring at least one node into view
+            var firstItem = newList[0];
+            Dispatcher.UIThread.Post(() =>
+            {
+                var treeItem = this.CtrlNodeTree.TreeContainerFromItem(newList[0]);
+                treeItem?.BringIntoView();
+            });
+        }
+    }
+
+    private void EnsureNodesOpened(RouteSelectionNode node)
+    {
+        if (node.ParentNode != null)
+        {
+            this.EnsureNodesOpened(node.ParentNode);
+        }
+
+        var actTreeNode = this.CtrlNodeTree.TreeContainerFromItem(node) as TreeViewItem;
+        if (actTreeNode != null)
+        {
+            actTreeNode.IsExpanded = true;
+        }
     }
 
     private void OnCtrlNodeTree_SelectionChanged(object? sender, SelectionChangedEventArgs e)

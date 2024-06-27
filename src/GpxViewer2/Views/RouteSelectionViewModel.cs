@@ -262,7 +262,7 @@ public partial class RouteSelectionViewModel : OwnViewModelBase, INavigationTarg
     {
         foreach (var actLoadedNode in message.Nodes)
         {
-            this.Nodes.Add(new RouteSelectionNode(actLoadedNode));
+            this.Nodes.Add(new RouteSelectionNode(actLoadedNode, null));
         }
     }
 

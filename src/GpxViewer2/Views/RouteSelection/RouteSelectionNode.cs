@@ -13,6 +13,8 @@ public class RouteSelectionNode : INotifyPropertyChanged
     /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public RouteSelectionNode? ParentNode { get; }
+
     public ObservableCollection<RouteSelectionNode> ChildNodes { get; } = new();
 
     public LoadedGpxFileTourInfo? AssociatedTour { get; }
@@ -70,15 +72,17 @@ public class RouteSelectionNode : INotifyPropertyChanged
         }
     }
 
-    public RouteSelectionNode(GpxFileRepositoryNode node)
+    public RouteSelectionNode(GpxFileRepositoryNode node, RouteSelectionNode? parentNode)
     {
         this.Node = node;
         this.AssociatedTour = node.GetAssociatedTour();
 
         foreach (var actChildNode in node.ChildNodes)
         {
-            this.ChildNodes.Add(new RouteSelectionNode(actChildNode));
+            this.ChildNodes.Add(new RouteSelectionNode(actChildNode, this));
         }
+
+        this.ParentNode = parentNode;
     }
 
     public static IEnumerable<RouteSelectionNode> LoopOverAllDeep(IEnumerable<RouteSelectionNode> nodes)
