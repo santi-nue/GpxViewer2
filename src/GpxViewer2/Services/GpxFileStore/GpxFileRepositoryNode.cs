@@ -53,6 +53,8 @@ public abstract class GpxFileRepositoryNode
 
     public abstract bool CanSave { get; }
 
+    public abstract bool IsDirectory { get; }
+
     public virtual bool HasError => false;
 
     /// <summary>

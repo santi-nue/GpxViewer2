@@ -16,6 +16,8 @@ namespace GpxViewer2.Services.GpxFileStore
         /// <inheritdoc />
         public override FileOrDirectoryPath Source => this.DirectoryPath;
 
+        public override bool IsDirectory => true;
+
         /// <inheritdoc />
         public override bool CanSave
         {

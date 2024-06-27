@@ -9,6 +9,8 @@ namespace GpxViewer2.Services.GpxFileStore
         /// <inheritdoc />
         public override bool CanSave => false;
 
+        public override bool IsDirectory => false;
+
         /// <inheritdoc />
         public override FileOrDirectoryPath Source => FileOrDirectoryPath.Empty;
 

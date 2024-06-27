@@ -32,6 +32,8 @@ public class RouteSelectionNode : INotifyPropertyChanged
     public bool IsTopTourVisible
         => this.AssociatedTour?.RawTourExtensionData.IsTopTour == true;
 
+    public bool IsDirectory => this.Node.IsDirectory;
+
     public double DistanceKm
         => this.AssociatedTour?.DistanceKm ?? 0.0;
 

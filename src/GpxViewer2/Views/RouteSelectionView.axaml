@@ -97,7 +97,16 @@
                             <ColumnDefinition Width="10" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="C5" />
                         </Grid.ColumnDefinitions>
-                        
+
+                        <i:Icon Grid.Column="0"
+                                Value="fa-folder"
+                                IsVisible="{Binding Path=IsDirectory}"
+                                VerticalAlignment="Center">
+                          <i:Icon.RenderTransform>
+                            <ScaleTransform ScaleX="0.8"
+                                            ScaleY="0.8" />
+                          </i:Icon.RenderTransform>
+                        </i:Icon>
                         <i:Icon Grid.Column="0"
                                 Value="fa-star"
                                 Foreground="{DynamicResource StartBackgroundBrush}"
