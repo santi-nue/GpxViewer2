@@ -8,8 +8,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpxViewer2.ExceptionViewer", "src\GpxViewer2.ExceptionViewer\GpxViewer2.ExceptionViewer.csproj", "{62C4DA53-DE64-46DE-BC60-CF31B4F9D5DC}"
 EndProject
 
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GpxViewer2.WindowsApp", "src\GpxViewer2.WindowsApp\GpxViewer2.WindowsApp.wapproj", "{D1D94DD4-5A33-44C1-B15A-7AEB39107E7C}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
